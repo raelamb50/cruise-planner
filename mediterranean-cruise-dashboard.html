@@ -1,0 +1,1672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0B1D3A">
+<title>Med Cruise 2026</title>
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+/* ── Design Tokens ── */
+:root {
+  --navy: #0B1D3A;
+  --navy-mid: #132B52;
+  --navy-light: #1a3260;
+  --sand: #F5E6D3;
+  --sand-light: #FBF5EE;
+  --gold: #C9A96E;
+  --gold-light: #e8d5a8;
+  --coral: #E07A5F;
+  --green: #2D6A4F;
+  --white: #FAFAFA;
+  --bg-page: var(--sand-light);
+  --bg-card: var(--white);
+  --bg-section: var(--sand);
+  --text-primary: var(--navy);
+  --text-secondary: #3d5a80;
+  --text-muted: #8a9ab5;
+  --border: rgba(11,29,58,0.08);
+  --shadow-sm: 0 1px 3px rgba(11,29,58,0.06);
+  --shadow-md: 0 4px 12px rgba(11,29,58,0.10);
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Source Sans 3', -apple-system, sans-serif;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --tab-height: 56px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-page: #080f1c;
+    --bg-card: #0B1D3A;
+    --bg-section: #132B52;
+    --text-primary: #F5E6D3;
+    --text-secondary: #b8c5d9;
+    --text-muted: #6b7fa0;
+    --border: rgba(245,230,211,0.08);
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.2);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.3);
+  }
+}
+
+/* ── Reset + Base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+body {
+  font-family: var(--font-body);
+  background: var(--bg-page);
+  color: var(--text-primary);
+  line-height: 1.5;
+  padding-bottom: calc(var(--tab-height) + var(--safe-bottom) + 8px);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a { color: var(--gold); text-decoration: none; }
+a:active { opacity: 0.7; }
+
+/* ── Typography ── */
+.font-display { font-family: var(--font-display); }
+.section-label {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+
+/* ── Tab System ── */
+.tab-pane { display: none; }
+.tab-pane.active { display: block; animation: fadeUp 250ms ease; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Tab Bar ── */
+#tab-bar {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 1000;
+  display: flex;
+  background: var(--navy);
+  padding-bottom: var(--safe-bottom);
+  box-shadow: 0 -2px 12px rgba(0,0,0,0.15);
+}
+.tab-btn {
+  flex: 1;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  height: var(--tab-height);
+  background: none; border: none; color: #6b7fa0;
+  font-family: var(--font-body); font-size: 10px; font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: color 200ms;
+  min-width: 44px; min-height: 44px;
+  position: relative;
+}
+.tab-btn.active { color: var(--gold); }
+.tab-btn.active::after {
+  content: ''; position: absolute; top: 0; left: 25%; right: 25%;
+  height: 2px; background: var(--gold); border-radius: 0 0 2px 2px;
+}
+.tab-btn .tab-icon { font-size: 20px; margin-bottom: 2px; }
+.tab-btn .tab-label { font-size: 10px; }
+
+/* ── Trip Header ── */
+.trip-header {
+  text-align: center;
+  padding: 20px 16px 12px;
+}
+.trip-header h1 {
+  font-family: var(--font-display);
+  font-size: 24px; font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: 1px;
+}
+.trip-header .subtitle {
+  font-family: var(--font-body);
+  font-size: 12px; font-weight: 300;
+  color: var(--text-muted);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* ── Map ── */
+#map-toggle {
+  text-align: center;
+  padding: 10px;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+#map-wrapper {
+  max-height: 300px;
+  overflow: hidden;
+  transition: max-height 400ms ease;
+}
+#map-wrapper.collapsed { max-height: 0; }
+#map {
+  height: 220px;
+  margin: 0 12px;
+  border-radius: 12px;
+  overflow: hidden;
+  z-index: 1;
+}
+.leaflet-container { background: var(--sand); }
+
+/* ── Port Strip ── */
+#port-strip {
+  display: flex;
+  gap: 8px;
+  padding: 10px 12px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+#port-strip::-webkit-scrollbar { display: none; }
+.port-pill {
+  flex-shrink: 0;
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1.5px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 12px; font-weight: 600;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
+  min-height: 44px;
+  display: flex; align-items: center;
+  transition: all 200ms;
+}
+.port-pill.active {
+  background: var(--gold);
+  color: var(--navy);
+  border-color: var(--gold);
+}
+
+/* ── Day Cards ── */
+#timeline { padding: 0 12px 16px; }
+.day-card {
+  background: var(--bg-card);
+  border-radius: 16px;
+  padding: 20px 16px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow-sm);
+  scroll-margin-top: 12px;
+}
+.day-card.sea-day { background: color-mix(in srgb, var(--bg-card) 92%, var(--navy)); }
+.day-badge {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 12px; font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 4px;
+}
+.day-location {
+  font-family: var(--font-display);
+  font-size: 26px; font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.2;
+  margin-bottom: 2px;
+  transition: color 500ms;
+}
+.day-location.highlight { color: var(--gold); }
+.day-date {
+  font-size: 12px; font-weight: 400;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.day-times {
+  display: flex; flex-wrap: wrap; gap: 8px 16px;
+  font-size: 12px; color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+.day-times span { display: flex; align-items: center; gap: 4px; }
+.day-times .time-val { font-weight: 600; }
+
+/* ── Status Badges ── */
+.status-badge {
+  display: inline-block;
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+.b-booked { background: rgba(45,106,79,0.12); color: var(--green); }
+.b-action { background: rgba(224,122,95,0.12); color: var(--coral); }
+.b-sea { background: rgba(201,169,110,0.12); color: var(--gold); }
+.b-travel { background: rgba(11,29,58,0.08); color: var(--text-secondary); }
+.b-open { background: rgba(201,169,110,0.08); color: #b8941c; }
+
+/* ── Day Sections ── */
+.day-section { margin-top: 14px; }
+.day-section:first-of-type { margin-top: 8px; }
+
+/* ── Transit Block ── */
+.transit-block {
+  background: var(--bg-section);
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 4px;
+}
+.transit-route {
+  font-family: var(--font-display);
+  font-size: 16px; font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+.transit-detail {
+  font-size: 12px; color: var(--text-secondary);
+  line-height: 1.6;
+}
+.transit-detail strong { font-weight: 600; color: var(--text-primary); }
+
+/* ── Hotel Block ── */
+.hotel-block {
+  background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+  border-radius: 10px;
+  padding: 14px;
+  color: #e0ddd6;
+}
+.hotel-name {
+  font-family: var(--font-display);
+  font-size: 17px; font-weight: 600;
+  color: var(--sand);
+  margin-bottom: 4px;
+}
+.hotel-status {
+  display: inline-block;
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1px;
+  padding: 2px 8px; border-radius: 8px;
+  background: rgba(45,106,79,0.25); color: #5fba8a;
+  margin-bottom: 6px;
+}
+.hotel-detail { font-size: 12px; line-height: 1.6; color: #b0b8c8; }
+.hotel-detail a { color: var(--gold-light); }
+
+/* ── Excursion Block ── */
+.excursion-item {
+  padding: 10px 12px;
+  background: var(--bg-page);
+  border-radius: 10px;
+  margin-bottom: 6px;
+}
+.excursion-item.pending { border-left: 3px solid var(--gold); }
+.excursion-name {
+  font-size: 14px; font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 3px;
+}
+.excursion-meta {
+  font-size: 12px; color: var(--text-secondary);
+  display: flex; flex-wrap: wrap; gap: 4px 12px;
+}
+.excursion-cost { color: var(--green); font-weight: 600; }
+.excursion-status {
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  padding: 1px 6px; border-radius: 6px;
+}
+.excursion-status.booked { background: rgba(45,106,79,0.12); color: var(--green); }
+.excursion-status.pending { background: rgba(201,169,110,0.15); color: #b8941c; }
+.excursion-status.hold { background: rgba(224,122,95,0.12); color: var(--coral); }
+.excursion-notes {
+  font-size: 11px; color: var(--text-muted);
+  margin-top: 4px; line-height: 1.5;
+}
+
+/* ── Dining Block ── */
+.dining-item {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  padding: 10px 12px;
+  background: var(--bg-page);
+  border-radius: 10px;
+  margin-bottom: 6px;
+}
+.dining-info { flex: 1; }
+.dining-name { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+.dining-meta { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+.dining-notes { font-size: 11px; color: var(--text-muted); margin-top: 3px; line-height: 1.4; }
+
+/* ── Gap Alerts ── */
+.gap-alert {
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 12px;
+  line-height: 1.5;
+  margin-bottom: 6px;
+}
+.gap-high { background: rgba(224,122,95,0.1); color: var(--coral); border-left: 3px solid var(--coral); }
+.gap-moderate { background: rgba(201,169,110,0.1); color: #b8941c; border-left: 3px solid var(--gold); }
+.gap-low { background: rgba(138,154,181,0.08); color: var(--text-muted); border-left: 3px solid var(--text-muted); }
+
+/* ── Recommendations Accordion ── */
+.accordion-toggle {
+  display: flex; justify-content: space-between; align-items: center;
+  width: 100%;
+  background: none; border: none;
+  padding: 8px 0; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 44px;
+}
+.accordion-arrow {
+  font-size: 12px; color: var(--gold);
+  transition: transform 300ms;
+}
+.accordion-toggle.open .accordion-arrow { transform: rotate(90deg); }
+.accordion-body {
+  max-height: 0; overflow: hidden;
+  transition: max-height 300ms ease;
+}
+.rec-item {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+.rec-item:last-child { border-bottom: none; }
+.rec-name { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+.rec-desc { font-size: 12px; color: var(--text-secondary); margin-top: 2px; line-height: 1.5; }
+
+/* ── Flights Tab ── */
+.flights-container { padding: 20px 12px; }
+.flights-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.flights-header h2 {
+  font-family: var(--font-display);
+  font-size: 24px; font-weight: 600;
+  color: var(--text-primary);
+}
+.flights-header .conf-code {
+  font-size: 12px; color: var(--text-muted);
+  letter-spacing: 1px;
+  margin-top: 4px;
+}
+.flight-card {
+  background: var(--bg-card);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 10px;
+  box-shadow: var(--shadow-sm);
+}
+.flight-leg-label {
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1.5px;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+.flight-route {
+  font-family: var(--font-display);
+  font-size: 20px; font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+.flight-number {
+  font-size: 13px; font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+.flight-times {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 8px;
+}
+.flight-time-block { text-align: center; }
+.flight-time-block .time { font-size: 20px; font-weight: 700; color: var(--text-primary); }
+.flight-time-block .airport { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+.flight-time-block .date { font-size: 10px; color: var(--text-muted); }
+.flight-arrow { color: var(--gold); font-size: 16px; }
+.flight-details {
+  font-size: 11px; color: var(--text-muted);
+  display: flex; flex-wrap: wrap; gap: 4px 14px;
+  margin-top: 4px;
+}
+.layover-card {
+  background: var(--bg-section);
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.layover-duration {
+  font-size: 13px; font-weight: 600;
+  color: var(--text-secondary);
+}
+.layover-location { font-size: 12px; color: var(--text-muted); }
+.cruise-block {
+  background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+  border-radius: 14px;
+  padding: 24px 16px;
+  text-align: center;
+  margin: 16px 0;
+}
+.cruise-block .cruise-icon { font-size: 32px; margin-bottom: 6px; }
+.cruise-block .cruise-label {
+  font-family: var(--font-display);
+  font-size: 20px; font-weight: 600;
+  color: var(--sand);
+}
+.cruise-block .cruise-dates { font-size: 12px; color: #8a9ab5; margin-top: 4px; }
+.cruise-block .cruise-route { font-size: 11px; color: #6b7fa0; margin-top: 6px; line-height: 1.5; }
+
+/* ── Budget Tab ── */
+.budget-container { padding: 20px 12px; }
+.budget-summary {
+  background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+  border-radius: 16px;
+  padding: 24px 20px;
+  text-align: center;
+  margin-bottom: 16px;
+  color: var(--sand);
+}
+.budget-total {
+  font-family: var(--font-display);
+  font-size: 36px; font-weight: 700;
+  color: var(--gold);
+}
+.budget-label {
+  font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 2px;
+  color: #8a9ab5;
+  margin-top: 4px;
+}
+.budget-note { font-size: 11px; color: #6b7fa0; margin-top: 8px; line-height: 1.5; }
+.budget-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 16px;
+  background: var(--bg-card);
+  border-radius: 12px;
+  margin-bottom: 8px;
+  box-shadow: var(--shadow-sm);
+}
+.budget-item-info { flex: 1; padding-right: 12px; }
+.budget-item-name { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+.budget-item-detail { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.budget-item-total {
+  font-size: 15px; font-weight: 700;
+  color: var(--green);
+  white-space: nowrap;
+}
+
+/* ── Pack Tab ── */
+.pack-container { padding: 20px 12px; }
+.pack-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.pack-header h2 {
+  font-family: var(--font-display);
+  font-size: 24px; font-weight: 600;
+}
+.pack-progress {
+  margin-top: 8px;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.pack-progress-fill {
+  height: 100%;
+  background: var(--green);
+  border-radius: 2px;
+  transition: width 300ms;
+}
+.pack-count {
+  font-size: 11px; color: var(--text-muted);
+  margin-top: 4px;
+}
+.pack-category {
+  background: var(--bg-card);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 10px;
+  box-shadow: var(--shadow-sm);
+}
+.pack-cat-title {
+  font-size: 14px; font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+.pack-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 8px 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 44px;
+}
+.pack-check {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 200ms;
+}
+.pack-item.checked .pack-check {
+  background: var(--green);
+  border-color: var(--green);
+}
+.pack-item.checked .pack-check::after {
+  content: '✓';
+  color: white;
+  font-size: 13px;
+  font-weight: 700;
+}
+.pack-item.checked .pack-item-label {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+.pack-item-label { font-size: 13px; color: var(--text-primary); }
+
+/* ── Info Tab ── */
+.info-container { padding: 20px 12px; }
+.info-quick {
+  background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+  color: var(--sand);
+}
+.info-quick h2 {
+  font-family: var(--font-display);
+  font-size: 20px; font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--sand);
+}
+.info-quick-row {
+  display: flex; justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(245,230,211,0.08);
+  font-size: 13px;
+}
+.info-quick-row:last-child { border-bottom: none; }
+.info-quick-label { color: #8a9ab5; }
+.info-quick-value { color: var(--sand); font-weight: 600; text-align: right; }
+.faq-section { margin-bottom: 20px; }
+.faq-item {
+  background: var(--bg-card);
+  border-radius: 12px;
+  margin-bottom: 8px;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+.faq-question {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 16px;
+  font-size: 14px; font-weight: 600;
+  color: var(--text-primary);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 44px;
+  background: none; border: none; width: 100%; text-align: left;
+  font-family: var(--font-body);
+}
+.faq-answer {
+  max-height: 0; overflow: hidden;
+  transition: max-height 300ms ease;
+}
+.faq-answer-inner {
+  padding: 0 16px 14px;
+  font-size: 13px; color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Action Items */
+.action-section { margin-top: 16px; }
+.action-section h3 {
+  font-family: var(--font-display);
+  font-size: 20px; font-weight: 600;
+  margin-bottom: 12px;
+}
+.action-group-label {
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1.5px;
+  padding: 3px 10px; border-radius: 8px;
+  display: inline-block;
+  margin-bottom: 8px; margin-top: 12px;
+}
+.action-group-label.high { background: rgba(224,122,95,0.12); color: var(--coral); }
+.action-group-label.moderate { background: rgba(201,169,110,0.12); color: #b8941c; }
+.action-group-label.low { background: rgba(138,154,181,0.1); color: var(--text-muted); }
+.action-group-label.optional { background: rgba(138,154,181,0.06); color: var(--text-muted); }
+.action-item {
+  padding: 10px 12px;
+  background: var(--bg-card);
+  border-radius: 10px;
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+  line-height: 1.5;
+}
+
+/* ── Utility ── */
+.phone-link { color: var(--gold); white-space: nowrap; }
+.divider { height: 1px; background: var(--border); margin: 12px 0; }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ═══ TAB 1: TRIP ═══ -->
+  <div id="tab-trip" class="tab-pane active">
+    <div class="trip-header">
+      <h1 class="font-display">Grand Mediterranean</h1>
+      <div class="subtitle">Four Seasons I · March 17–30, 2026</div>
+    </div>
+    <div id="map-toggle">▲ Route Map ▲</div>
+    <div id="map-wrapper">
+      <div id="map"></div>
+      <div id="port-strip"></div>
+    </div>
+    <div id="timeline"></div>
+  </div>
+
+  <!-- ═══ TAB 2: FLIGHTS ═══ -->
+  <div id="tab-flights" class="tab-pane"></div>
+
+  <!-- ═══ TAB 3: BUDGET ═══ -->
+  <div id="tab-budget" class="tab-pane"></div>
+
+  <!-- ═══ TAB 4: PACK ═══ -->
+  <div id="tab-pack" class="tab-pane"></div>
+
+  <!-- ═══ TAB 5: INFO ═══ -->
+  <div id="tab-info" class="tab-pane"></div>
+
+</div>
+
+<nav id="tab-bar">
+  <button class="tab-btn active" data-tab="trip" aria-label="Trip">
+    <span class="tab-icon">🗺</span><span class="tab-label">Trip</span>
+  </button>
+  <button class="tab-btn" data-tab="flights" aria-label="Flights">
+    <span class="tab-icon">✈️</span><span class="tab-label">Flights</span>
+  </button>
+  <button class="tab-btn" data-tab="budget" aria-label="Budget">
+    <span class="tab-icon">💰</span><span class="tab-label">Budget</span>
+  </button>
+  <button class="tab-btn" data-tab="pack" aria-label="Pack">
+    <span class="tab-icon">🧳</span><span class="tab-label">Pack</span>
+  </button>
+  <button class="tab-btn" data-tab="info" aria-label="Info">
+    <span class="tab-icon">ℹ️</span><span class="tab-label">Info</span>
+  </button>
+</nav>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+/* ════════════════════════════════════════════
+   EMBEDDED TRIP DATA (from trip_data.json v8)
+   ════════════════════════════════════════════ */
+const D = {
+  trip: {
+    title: "Grand Mediterranean Luxury Guide",
+    subtitle: "Four Seasons I · Western Mediterranean",
+    travelers: ["Raelan Lambert", "Robert Lambert"],
+    dateRange: "March 17–30, 2026",
+    cruiseDateRange: "March 20–29, 2026",
+    route: "Málaga → Menorca → La Joliette → Saint-Tropez → Ponza → Trapani → Gozo → Valletta"
+  },
+  confirmations: { delta: "GEVMLH", vueling: "K60WW" },
+  flights: {
+    outbound: [
+      { leg: 1, flight: "DL4439", aircraft: "Embraer 175", operator: "SkyWest / Delta Connection", class: "Delta First Classic", from: "Sacramento, CA (SMF)", fromTerminal: "Terminal A", to: "Seattle, WA (SEA)", toTerminal: "", departDate: "Tuesday, March 17, 2026", departTime: "11:35 AM", arriveDate: "Tuesday, March 17, 2026", arriveTime: "1:43 PM", seats: { Robert: "3C", Raelan: "3D" }, confirmation: "GEVMLH" },
+      { leg: 2, flight: "DL0142", aircraft: "Airbus A330-900neo", class: "Delta First Classic", from: "Seattle, WA (SEA)", to: "Amsterdam, Netherlands (AMS)", departDate: "Tuesday, March 17, 2026", departTime: "4:05 PM", arriveDate: "Wednesday, March 18, 2026", arriveTime: "10:00 AM", layoverBefore: "2h 22m in Seattle", seats: { Robert: "3C", Raelan: "3D" }, confirmation: "GEVMLH" }
+    ],
+    connecting: [
+      { leg: 3, flight: "IB5689", aircraft: "Airbus A320neo", operator: "Vueling", class: "Economy", from: "Amsterdam (AMS)", to: "Málaga, Spain (AGP)", departDate: "Thursday, March 19, 2026", departTime: "11:40 AM", arriveDate: "Thursday, March 19, 2026", arriveTime: "2:50 PM", duration: "3h 10m", confirmation: "K60WW", cost: "$385.20" }
+    ],
+    return: [
+      { leg: 4, flight: "AF3040", aircraft: "Airbus A320neo", operator: "Air Malta", class: "Delta First", from: "Malta (MLA)", to: "Paris-CDG (CDG)", departDate: "Monday, March 30, 2026", departTime: "6:00 AM", arriveDate: "Monday, March 30, 2026", arriveTime: "9:00 AM", confirmation: "GEVMLH" },
+      { leg: 5, flight: "DL0291", aircraft: "Airbus A350-900", class: "Delta First", from: "Paris-CDG (CDG)", fromTerminal: "Terminal 2E", to: "Los Angeles, CA (LAX)", toTerminal: "Terminal B", departDate: "Monday, March 30, 2026", departTime: "4:00 PM", arriveDate: "Monday, March 30, 2026", arriveTime: "6:35 PM", layoverBefore: "7h in Paris (CDG)", confirmation: "GEVMLH" },
+      { leg: 6, flight: "DL4101", aircraft: "Embraer 175", operator: "SkyWest / Delta Connection", class: "Delta First", from: "Los Angeles, CA (LAX)", fromTerminal: "Terminal 3", to: "Sacramento, CA (SMF)", toTerminal: "Terminal A", departDate: "Monday, March 30, 2026", departTime: "9:35 PM", arriveDate: "Monday, March 30, 2026", arriveTime: "11:08 PM", layoverBefore: "3h in Los Angeles (LAX)", confirmation: "GEVMLH" }
+    ],
+    returnTotalDuration: "26h 8m"
+  },
+  days: [
+    {
+      day: 0, date: "2026-03-17", dateFormatted: "Tuesday, March 17, 2026",
+      label: "Pre-Cruise: Outbound Flights", port: null, country: null, type: "travel",
+      description: "SMF → SEA → AMS. Depart Sacramento 11:35 AM, arrive Amsterdam 10:00 AM next day. Delta First Class.",
+      excursions: [], dining: [], recommendations: [], gaps: []
+    },
+    {
+      day: 0, date: "2026-03-18", dateFormatted: "Wednesday, March 18, 2026",
+      label: "Pre-Cruise: Amsterdam Layover", port: "Amsterdam", country: "Netherlands", type: "layover",
+      hotel: { name: "The Dylan Amsterdam", status: "booked", checkIn: "3:00 PM", earlyCheckIn: "Requested — confirmation to robert.lambert@gmail.com", luggageNote: "If early check-in unavailable: hotel will stow luggage." },
+      excursions: [
+        { name: "Rijksmuseum Semi-Private Guided Tour", time: "1:00 PM", guests: 2, costPerPerson: 72.25, totalCost: 144.50, status: "booked", confirmation: "BR-1367886889", notes: "Mobile ticket accepted. Operator: +31 655 551 914." }
+      ],
+      dining: [
+        { name: "De Silveren Spiegel", time: "6:30 PM", guests: 2, status: "booked", reservationId: "AdwWuKA5Cw", address: "Kattengat 4-6, Amsterdam", phone: "+31 20 624 6589", notes: "7-course tasting menu. ALLERGY: Raelan — no fresh garlic (restaurant notified). Smart casual. Allow ~3.5 hours." }
+      ],
+      recommendations: [
+        { name: "Canal District Walk", description: "Stroll the UNESCO-listed canal ring; stop at Café 't Smalle for traditional Dutch atmosphere." }
+      ],
+      gaps: []
+    },
+    {
+      day: 0, date: "2026-03-19", dateFormatted: "Thursday, March 19, 2026",
+      label: "Pre-Cruise: Amsterdam → Málaga", port: null, country: null, type: "travel",
+      hotel: { name: "Hotel Vincci Selección Posada del Patio", status: "booked", confirmation: "xbgpa999u1", address: "Pasillo Santa Isabel, 7, 29005 Málaga", phone: "(+34) 951 001 020", room: "Vincci Essence Triple Superior", totalCost: "€461.99", checkIn: "3:00 PM", checkOut: "12:00 PM (March 20)" },
+      excursions: [], dining: [],
+      recommendations: [
+        { name: "Málaga Historic Center", description: "Explore the cathedral and Picasso Museum if arriving with time to spare." },
+        { name: "Bodegas El Pimpi", description: "Iconic Málaga wine bar adjacent to the Alcazaba — excellent sherries and tapas." }
+      ],
+      gaps: []
+    },
+    {
+      day: 1, date: "2026-03-20", dateFormatted: "Friday, March 20, 2026",
+      port: "Málaga", country: "Spain", type: "embark",
+      arrive: null, depart: "11:00 PM", board: "By 4:00 PM",
+      excursions: [
+        { name: "Hammam Al Ándalus — MIMMA60 Ritual", time: "10:00 AM", guests: 2, costPerPerson: 139, totalCost: 278, currency: "EUR", estimatedUSD: 300, status: "booked", confirmation: "419456", address: "Plaza de los Mártires, 5, Málaga", phone: "952 215 018" }
+      ],
+      dining: [
+        { name: "Dinner on the yacht", time: "Evening", status: "planned", notes: "First night aboard — explore the restaurants. Dinner is pay-as-you-go." }
+      ],
+      recommendations: [
+        { name: "Blossom (1 Michelin Star)", description: "Chef Emi Schobert's modern fusion — terrace overlooks the Alcazaba. Only 8 tables." },
+        { name: "Kaleja (1 Michelin Star)", description: "Ember and wood-fired Andalusian cooking in the old Jewish quarter." },
+        { name: "José Carlos García (1 Michelin Star)", description: "10 consecutive years starred. At Muelle Uno — walk to boarding after lunch." },
+        { name: "Centre Pompidou Málaga", description: "Picasso, Miró, Bacon, Kahlo — right at Muelle Uno. Combine with JCG lunch." },
+        { name: "Alcazaba & Gibralfaro Castle", description: "11th-century Moorish fortress with panoramic port views. Allow 1.5–2 hours." },
+        { name: "Atarazanas Market", description: "Historic market for seafood, olives, and produce. Perfect for morning grazing." }
+      ],
+      gaps: [
+        { severity: "LOW", description: "Hammam at 10 AM, boarding by 4 PM. Afternoon free (~12–4 PM) — consider Atarazanas Market or Centre Pompidou before boarding." }
+      ]
+    },
+    {
+      day: 2, date: "2026-03-21", dateFormatted: "Saturday, March 21, 2026",
+      port: null, country: null, type: "sea", label: "At Sea",
+      excursions: [],
+      dining: [
+        { name: "Terrasse", time: "6:30 PM", guests: 2, status: "booked", notes: "Alfresco Mediterranean dining." }
+      ],
+      recommendations: [
+        { name: "Spa & Wellness", description: "Full-service spa aboard — book treatments early." },
+        { name: "Pool Deck", description: "Relax on the sun deck; intimate yacht means no crowds." }
+      ],
+      gaps: []
+    },
+    {
+      day: 3, date: "2026-03-22", dateFormatted: "Sunday, March 22, 2026",
+      port: "Mahón, Menorca", country: "Spain", type: "port",
+      arrive: "8:00 AM", depart: "3:00 PM", board: "By 3:00 PM",
+      excursions: [
+        { name: "Subaida Cheese Farm Visit", time: "10:00 AM (requested)", guests: 2, status: "pending", notes: "Contacted via WhatsApp — awaiting confirmation. D.O.P. Mahón-Menorca. Need car/driver for the day." }
+      ],
+      dining: [
+        { name: "Smoix (Bib Gourmand)", time: "1:00 PM", guests: 2, status: "booked", location: "Ciutadella de Menorca", phone: "+34 971 38 28 08", notes: "Table held 10 min. Arrive on time. ~45 min drive back to Mahón port after." }
+      ],
+      recommendations: [
+        { name: "Talayotic Menorca UNESCO Sites", description: "2023 UNESCO inscription — mysterious taulas found nowhere else on Earth." },
+        { name: "Xoriguer Gin Distillery", description: "Family-owned since 1784 — gin, pomada, and hierbas tastings. Near the port." },
+        { name: "Hauser & Wirth Gallery", description: "World-class art on Illa del Rei. Confirm March opening: +34 871 18 38 45." },
+        { name: "Cala Macarella", description: "Stunning Mediterranean cove — scenic hike in March (beach facilities closed)." }
+      ],
+      gaps: [
+        { severity: "MODERATE", description: "Cheese farm visit pending confirmation. Still need car/driver for the day." }
+      ]
+    },
+    {
+      day: 4, date: "2026-03-23", dateFormatted: "Monday, March 23, 2026",
+      port: "La Joliette, Marseille", country: "France", type: "port",
+      arrive: "8:00 AM", depart: "6:00 PM", board: "By 6:00 PM",
+      excursions: [],
+      dining: [
+        { name: "Sedna", time: "6:00 PM", guests: 2, status: "booked", notes: "Onboard — Japanese-inspired seafood." }
+      ],
+      recommendations: [
+        { name: "AM par Alexandre Mazzia (3 Stars)", description: "'Gourmet anarchy' blending Mediterranean, African, and Japanese. Tasting menu only." },
+        { name: "Le Petit Nice (3 Stars)", description: "Gérald Passédat's legendary all-seafood restaurant." },
+        { name: "Belle de Mars (1 Star, new 2025)", description: "Hottest new table in Marseille. Near the Vieux-Port." },
+        { name: "MuCEM + Bouillant by Mazzia", description: "Museum + Mazzia's new restaurant on the top floor." },
+        { name: "Calanques National Park", description: "Private boat tour — scenic cruise (water ~14°C in March)." },
+        { name: "Le Panier Quarter", description: "Marseille's oldest neighborhood — walkable from port." }
+      ],
+      gaps: [
+        { severity: "MODERATE", description: "No shore excursion booked. Full day available (8 AM–6 PM). Back onboard for Sedna at 6 PM." }
+      ]
+    },
+    {
+      day: 5, date: "2026-03-24", dateFormatted: "Tuesday, March 24, 2026",
+      port: "Saint-Tropez", country: "France", type: "port",
+      arrive: "8:00 AM", depart: "11:00 PM", board: "By 11:00 PM",
+      excursions: [
+        { name: "Golf Club Saint-Tropez", time: "9:00 AM – 3:30 PM", guests: 2, costPerPerson: 1155, totalCost: 2310, status: "booked", notes: "18-hole round. Includes transfers." }
+      ],
+      dining: [
+        { name: "Le Café (Saint-Tropez)", time: "8:00 PM", guests: 2, status: "hold_pending", phone: "+33 4 94 97 44 69", notes: "HOLD PENDING — must call to book. Iconic Place des Lices." }
+      ],
+      recommendations: [
+        { name: "Musée de l'Annonciade", description: "Post-Impressionist and Fauvist art in a converted 16th-century chapel." },
+        { name: "Place des Lices Market", description: "Morning Provençal market (Tuesdays & Saturdays)." },
+        { name: "Club 55", description: "The original Pampelonne Beach club — legendary since 1955." },
+        { name: "La Vague d'Or (3 Stars)", description: "Arnaud Donckele's Mediterranean haute cuisine." }
+      ],
+      gaps: [
+        { severity: "LOW", description: "Le Café dinner still pending — call to confirm: +33 4 94 97 44 69" }
+      ]
+    },
+    {
+      day: 6, date: "2026-03-25", dateFormatted: "Wednesday, March 25, 2026",
+      port: null, country: null, type: "sea", label: "At Sea",
+      excursions: [], dining: [],
+      recommendations: [
+        { name: "Recovery Day", description: "Rest after Saint-Tropez. Spa, pool, or catch up on reading." }
+      ],
+      gaps: []
+    },
+    {
+      day: 7, date: "2026-03-26", dateFormatted: "Thursday, March 26, 2026",
+      port: "Isola di Ponza", country: "Italy", type: "port",
+      arrive: "8:00 AM", depart: "5:00 PM", board: "By 5:00 PM",
+      excursions: [],
+      dining: [],
+      recommendations: [
+        { name: "Private Boat Circumnavigation", description: "The single best thing to do. Grotte di Pilato, sea caves, Palmarola extension. Allow 4–5 hours." },
+        { name: "Acqua Pazza (1 Star)", description: "20+ consecutive years starred. Panoramic port views. Confirm March hours: +39 0771 80643." },
+        { name: "Palmarola Island", description: "Uninhabited island 30 min west — dramatic rock formations. You'll have it to yourselves in March." },
+        { name: "Biancolella di Ponza Wine", description: "One of Italy's rarest wines (~1,500 bottles/year). Order at any restaurant." }
+      ],
+      gaps: [
+        { severity: "HIGH", description: "No excursion booked. Full day open (8 AM–5 PM). March is off-season — confirm restaurant availability." }
+      ]
+    },
+    {
+      day: 8, date: "2026-03-27", dateFormatted: "Friday, March 27, 2026",
+      port: "Trapani, Sicily", country: "Italy", type: "port",
+      arrive: "8:00 AM", depart: "6:00 PM", board: "By 6:00 PM",
+      excursions: [
+        { name: "Ancient Ruins & Authentic Flavours", time: "8:45 AM – 2:30 PM", guests: 2, costPerPerson: 675, totalCost: 1350, status: "booked", notes: "Segesta ruins + Sicilian food experience. Four Seasons excursion." }
+      ],
+      dining: [],
+      recommendations: [
+        { name: "Erice", description: "Medieval hilltop village — cable car ride, Norman castle, Maria Grammatico's pastries." },
+        { name: "Saline di Trapani", description: "Salt flats and windmills — stunning at sunset." },
+        { name: "La Bettolaccia", description: "Outstanding Trapanese couscous in the historic center." }
+      ],
+      gaps: [
+        { severity: "LOW", description: "Afternoon free after 2:30 PM. Consider Erice cable car or salt flats." }
+      ]
+    },
+    {
+      day: 9, date: "2026-03-28", dateFormatted: "Saturday, March 28, 2026",
+      port: "Gozo & Valletta", country: "Malta", type: "port",
+      arrive: "8:00 AM (Gozo)", depart: "Overnight in Valletta harbor", board: "Return to yacht",
+      excursions: [
+        { name: "Guided Dive — Gozo", time: "9:30 AM – 1:00 PM", guests: 2, costPerPerson: 380, totalCost: 760, status: "booked", notes: "Morning dive excursion. Gozo is one of the Med's top dive destinations." }
+      ],
+      dining: [],
+      recommendations: [
+        { name: "ION Harbour by Simon Rogan (2 Stars)", description: "Malta's only two-star. 13-course tasting menu. THE farewell dinner. Book well ahead." },
+        { name: "Under Grain (1 Star)", description: "Vaulted stone ceilings in a 17th-century cellar. Seven consecutive years starred." },
+        { name: "Upper Barrakka Gardens", description: "Panoramic harbor views. Cannon ceremony at noon & 4 PM." },
+        { name: "St. John's Co-Cathedral", description: "Caravaggio's largest painting — the only one he signed." }
+      ],
+      gaps: [
+        { severity: "MODERATE", description: "Valletta evening open — no farewell dinner booked. Consider ION Harbour." }
+      ]
+    },
+    {
+      day: 10, date: "2026-03-29", dateFormatted: "Sunday, March 29, 2026",
+      label: "Disembarkation & Malta", port: "Valletta", country: "Malta", type: "disembark",
+      disembarkWindow: "8:00–10:30 AM",
+      hotel: { name: "The Phoenicia Malta", status: "booked", confirmation: "6884SGO67919", address: "The Mall, Floriana, Malta", phone: "00-356-21225241", room: "Pegasus Suite", totalCost: "EUR 1,163.85", checkIn: "3:00 PM", includes: "Daily breakfast, early check-in subject to availability, free Wi-Fi" },
+      excursions: [], dining: [],
+      recommendations: [
+        { name: "Mdina (The Silent City)", description: "Malta's former capital — honey-colored limestone alleys, fewer than 250 residents. 25 min from Valletta." },
+        { name: "De Mondion (1 Star, Mdina)", description: "Michelin-starred dining with terrace views across the countryside." },
+        { name: "MICAS", description: "Contemporary art gallery with rooftop sculpture garden." }
+      ],
+      gaps: []
+    },
+    {
+      day: 11, date: "2026-03-30", dateFormatted: "Monday, March 30, 2026",
+      label: "Return Flights", port: null, country: null, type: "travel",
+      description: "MLA → CDG → LAX → SMF. Depart 6:00 AM, arrive Sacramento 11:08 PM. Total: 26h 8m.",
+      excursions: [], dining: [], recommendations: [], gaps: []
+    }
+  ],
+  expenses: {
+    excursions: [
+      { item: "Rijksmuseum Guided Tour, Amsterdam (Mar 18)", perPerson: 72.25, quantity: 2, total: 144.50 },
+      { item: "Hammam Al Ándalus, Málaga (Mar 20)", perPerson: 139, quantity: 2, total: 278, currency: "EUR", estimatedUSD: 300, notes: "€278 total" },
+      { item: "Smoix lunch, Menorca (Mar 22)", perPerson: 65, quantity: 2, total: 130, notes: "Estimated" },
+      { item: "Golf Club Saint-Tropez (Mar 24)", perPerson: 1155, quantity: 2, total: 2310 },
+      { item: "Ancient Ruins & Flavours, Trapani (Mar 27)", perPerson: 675, quantity: 2, total: 1350 },
+      { item: "Guided Dive, Gozo (Mar 28)", perPerson: 380, quantity: 2, total: 760 }
+    ],
+    totalExcursions: 4994.50,
+    totalExcursionsNote: "Includes ~$300 USD estimate for Hammam (€278) and ~$130 estimate for Smoix.",
+    flights: [{ item: "Vueling AMS → AGP (Mar 19)", total: 385.20 }],
+    notes: "Delta flights (GEVMLH) ticketed separately. Cruise fare not included."
+  },
+  actionItems: [
+    { priority: "HIGH", action: "Contact Subaida Farm — awaiting WhatsApp confirmation for Mar 22, 10:00 AM", status: "open" },
+    { priority: "HIGH", action: "Arrange car/driver for Menorca (Mar 22): Mahón → farm → Ciutadella → Mahón", status: "open" },
+    { priority: "HIGH", action: "Book excursion for Ponza (Mar 26) — full day open", status: "open" },
+    { priority: "HIGH", action: "Call Acqua Pazza (+39 0771 80643) — confirm open Mar 26 (off-season)", status: "open" },
+    { priority: "MODERATE", action: "Reserve ION Harbour for farewell dinner in Valletta (Mar 28 evening)", status: "open" },
+    { priority: "MODERATE", action: "Reserve AM par Mazzia or Le Petit Nice for Marseille lunch (Mar 23)", status: "open" },
+    { priority: "MODERATE", action: "Book shore excursion for Marseille (Mar 23) — full day available", status: "open" },
+    { priority: "MODERATE", action: "Contact Hauser & Wirth Menorca (+34 871 18 38 45) — confirm Mar 22 opening", status: "open" },
+    { priority: "LOW", action: "Call Le Café Saint-Tropez (+33 4 94 97 44 69) — confirm dinner hold (Mar 24, 8 PM)", status: "open" },
+    { priority: "LOW", action: "Plan afternoon in Trapani after excursion ends at 2:30 PM (Mar 27)", status: "open" },
+    { priority: "OPTIONAL", action: "Book spa treatments aboard Four Seasons I", status: "open" },
+    { priority: "OPTIONAL", action: "Arrange private boat for Ponza circumnavigation (Mar 26)", status: "open" }
+  ],
+  shipInfo: [
+    { question: "What is the Four Seasons I?", answer: "A 14-deck, 207-meter luxury yacht by Four Seasons. 222 guests in 95 suites. Launched 2025." },
+    { question: "What dining options are onboard?", answer: "Terrasse (Mediterranean), Sedna (Japanese seafood), and more. Breakfast at Terrasse (7:30–11 AM) is complimentary — the only included meal. All other dining is pay-as-you-go." },
+    { question: "What is the dress code?", answer: "Resort elegant. Smart-casual daytime; collared shirts for evening dining. No formal night requirement." },
+    { question: "Is Wi-Fi available?", answer: "Complimentary high-speed Wi-Fi throughout the yacht, including suites." },
+    { question: "What about gratuities?", answer: "Included in the cruise fare. No additional tipping expected." },
+    { question: "What currency is used onboard?", answer: "USD. Charges go to your suite account, settled with credit card." },
+    { question: "What electrical outlets are in suites?", answer: "European (Type C/F) + North American (Type A/B) + USB-A/USB-C. No adapter needed for US devices." },
+    { question: "How do shore excursions work?", answer: "Four Seasons offers curated excursions via the app. Independent exploration also welcome — concierge can arrange private tours and restaurants." },
+    { question: "What is included in the cruise fare?", answer: "Breakfast (7:30–11 AM), Wi-Fi, fitness center, non-motorized water sports, gratuities. Lunch, dinner, beverages, spa, and premium excursions are extra." },
+    { question: "How does tendering work?", answer: "At some ports, the yacht anchors offshore. Guests are ferried via the yacht's tender boats. Keep your cruise card with you." }
+  ]
+};
+
+/* ════════════════════
+   PORT COORDINATES
+   ════════════════════ */
+const PORTS = [
+  { name: "Málaga", lat: 36.7213, lng: -4.4214, type: "embark", dayDate: "2026-03-20" },
+  { name: "Menorca", lat: 39.8885, lng: 4.2658, type: "port", dayDate: "2026-03-22" },
+  { name: "Marseille", lat: 43.2965, lng: 5.3698, type: "port", dayDate: "2026-03-23" },
+  { name: "Saint-Tropez", lat: 43.2727, lng: 6.6406, type: "port", dayDate: "2026-03-24" },
+  { name: "Ponza", lat: 40.8954, lng: 12.9631, type: "port", dayDate: "2026-03-26" },
+  { name: "Trapani", lat: 38.0174, lng: 12.5114, type: "port", dayDate: "2026-03-27" },
+  { name: "Gozo", lat: 36.0444, lng: 14.2514, type: "port", dayDate: "2026-03-28" },
+  { name: "Valletta", lat: 35.8989, lng: 14.5146, type: "disembark", dayDate: "2026-03-29" }
+];
+
+const FLAGS = { Spain: "🇪🇸", Netherlands: "🇳🇱", France: "🇫🇷", Italy: "🇮🇹", Malta: "🇲🇹" };
+
+const PACKING = [
+  { cat: "👜 Essentials", items: ["Passports", "Cruise documents", "Credit cards & cash (EUR)", "Phone charger & cable", "Medications (Dramamine/Bonine)", "Sunscreen (SPF 50+)", "Sunglasses", "Travel insurance docs"] },
+  { cat: "👗 Clothing", items: ["Layers (cool mornings 57–69°F)", "Swimwear × 2", "Walking shoes", "Evening outfits (resort elegant)", "Rain jacket", "Sun hat", "Sandals", "Linen shirts/pants"] },
+  { cat: "📱 Tech", items: ["iPhone", "Camera", "Power bank", "AirPods", "E-reader"] },
+  { cat: "🧴 Toiletries", items: ["Toothbrush & toothpaste", "Deodorant", "Shampoo & conditioner", "Moisturizer", "Lip balm SPF", "Seasickness remedy patches"] },
+  { cat: "🤿 Dive Day — Gozo (Mar 28)", items: ["Dive certification card", "Rash guard", "Reef-safe sunscreen", "Waterproof phone case"] }
+];
+
+/* ════════════════════
+   UTILITY FUNCTIONS
+   ════════════════════ */
+function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+function phoneLink(phone) {
+  if (!phone) return '';
+  const clean = phone.replace(/[^+\d]/g, '');
+  return `<a href="tel:${clean}" class="phone-link">${esc(phone)}</a>`;
+}
+
+function mapLink(address) {
+  if (!address) return '';
+  return `<a href="https://maps.apple.com/?q=${encodeURIComponent(address)}">${esc(address)}</a>`;
+}
+
+function fmt$(n, currency) {
+  if (currency === 'EUR') return `€${n.toLocaleString()}`;
+  return `$${n.toLocaleString(undefined, {minimumFractionDigits: n % 1 ? 2 : 0})}`;
+}
+
+function getDayBadge(day) {
+  if (day.day === 0) return 'PRE-CRUISE';
+  if (day.day >= 1 && day.day <= 10) return `DAY ${day.day}`;
+  return 'POST-CRUISE';
+}
+
+function getFlag(country) { return FLAGS[country] || ''; }
+
+function getLocation(day) {
+  if (day.type === 'sea') return '⛵ At Sea';
+  if (day.port && day.country) return `${getFlag(day.country)} ${day.port}, ${day.country}`;
+  if (day.port) return `${getFlag(day.country)} ${day.port}`;
+  if (day.label && day.label.includes('→')) return `✈️ ${day.label.replace(/^Pre-Cruise:\s*/, '')}`;
+  if (day.date === '2026-03-17') return '✈️ Sacramento → Amsterdam';
+  if (day.date === '2026-03-30') return '✈️ Valletta → Sacramento';
+  return day.label || '';
+}
+
+function getStatusBadge(day) {
+  if (day.type === 'sea') return { cls: 'b-sea', label: 'Sea Day' };
+  if (day.type === 'travel') return { cls: 'b-travel', label: 'Transit' };
+  if (day.type === 'embark') return { cls: 'b-travel', label: 'Embarkation' };
+  if (day.type === 'disembark') return { cls: 'b-travel', label: 'Disembarkation' };
+  if (day.gaps && day.gaps.some(g => g.severity === 'HIGH')) return { cls: 'b-action', label: 'Needs Planning' };
+  if (day.excursions && day.excursions.some(e => e.status === 'booked')) return { cls: 'b-booked', label: 'Booked' };
+  return { cls: 'b-open', label: 'Open' };
+}
+
+/* ════════════════════════════
+   FLIGHT DATA BY DATE LOOKUP
+   ════════════════════════════ */
+const flightsByDate = {
+  '2026-03-17': D.flights.outbound,
+  '2026-03-19': D.flights.connecting,
+  '2026-03-30': D.flights.return
+};
+
+/* ═══════════════════════
+   RENDER: TRIP TIMELINE
+   ═══════════════════════ */
+function renderTimeline() {
+  const el = document.getElementById('timeline');
+  let html = '';
+
+  D.days.forEach(day => {
+    const badge = getDayBadge(day);
+    const status = getStatusBadge(day);
+    const location = getLocation(day);
+    const isSea = day.type === 'sea';
+    const flights = flightsByDate[day.date] || [];
+
+    html += `<section class="day-card${isSea ? ' sea-day' : ''}" id="day-${day.date}">`;
+    html += `<div class="day-badge">${badge}</div>`;
+    html += `<h2 class="day-location">${esc(location)}</h2>`;
+    html += `<div class="day-date">${esc(day.dateFormatted)}</div>`;
+
+    // Times
+    if (day.arrive || day.depart || day.board || day.disembarkWindow) {
+      html += '<div class="day-times">';
+      if (day.arrive) html += `<span>Arrive <span class="time-val">${esc(day.arrive)}</span></span>`;
+      if (day.depart) html += `<span>Depart <span class="time-val">${esc(day.depart)}</span></span>`;
+      if (day.board) html += `<span>All Aboard <span class="time-val">${esc(day.board)}</span></span>`;
+      if (day.disembarkWindow) html += `<span>Disembark <span class="time-val">${esc(day.disembarkWindow)}</span></span>`;
+      html += '</div>';
+    }
+
+    // Status badge
+    html += `<span class="status-badge ${status.cls}">${status.label}</span>`;
+
+    // Transit blocks
+    if (flights.length) {
+      html += '<div class="day-section"><div class="section-label">FLIGHTS</div>';
+      flights.forEach(f => {
+        html += '<div class="transit-block">';
+        html += `<div class="transit-route">${esc(f.from.split('(')[0].trim())} → ${esc(f.to.split('(')[0].trim())}</div>`;
+        html += '<div class="transit-detail">';
+        html += `<strong>${esc(f.flight)}</strong>`;
+        if (f.operator) html += ` · ${esc(f.operator)}`;
+        html += `<br>${esc(f.aircraft)} · ${esc(f.class)}`;
+        html += `<br>Depart <strong>${esc(f.departTime)}</strong> → Arrive <strong>${esc(f.arriveTime)}</strong>`;
+        if (f.seats) html += `<br>Seats: Robert ${esc(f.seats.Robert)}, Raelan ${esc(f.seats.Raelan)}`;
+        html += '</div></div>';
+      });
+      html += '</div>';
+    }
+
+    // Hotel
+    if (day.hotel) {
+      html += '<div class="day-section"><div class="section-label">ACCOMMODATION</div>';
+      html += '<div class="hotel-block">';
+      html += `<div class="hotel-name">${esc(day.hotel.name)}</div>`;
+      if (day.hotel.status === 'booked') html += '<span class="hotel-status">✓ Booked</span>';
+      html += '<div class="hotel-detail">';
+      if (day.hotel.room) html += `${esc(day.hotel.room)}<br>`;
+      if (day.hotel.checkIn) html += `Check-in: ${esc(day.hotel.checkIn)}`;
+      if (day.hotel.checkOut) html += ` · Check-out: ${esc(day.hotel.checkOut)}`;
+      if (day.hotel.checkIn || day.hotel.checkOut) html += '<br>';
+      if (day.hotel.totalCost) html += `${esc(day.hotel.totalCost)}<br>`;
+      if (day.hotel.confirmation) html += `Confirmation: ${esc(day.hotel.confirmation)}<br>`;
+      if (day.hotel.address) html += `${mapLink(day.hotel.address)}<br>`;
+      if (day.hotel.phone) html += `${phoneLink(day.hotel.phone)}<br>`;
+      if (day.hotel.earlyCheckIn) html += `<em>${esc(day.hotel.earlyCheckIn)}</em><br>`;
+      if (day.hotel.luggageNote) html += `<em>${esc(day.hotel.luggageNote)}</em>`;
+      if (day.hotel.includes) html += `<br>Includes: ${esc(day.hotel.includes)}`;
+      html += '</div></div></div>';
+    }
+
+    // Excursions
+    if (day.excursions && day.excursions.length) {
+      html += '<div class="day-section"><div class="section-label">ACTIVITIES</div>';
+      day.excursions.forEach(ex => {
+        const isPending = ex.status !== 'booked';
+        html += `<div class="excursion-item${isPending ? ' pending' : ''}">`;
+        html += `<div class="excursion-name">${esc(ex.name)}</div>`;
+        html += '<div class="excursion-meta">';
+        if (ex.time) html += `<span>${esc(ex.time)}</span>`;
+        if (ex.totalCost) {
+          const c = ex.currency === 'EUR' ? fmt$(ex.totalCost, 'EUR') : fmt$(ex.totalCost);
+          html += `<span class="excursion-cost">${c}`;
+          if (ex.estimatedUSD) html += ` (~$${ex.estimatedUSD})`;
+          html += '</span>';
+        }
+        const statusCls = ex.status === 'booked' ? 'booked' : (ex.status === 'hold_pending' ? 'hold' : 'pending');
+        const statusLabel = ex.status === 'booked' ? 'Booked' : (ex.status === 'hold_pending' ? 'Hold' : 'Pending');
+        html += `<span class="excursion-status ${statusCls}">${statusLabel}</span>`;
+        html += '</div>';
+        if (ex.confirmation) html += `<div class="excursion-notes">Confirmation: ${esc(ex.confirmation)}</div>`;
+        if (ex.phone) html += `<div class="excursion-notes">${phoneLink(ex.phone)}</div>`;
+        if (ex.notes && !ex.confirmation) html += `<div class="excursion-notes">${esc(ex.notes)}</div>`;
+        html += '</div>';
+      });
+      html += '</div>';
+    }
+
+    // Dining
+    if (day.dining && day.dining.length) {
+      html += '<div class="day-section"><div class="section-label">DINING</div>';
+      day.dining.forEach(di => {
+        html += '<div class="dining-item"><div class="dining-info">';
+        html += `<div class="dining-name">${esc(di.name)}</div>`;
+        html += '<div class="dining-meta">';
+        if (di.time) html += esc(di.time);
+        if (di.status === 'booked') html += ' · <span style="color:var(--green);font-weight:600">Booked</span>';
+        else if (di.status === 'hold_pending') html += ' · <span style="color:var(--coral);font-weight:600">Hold Pending</span>';
+        else if (di.status === 'planned') html += ' · <span style="color:var(--text-muted)">Planned</span>';
+        html += '</div>';
+        if (di.notes) html += `<div class="dining-notes">${esc(di.notes)}</div>`;
+        if (di.address) html += `<div class="dining-notes">${mapLink(di.address)}</div>`;
+        if (di.phone) html += `<div class="dining-notes">${phoneLink(di.phone)}</div>`;
+        html += '</div></div>';
+      });
+      html += '</div>';
+    }
+
+    // Gaps
+    if (day.gaps && day.gaps.length) {
+      html += '<div class="day-section">';
+      day.gaps.forEach(g => {
+        const cls = g.severity === 'HIGH' ? 'gap-high' : (g.severity === 'MODERATE' ? 'gap-moderate' : 'gap-low');
+        html += `<div class="gap-alert ${cls}"><strong>${g.severity}:</strong> ${esc(g.description)}</div>`;
+      });
+      html += '</div>';
+    }
+
+    // Recommendations accordion
+    if (day.recommendations && day.recommendations.length) {
+      html += '<div class="day-section">';
+      html += `<button class="accordion-toggle section-label" onclick="toggleAccordion(this)">`;
+      html += `RECOMMENDATIONS (${day.recommendations.length}) <span class="accordion-arrow">▸</span></button>`;
+      html += '<div class="accordion-body">';
+      day.recommendations.forEach(r => {
+        let desc = r.description;
+        // Wrap phone numbers in tap-to-call links
+        desc = desc.replace(/(\+\d[\d\s\-]+\d)/g, (m) => {
+          const clean = m.replace(/[^+\d]/g, '');
+          return `<a href="tel:${clean}" class="phone-link">${m}</a>`;
+        });
+        html += `<div class="rec-item"><div class="rec-name">${esc(r.name)}</div><div class="rec-desc">${desc}</div></div>`;
+      });
+      html += '</div></div>';
+    }
+
+    // Description fallback for travel days
+    if (day.description && !flights.length && !day.excursions?.length && !day.dining?.length) {
+      html += `<div class="day-section"><p style="font-size:13px;color:var(--text-secondary);line-height:1.6">${esc(day.description)}</p></div>`;
+    }
+
+    html += '</section>';
+  });
+
+  // Action Items — at bottom of timeline
+  const openItems = D.actionItems.filter(a => a.status === 'open');
+  if (openItems.length) {
+    html += '<div class="action-section" style="margin-top:8px"><h3 class="font-display">Action Items</h3>';
+    const groups = ['HIGH', 'MODERATE', 'LOW', 'OPTIONAL'];
+    groups.forEach(priority => {
+      const items = openItems.filter(a => a.priority === priority);
+      if (!items.length) return;
+      html += `<div class="action-group-label ${priority.toLowerCase()}">${priority}</div>`;
+      items.forEach(a => {
+        let text = esc(a.action).replace(/(\+\d[\d\s\-]+\d)/g, (m) => {
+          const clean = m.replace(/[^+\d]/g, '');
+          return `<a href="tel:${clean}" class="phone-link">${m}</a>`;
+        });
+        html += `<div class="action-item">${text}</div>`;
+      });
+    });
+    html += '</div>';
+  }
+
+  el.innerHTML = html;
+}
+
+/* ═══════════════════
+   RENDER: FLIGHTS
+   ═══════════════════ */
+function renderFlights() {
+  const el = document.getElementById('tab-flights');
+  let html = '<div class="flights-container">';
+  html += '<div class="flights-header"><h2 class="font-display">Flight Itinerary</h2>';
+  html += `<div class="conf-code">Delta: ${D.confirmations.delta} · Vueling: ${D.confirmations.vueling}</div></div>`;
+
+  const allLegs = [...D.flights.outbound, ...D.flights.connecting];
+
+  // Outbound + connecting
+  allLegs.forEach((f, i) => {
+    if (f.layoverBefore) {
+      html += '<div class="layover-card">';
+      html += `<div class="layover-duration">⏱ ${esc(f.layoverBefore)}</div>`;
+      html += '</div>';
+    }
+    html += renderFlightCard(f);
+  });
+
+  // Cruise block
+  html += '<div class="cruise-block">';
+  html += '<div class="cruise-icon">🚢</div>';
+  html += '<div class="cruise-label">CRUISE</div>';
+  html += `<div class="cruise-dates">${esc(D.trip.cruiseDateRange)}</div>`;
+  html += `<div class="cruise-route">${esc(D.trip.route)}</div>`;
+  html += '</div>';
+
+  // Return
+  D.flights.return.forEach(f => {
+    if (f.layoverBefore) {
+      html += '<div class="layover-card">';
+      html += `<div class="layover-duration">⏱ ${esc(f.layoverBefore)}</div>`;
+      html += '</div>';
+    }
+    html += renderFlightCard(f);
+  });
+
+  html += `<div style="text-align:center;margin-top:16px;font-size:12px;color:var(--text-muted)">Total return duration: ${esc(D.flights.returnTotalDuration)}</div>`;
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+function renderFlightCard(f) {
+  const fromCity = f.from.split('(')[0].trim();
+  const toCity = f.to.split('(')[0].trim();
+  const fromCode = (f.from.match(/\((\w+)\)/) || ['',''])[1];
+  const toCode = (f.to.match(/\((\w+)\)/) || ['',''])[1];
+
+  let html = '<div class="flight-card">';
+  html += `<div class="flight-leg-label">Leg ${f.leg}</div>`;
+  html += `<div class="flight-route">${esc(fromCity)} → ${esc(toCity)}</div>`;
+  html += `<div class="flight-number">${esc(f.flight)}`;
+  if (f.operator) html += ` · ${esc(f.operator)}`;
+  html += `</div>`;
+
+  html += '<div class="flight-times">';
+  html += `<div class="flight-time-block"><div class="time">${esc(f.departTime)}</div><div class="airport">${esc(fromCode)}</div>`;
+  if (f.fromTerminal) html += `<div class="date">${esc(f.fromTerminal)}</div>`;
+  html += '</div>';
+  html += '<div class="flight-arrow">→</div>';
+  html += `<div class="flight-time-block"><div class="time">${esc(f.arriveTime)}</div><div class="airport">${esc(toCode)}</div>`;
+  if (f.toTerminal) html += `<div class="date">${esc(f.toTerminal)}</div>`;
+  html += '</div></div>';
+
+  html += '<div class="flight-details">';
+  html += `<span>${esc(f.aircraft)}</span>`;
+  html += `<span>${esc(f.class)}</span>`;
+  if (f.seats) html += `<span>Seats: ${f.seats.Robert}, ${f.seats.Raelan}</span>`;
+  if (f.duration) html += `<span>${esc(f.duration)}</span>`;
+  html += `</div>`;
+
+  html += `<div style="margin-top:6px;font-size:11px;color:var(--text-muted)">`;
+  html += `${esc(f.departDate)}`;
+  if (f.arriveDate !== f.departDate) html += ` → ${esc(f.arriveDate)}`;
+  html += `</div>`;
+
+  html += '</div>';
+  return html;
+}
+
+/* ═══════════════════
+   RENDER: BUDGET
+   ═══════════════════ */
+function renderBudget() {
+  const el = document.getElementById('tab-budget');
+  let html = '<div class="budget-container">';
+
+  // Summary card
+  html += '<div class="budget-summary">';
+  html += `<div class="budget-total">$${D.expenses.totalExcursions.toLocaleString(undefined, {minimumFractionDigits: 2})}</div>`;
+  html += '<div class="budget-label">Excursion & Dining Total</div>';
+  html += `<div class="budget-note">${esc(D.expenses.totalExcursionsNote)}<br>Per person: ~$${(D.expenses.totalExcursions / 2).toLocaleString(undefined, {minimumFractionDigits: 2})}</div>`;
+  html += '</div>';
+
+  // Excursion rows
+  html += '<div class="section-label" style="margin-top:16px">EXCURSIONS & DINING</div>';
+  D.expenses.excursions.forEach(ex => {
+    const total = ex.currency === 'EUR' ? `€${ex.total}` + (ex.estimatedUSD ? ` (~$${ex.estimatedUSD})` : '') : `$${ex.total.toLocaleString(undefined, {minimumFractionDigits: ex.total % 1 ? 2 : 0})}`;
+    html += '<div class="budget-row">';
+    html += '<div class="budget-item-info">';
+    html += `<div class="budget-item-name">${esc(ex.item)}</div>`;
+    html += `<div class="budget-item-detail">$${ex.perPerson}/pp × ${ex.quantity}`;
+    if (ex.notes) html += ` · ${esc(ex.notes)}`;
+    html += '</div></div>';
+    html += `<div class="budget-item-total">${total}</div>`;
+    html += '</div>';
+  });
+
+  // Flights
+  html += '<div class="section-label" style="margin-top:16px">FLIGHTS (SEPARATE)</div>';
+  D.expenses.flights.forEach(f => {
+    html += '<div class="budget-row">';
+    html += `<div class="budget-item-info"><div class="budget-item-name">${esc(f.item)}</div></div>`;
+    html += `<div class="budget-item-total">$${f.total.toFixed(2)}</div>`;
+    html += '</div>';
+  });
+
+  html += `<div style="text-align:center;margin-top:16px;font-size:11px;color:var(--text-muted);line-height:1.6">${esc(D.expenses.notes)}</div>`;
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+/* ════════════════════
+   RENDER: PACKING
+   ════════════════════ */
+function renderPack() {
+  const el = document.getElementById('tab-pack');
+  const state = loadPackState();
+  const totalItems = PACKING.reduce((n, c) => n + c.items.length, 0);
+  const checked = Object.values(state).filter(Boolean).length;
+
+  let html = '<div class="pack-container">';
+  html += '<div class="pack-header"><h2 class="font-display">Packing List</h2>';
+  html += `<div class="pack-progress"><div class="pack-progress-fill" style="width:${totalItems ? (checked/totalItems*100) : 0}%"></div></div>`;
+  html += `<div class="pack-count">${checked} / ${totalItems} packed</div></div>`;
+
+  PACKING.forEach(cat => {
+    html += '<div class="pack-category">';
+    html += `<div class="pack-cat-title">${cat.cat}</div>`;
+    cat.items.forEach(item => {
+      const key = `${cat.cat}-${item}`;
+      const isChecked = state[key];
+      html += `<div class="pack-item${isChecked ? ' checked' : ''}" data-key="${esc(key)}" onclick="togglePack(this)">`;
+      html += '<div class="pack-check"></div>';
+      html += `<span class="pack-item-label">${esc(item)}</span>`;
+      html += '</div>';
+    });
+    html += '</div>';
+  });
+
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+function loadPackState() {
+  try { return JSON.parse(localStorage.getItem('cruise-pack-state') || '{}'); } catch { return {}; }
+}
+
+function savePackState(state) {
+  try { localStorage.setItem('cruise-pack-state', JSON.stringify(state)); } catch {}
+}
+
+function togglePack(el) {
+  const key = el.dataset.key;
+  const state = loadPackState();
+  state[key] = !state[key];
+  savePackState(state);
+  el.classList.toggle('checked');
+  // Update progress
+  const totalItems = PACKING.reduce((n, c) => n + c.items.length, 0);
+  const checked = Object.values(state).filter(Boolean).length;
+  const fill = document.querySelector('.pack-progress-fill');
+  const count = document.querySelector('.pack-count');
+  if (fill) fill.style.width = `${totalItems ? (checked/totalItems*100) : 0}%`;
+  if (count) count.textContent = `${checked} / ${totalItems} packed`;
+}
+
+/* ═══════════════════
+   RENDER: INFO
+   ═══════════════════ */
+function renderInfo() {
+  const el = document.getElementById('tab-info');
+  let html = '<div class="info-container">';
+
+  // Quick reference card
+  html += '<div class="info-quick"><h2 class="font-display">Quick Reference</h2>';
+  const quickItems = [
+    ['Delta Confirmation', D.confirmations.delta],
+    ['Vueling Confirmation', D.confirmations.vueling],
+    ['Wi-Fi', 'Complimentary'],
+    ['Outlets', 'US + EU + USB (no adapter)'],
+    ['Breakfast', 'Terrasse, 7:30–11 AM (included)'],
+    ['Dress Code', 'Resort elegant'],
+    ['Gratuities', 'Included in fare']
+  ];
+  quickItems.forEach(([label, value]) => {
+    html += `<div class="info-quick-row"><span class="info-quick-label">${label}</span><span class="info-quick-value">${esc(value)}</span></div>`;
+  });
+  html += '</div>';
+
+  // Ship FAQ
+  html += '<div class="section-label" style="margin-top:20px">SHIP FAQ</div>';
+  html += '<div class="faq-section">';
+  D.shipInfo.forEach((item, i) => {
+    html += '<div class="faq-item">';
+    html += `<button class="faq-question" onclick="toggleFaq(this)">${esc(item.question)} <span class="accordion-arrow">▸</span></button>`;
+    html += `<div class="faq-answer"><div class="faq-answer-inner">${esc(item.answer)}</div></div>`;
+    html += '</div>';
+  });
+  html += '</div>';
+
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+/* ═══════════════════
+   ACCORDION & FAQ
+   ═══════════════════ */
+function toggleAccordion(btn) {
+  btn.classList.toggle('open');
+  const body = btn.nextElementSibling;
+  if (btn.classList.contains('open')) {
+    body.style.maxHeight = body.scrollHeight + 'px';
+  } else {
+    body.style.maxHeight = '0';
+  }
+}
+
+function toggleFaq(btn) {
+  const arrow = btn.querySelector('.accordion-arrow');
+  const answer = btn.nextElementSibling;
+  const isOpen = answer.style.maxHeight && answer.style.maxHeight !== '0px';
+  if (isOpen) {
+    answer.style.maxHeight = '0';
+    arrow.style.transform = 'rotate(0deg)';
+  } else {
+    answer.style.maxHeight = answer.scrollHeight + 'px';
+    arrow.style.transform = 'rotate(90deg)';
+  }
+}
+
+/* ═══════════════════
+   TAB SWITCHING
+   ═══════════════════ */
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tabId).classList.add('active');
+  document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+
+  // Hide map on non-trip tabs
+  const mapWrapper = document.getElementById('map-wrapper');
+  const mapToggle = document.getElementById('map-toggle');
+  const tripHeader = document.querySelector('.trip-header');
+  if (tabId !== 'trip') {
+    if (mapWrapper) mapWrapper.style.display = 'none';
+    if (mapToggle) mapToggle.style.display = 'none';
+    if (tripHeader) tripHeader.style.display = 'none';
+  } else {
+    if (mapWrapper) mapWrapper.style.display = '';
+    if (mapToggle) mapToggle.style.display = '';
+    if (tripHeader) tripHeader.style.display = '';
+  }
+
+  window.scrollTo(0, 0);
+}
+
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+});
+
+/* ═══════════════════
+   MAP
+   ═══════════════════ */
+let map = null;
+let mapCollapsed = false;
+
+function initMap() {
+  if (typeof L === 'undefined') {
+    // Leaflet didn't load — hide map
+    document.getElementById('map-wrapper').style.display = 'none';
+    document.getElementById('map-toggle').style.display = 'none';
+    return;
+  }
+
+  map = L.map('map', {
+    zoomControl: false,
+    attributionControl: false
+  });
+
+  // Tiles — light for light mode, dark for dark mode
+  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const tileUrl = isDark
+    ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+    : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+  L.tileLayer(tileUrl, { maxZoom: 16 }).addTo(map);
+
+  // Gold dashed polyline
+  const routeCoords = PORTS.map(p => [p.lat, p.lng]);
+  L.polyline(routeCoords, {
+    color: '#C9A96E',
+    weight: 2,
+    dashArray: '6, 8',
+    opacity: 0.8
+  }).addTo(map);
+
+  // Port markers
+  PORTS.forEach(port => {
+    const isEndpoint = port.type === 'embark' || port.type === 'disembark';
+    const marker = L.circleMarker([port.lat, port.lng], {
+      radius: isEndpoint ? 8 : 6,
+      fillColor: isEndpoint ? '#E07A5F' : '#C9A96E',
+      color: '#fff',
+      weight: 2,
+      fillOpacity: 1
+    }).addTo(map);
+
+    marker.bindTooltip(port.name, {
+      permanent: false,
+      direction: 'top',
+      offset: [0, -8],
+      className: 'port-tooltip'
+    });
+
+    marker.on('click', () => {
+      flyToPort(port);
+      scrollToDay(port.dayDate);
+    });
+  });
+
+  // Fit bounds
+  const bounds = L.latLngBounds(routeCoords);
+  map.fitBounds(bounds, { padding: [30, 30] });
+
+  // Port strip
+  renderPortStrip();
+
+  // Map toggle
+  document.getElementById('map-toggle').addEventListener('click', () => {
+    const wrapper = document.getElementById('map-wrapper');
+    mapCollapsed = !mapCollapsed;
+    wrapper.classList.toggle('collapsed', mapCollapsed);
+    document.getElementById('map-toggle').textContent = mapCollapsed ? '▼ Route Map ▼' : '▲ Route Map ▲';
+    if (!mapCollapsed) setTimeout(() => map.invalidateSize(), 420);
+  });
+}
+
+function renderPortStrip() {
+  const strip = document.getElementById('port-strip');
+  let html = '<button class="port-pill active" data-port="all" onclick="showAllPorts()">All</button>';
+  PORTS.forEach(p => {
+    html += `<button class="port-pill" data-port="${p.dayDate}" onclick="selectPort('${p.dayDate}', this)">${esc(p.name)}</button>`;
+  });
+  strip.innerHTML = html;
+}
+
+function showAllPorts() {
+  document.querySelectorAll('.port-pill').forEach(p => p.classList.remove('active'));
+  document.querySelector('[data-port="all"]').classList.add('active');
+  const bounds = L.latLngBounds(PORTS.map(p => [p.lat, p.lng]));
+  map.flyToBounds(bounds, { padding: [30, 30], duration: 0.8 });
+}
+
+function selectPort(dayDate, btn) {
+  // Expand map if collapsed
+  if (mapCollapsed) {
+    document.getElementById('map-toggle').click();
+  }
+  // Update active pill
+  document.querySelectorAll('.port-pill').forEach(p => p.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  // Find port
+  const port = PORTS.find(p => p.dayDate === dayDate);
+  if (port) flyToPort(port);
+  scrollToDay(dayDate);
+}
+
+function flyToPort(port) {
+  if (map) map.flyTo([port.lat, port.lng], 12, { duration: 0.8 });
+}
+
+function scrollToDay(date) {
+  const el = document.getElementById('day-' + date);
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Highlight
+    const loc = el.querySelector('.day-location');
+    if (loc) {
+      loc.classList.add('highlight');
+      setTimeout(() => loc.classList.remove('highlight'), 2000);
+    }
+  }
+}
+
+/* ═══════════════════
+   INITIALIZE
+   ═══════════════════ */
+function init() {
+  renderTimeline();
+  renderFlights();
+  renderBudget();
+  renderPack();
+  renderInfo();
+  initMap();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+
+/* Service Worker Registration */
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+</script>
+</body>
+</html>

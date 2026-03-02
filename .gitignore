@@ -1,0 +1,6 @@
+node_modules/
+.claude/
+archive/
+updates/
+*.docx
+CLAUDE_utf8.tmp

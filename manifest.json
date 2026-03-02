@@ -1,0 +1,11 @@
+{
+  "name": "Med Cruise 2026",
+  "short_name": "Cruise",
+  "description": "Grand Mediterranean Luxury Cruise — Four Seasons I",
+  "start_url": "/mediterranean-cruise-dashboard.html",
+  "display": "standalone",
+  "background_color": "#0B1D3A",
+  "theme_color": "#0B1D3A",
+  "orientation": "portrait",
+  "icons": []
+}
