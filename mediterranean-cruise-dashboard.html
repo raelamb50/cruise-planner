@@ -697,8 +697,8 @@ a:active { opacity: 0.7; }
   <button class="tab-btn active" data-tab="trip" aria-label="Trip">
     <span class="tab-icon">🗺</span><span class="tab-label">Trip</span>
   </button>
-  <button class="tab-btn" data-tab="flights" aria-label="Flights">
-    <span class="tab-icon">✈️</span><span class="tab-label">Flights</span>
+  <button class="tab-btn" data-tab="flights" aria-label="Logistics">
+    <span class="tab-icon">✈️</span><span class="tab-label">Logistics</span>
   </button>
   <button class="tab-btn" data-tab="budget" aria-label="Budget">
     <span class="tab-icon">💰</span><span class="tab-label">Budget</span>
@@ -1255,12 +1255,21 @@ function renderTimeline() {
 function renderFlights() {
   const el = document.getElementById('tab-flights');
   let html = '<div class="flights-container">';
-  html += '<div class="flights-header"><h2 class="font-display">Flight Itinerary</h2>';
+  html += '<div class="flights-header"><h2 class="font-display">Transport & Logistics</h2>';
   html += `<div class="conf-code">Delta: ${D.confirmations.delta} · Vueling: ${D.confirmations.vueling}</div></div>`;
 
-  const allLegs = [...D.flights.outbound, ...D.flights.connecting];
+  // ── Confirmation Codes ──
+  html += '<div class="section-label">CONFIRMATION CODES</div>';
+  html += '<div class="flight-card" style="margin-bottom:16px">';
+  html += '<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)"><span style="font-size:13px;color:var(--text-secondary)">Delta (all legs)</span><span style="font-size:14px;font-weight:700;color:var(--text-primary);letter-spacing:1px">GEVMLH</span></div>';
+  html += '<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)"><span style="font-size:13px;color:var(--text-secondary)">Vueling AMS → AGP</span><span style="font-size:14px;font-weight:700;color:var(--text-primary);letter-spacing:1px">K60WW</span></div>';
+  html += '<div style="display:flex;justify-content:space-between;padding:4px 0"><span style="font-size:13px;color:var(--text-secondary)">E-Tickets (Raelan)</span><span style="font-size:12px;color:var(--text-muted)">0062396415332</span></div>';
+  html += '<div style="display:flex;justify-content:space-between;padding:4px 0"><span style="font-size:13px;color:var(--text-secondary)">E-Tickets (Robert)</span><span style="font-size:12px;color:var(--text-muted)">0062396415330</span></div>';
+  html += '</div>';
 
-  // Outbound + connecting
+  // ── Flights: Outbound + Connecting ──
+  html += '<div class="section-label">OUTBOUND FLIGHTS</div>';
+  const allLegs = [...D.flights.outbound, ...D.flights.connecting];
   allLegs.forEach((f, i) => {
     if (f.layoverBefore) {
       html += '<div class="layover-card">';
@@ -1270,7 +1279,29 @@ function renderFlights() {
     html += renderFlightCard(f);
   });
 
-  // Cruise block
+  // ── Hotels ──
+  html += '<div class="section-label" style="margin-top:20px">HOTELS</div>';
+  const hotels = D.days.filter(d => d.hotel);
+  hotels.forEach(day => {
+    const h = day.hotel;
+    html += '<div class="hotel-block" style="margin-bottom:10px">';
+    html += `<div class="hotel-name">${esc(h.name)}</div>`;
+    if (h.status === 'booked') html += '<span class="hotel-status">✓ Booked</span>';
+    html += '<div class="hotel-detail">';
+    html += `<strong style="color:var(--gold-light)">${esc(day.dateFormatted)}</strong><br>`;
+    if (h.room) html += `${esc(h.room)}<br>`;
+    if (h.checkIn) html += `Check-in: ${esc(h.checkIn)}`;
+    if (h.checkOut) html += ` · Check-out: ${esc(h.checkOut)}`;
+    if (h.checkIn || h.checkOut) html += '<br>';
+    if (h.totalCost) html += `${esc(h.totalCost)}<br>`;
+    if (h.confirmation) html += `Confirmation: <strong>${esc(h.confirmation)}</strong><br>`;
+    if (h.address) html += `${mapLink(h.address)}<br>`;
+    if (h.phone) html += `${phoneLink(h.phone)}<br>`;
+    if (h.includes) html += `<span style="color:#5fba8a">Includes:</span> ${esc(h.includes)}`;
+    html += '</div></div>';
+  });
+
+  // ── Cruise block ──
   html += '<div class="cruise-block">';
   html += '<div class="cruise-icon">🚢</div>';
   html += '<div class="cruise-label">CRUISE</div>';
@@ -1278,7 +1309,8 @@ function renderFlights() {
   html += `<div class="cruise-route">${esc(D.trip.route)}</div>`;
   html += '</div>';
 
-  // Return
+  // ── Return Flights ──
+  html += '<div class="section-label">RETURN FLIGHTS</div>';
   D.flights.return.forEach(f => {
     if (f.layoverBefore) {
       html += '<div class="layover-card">';
