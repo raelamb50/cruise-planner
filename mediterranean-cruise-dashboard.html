@@ -328,6 +328,7 @@ a:active { opacity: 0.7; }
 .excursion-status.booked { background: rgba(45,106,79,0.12); color: var(--green); }
 .excursion-status.pending { background: rgba(201,169,110,0.15); color: #b8941c; }
 .excursion-status.hold { background: rgba(224,122,95,0.12); color: var(--coral); }
+.excursion-status.cancelled { background: rgba(120,120,120,0.12); color: #888; text-decoration: line-through; }
 .excursion-notes {
   font-size: 11px; color: var(--text-muted);
   margin-top: 4px; line-height: 1.5;
@@ -691,6 +692,9 @@ a:active { opacity: 0.7; }
   <!-- ═══ TAB 5: INFO ═══ -->
   <div id="tab-info" class="tab-pane"></div>
 
+  <!-- ═══ TAB 6: ACTION ITEMS ═══ -->
+  <div id="tab-action" class="tab-pane"></div>
+
 </div>
 
 <nav id="tab-bar">
@@ -709,286 +713,1036 @@ a:active { opacity: 0.7; }
   <button class="tab-btn" data-tab="info" aria-label="Info">
     <span class="tab-icon">ℹ️</span><span class="tab-label">Info</span>
   </button>
+  <button class="tab-btn" data-tab="action" aria-label="Action Items">
+    <span class="tab-icon">📋</span><span class="tab-label">Actions</span>
+  </button>
 </nav>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 /* ════════════════════════════════════════════
-   EMBEDDED TRIP DATA (from trip_data.json v8)
+   EMBEDDED TRIP DATA (from trip_data.json v11)
    ════════════════════════════════════════════ */
 const D = {
   trip: {
     title: "Grand Mediterranean Luxury Guide",
     subtitle: "Four Seasons I · Western Mediterranean",
-    travelers: ["Raelan Lambert", "Robert Lambert"],
+    travelers: [
+      "Raelan Lambert",
+      "Robert Lambert"
+    ],
     dateRange: "March 17–30, 2026",
     cruiseDateRange: "March 20–29, 2026",
     route: "Málaga → Menorca → La Joliette → Saint-Tropez → Ponza → Trapani → Gozo → Valletta"
   },
-  confirmations: { delta: "GEVMLH", vueling: "K60WW" },
+  confirmations: {
+    delta: "GEVMLH",
+    vueling: "K60WW"
+  },
   flights: {
     outbound: [
-      { leg: 1, flight: "DL4439", aircraft: "Embraer 175", operator: "SkyWest / Delta Connection", class: "Delta First Classic", from: "Sacramento, CA (SMF)", fromTerminal: "Terminal A", to: "Seattle, WA (SEA)", toTerminal: "", departDate: "Tuesday, March 17, 2026", departTime: "11:35 AM", arriveDate: "Tuesday, March 17, 2026", arriveTime: "1:43 PM", seats: { Robert: "3C", Raelan: "3D" }, confirmation: "GEVMLH" },
-      { leg: 2, flight: "DL0142", aircraft: "Airbus A330-900neo", class: "Delta First Classic", from: "Seattle, WA (SEA)", to: "Amsterdam, Netherlands (AMS)", departDate: "Tuesday, March 17, 2026", departTime: "4:05 PM", arriveDate: "Wednesday, March 18, 2026", arriveTime: "10:00 AM", layoverBefore: "2h 22m in Seattle", seats: { Robert: "3C", Raelan: "3D" }, confirmation: "GEVMLH" }
+      {
+        leg: 1,
+        flight: "DL4439",
+        aircraft: "Embraer 175 (Enhanced Winglets)",
+        operator: "SkyWest DBA Delta Connection",
+        class: "Delta First Classic (I)",
+        from: "Sacramento, CA (SMF)",
+        fromTerminal: "Terminal A",
+        to: "Seattle, WA (SEA)",
+        toTerminal: "TBD",
+        departDate: "Tuesday, March 17, 2026",
+        departTime: "11:35 AM",
+        arriveDate: "Tuesday, March 17, 2026",
+        arriveTime: "1:43 PM",
+        seats: {
+          Robert: "3C",
+          Raelan: "3D"
+        },
+        eTickets: {
+          Robert: "0062396415330",
+          Raelan: "0062396415332"
+        },
+        confirmation: "GEVMLH"
+      },
+      {
+        leg: 2,
+        flight: "DL0142",
+        aircraft: "Airbus A330-900neo",
+        class: "Delta First Classic (I)",
+        from: "Seattle, WA (SEA)",
+        fromTerminal: "TBD",
+        to: "Amsterdam, Netherlands (AMS)",
+        toTerminal: "TBD",
+        departDate: "Tuesday, March 17, 2026",
+        departTime: "4:05 PM",
+        arriveDate: "Wednesday, March 18, 2026",
+        arriveTime: "10:00 AM",
+        layoverBefore: "2h 22m in Seattle (SEA)",
+        seats: {
+          Robert: "3C",
+          Raelan: "3D"
+        },
+        confirmation: "GEVMLH"
+      }
     ],
     connecting: [
-      { leg: 3, flight: "IB5689", aircraft: "Airbus A320neo", operator: "Vueling", class: "Economy", from: "Amsterdam (AMS)", to: "Málaga, Spain (AGP)", departDate: "Thursday, March 19, 2026", departTime: "11:40 AM", arriveDate: "Thursday, March 19, 2026", arriveTime: "2:50 PM", duration: "3h 10m", confirmation: "K60WW", cost: "$385.20" }
+      {
+        leg: 3,
+        flight: "IB5689",
+        aircraft: "Airbus A320neo",
+        operator: "Vueling",
+        class: "Economy",
+        from: "Amsterdam, Netherlands (AMS)",
+        to: "Málaga, Spain (AGP)",
+        departDate: "Thursday, March 19, 2026",
+        departTime: "11:40 AM",
+        arriveDate: "Thursday, March 19, 2026",
+        arriveTime: "2:50 PM",
+        duration: "3h 10m",
+        tickets: {
+          Raelan: "0752113086272",
+          Robert: "0752113086271"
+        },
+        confirmation: "K60WW",
+        cost: "$385.20 (total for both passengers)",
+        baggage: "Hand baggage: 2 pieces per person, Hold: 1 piece per person",
+        notes: "Free day in Amsterdam on Mar 18. Hotel: The Dylan Amsterdam (booked)."
+      }
     ],
     return: [
-      { leg: 4, flight: "AF3040", aircraft: "Airbus A320neo", operator: "Air Malta", class: "Delta First", from: "Malta (MLA)", to: "Paris-CDG (CDG)", departDate: "Monday, March 30, 2026", departTime: "6:00 AM", arriveDate: "Monday, March 30, 2026", arriveTime: "9:00 AM", confirmation: "GEVMLH" },
-      { leg: 5, flight: "DL0291", aircraft: "Airbus A350-900", class: "Delta First", from: "Paris-CDG (CDG)", fromTerminal: "Terminal 2E", to: "Los Angeles, CA (LAX)", toTerminal: "Terminal B", departDate: "Monday, March 30, 2026", departTime: "4:00 PM", arriveDate: "Monday, March 30, 2026", arriveTime: "6:35 PM", layoverBefore: "7h in Paris (CDG)", confirmation: "GEVMLH" },
-      { leg: 6, flight: "DL4101", aircraft: "Embraer 175", operator: "SkyWest / Delta Connection", class: "Delta First", from: "Los Angeles, CA (LAX)", fromTerminal: "Terminal 3", to: "Sacramento, CA (SMF)", toTerminal: "Terminal A", departDate: "Monday, March 30, 2026", departTime: "9:35 PM", arriveDate: "Monday, March 30, 2026", arriveTime: "11:08 PM", layoverBefore: "3h in Los Angeles (LAX)", confirmation: "GEVMLH" }
+      {
+        leg: 4,
+        flight: "AF3040",
+        aircraft: "Airbus A320neo",
+        operator: "Air Malta",
+        class: "Delta First",
+        from: "Malta (MLA)",
+        fromTerminal: "TBD",
+        to: "Paris-De Gaulle, France (CDG)",
+        toTerminal: "TBD",
+        departDate: "Monday, March 30, 2026",
+        departTime: "6:00 AM",
+        arriveDate: "Monday, March 30, 2026",
+        arriveTime: "9:00 AM",
+        confirmation: "GEVMLH"
+      },
+      {
+        leg: 5,
+        flight: "DL0291",
+        aircraft: "Airbus A350-900",
+        class: "Delta First",
+        from: "Paris-De Gaulle, France (CDG)",
+        fromTerminal: "Aerogare 2 Term E",
+        to: "Los Angeles, CA (LAX)",
+        toTerminal: "Terminal B",
+        departDate: "Monday, March 30, 2026",
+        departTime: "4:00 PM",
+        arriveDate: "Monday, March 30, 2026",
+        arriveTime: "6:35 PM",
+        layoverBefore: "7h in Paris (CDG)",
+        confirmation: "GEVMLH"
+      },
+      {
+        leg: 6,
+        flight: "DL4101",
+        aircraft: "Embraer 175 (Enhanced Winglets)",
+        operator: "SkyWest DBA Delta Connection",
+        class: "Delta First",
+        from: "Los Angeles, CA (LAX)",
+        fromTerminal: "Terminal 3",
+        to: "Sacramento, CA (SMF)",
+        toTerminal: "Terminal A",
+        departDate: "Monday, March 30, 2026",
+        departTime: "9:35 PM",
+        arriveDate: "Monday, March 30, 2026",
+        arriveTime: "11:08 PM",
+        layoverBefore: "3h in Los Angeles (LAX)",
+        confirmation: "GEVMLH"
+      }
     ],
     returnTotalDuration: "26h 8m"
   },
   days: [
     {
-      day: 0, date: "2026-03-17", dateFormatted: "Tuesday, March 17, 2026",
-      label: "Pre-Cruise: Outbound Flights", port: null, country: null, type: "travel",
-      description: "SMF → SEA → AMS. Depart Sacramento 11:35 AM, arrive Amsterdam 10:00 AM next day. Delta First Class.",
-      excursions: [], dining: [], recommendations: [], gaps: []
+      day: 0,
+      date: "2026-03-17",
+      dateFormatted: "Tuesday, March 17, 2026",
+      label: "Pre-Cruise: Outbound Flights (Legs 1–2)",
+      port: null,
+      country: null,
+      type: "travel",
+      description: "SMF → SEA → AMS. Depart Sacramento 11:35 AM, arrive Amsterdam 10:00 AM (+1 day). Delta First Class, confirmation GEVMLH.",
+      excursions: [],
+      dining: [],
+      recommendations: [],
+      gaps: []
     },
     {
-      day: 0, date: "2026-03-18", dateFormatted: "Wednesday, March 18, 2026",
-      label: "Pre-Cruise: Amsterdam Layover", port: "Amsterdam", country: "Netherlands", type: "layover",
-      hotel: { name: "The Dylan Amsterdam", status: "booked", checkIn: "3:00 PM", earlyCheckIn: "Requested — confirmation to robert.lambert@gmail.com", luggageNote: "If early check-in unavailable: hotel will stow luggage." },
+      day: 0,
+      date: "2026-03-18",
+      dateFormatted: "Wednesday, March 18, 2026",
+      label: "Pre-Cruise: Amsterdam Layover",
+      port: "Amsterdam",
+      country: "Netherlands",
+      type: "layover",
+      description: "Arrive AMS 10:00 AM. Check-in at The Dylan Amsterdam at 3:00 PM (early check-in requested). Rijksmuseum guided tour at 1:00 PM. Dinner at De Silveren Spiegel at 6:30 PM.",
+      hotel: {
+        name: "The Dylan Amsterdam",
+        status: "booked",
+        checkIn: "3:00 PM",
+        earlyCheckIn: "Requested — confirmation will be emailed to robert.lambert@gmail.com",
+        luggageNote: "If early check-in unavailable: hotel will stow luggage. Freshen up in bathrooms (gym does not have showers)."
+      },
       excursions: [
-        { name: "Rijksmuseum Semi-Private Guided Tour", time: "1:00 PM", guests: 2, costPerPerson: 72.25, totalCost: 144.50, status: "booked", confirmation: "BR-1367886889", notes: "Mobile ticket accepted. Operator: +31 655 551 914." }
+        {
+          name: "Rijksmuseum Amsterdam Semi-Private Guided Tour",
+          time: "1:00 PM",
+          guests: 2,
+          costPerPerson: 72.25,
+          totalCost: 144.5,
+          status: "booked",
+          provider: "Viator",
+          confirmation: "BR-1367886889",
+          viatorConfirmation: "1750721503",
+          notes: "Semi-private guided tour. Card ending 1004 auto-charged $144.50 on 03/16/26. Mobile ticket accepted — print or save to phone. Tour operator: Rijksmuseum Tours, Nachtwachtlaan 204, Amsterdam. Operator phone: +31655551914."
+        }
       ],
       dining: [
-        { name: "De Silveren Spiegel", time: "6:30 PM", guests: 2, status: "booked", reservationId: "AdwWuKA5Cw", address: "Kattengat 4-6, Amsterdam", phone: "+31 20 624 6589", notes: "7-course tasting menu. ALLERGY: Raelan — no fresh garlic (restaurant notified). Smart casual. Allow ~3.5 hours." }
+        {
+          name: "De Silveren Spiegel",
+          time: "6:30 PM",
+          guests: 2,
+          status: "booked",
+          reservationId: "AdwWuKA5Cw",
+          address: "Kattengat 4-6, Amsterdam",
+          phone: "+31 20 624 6589",
+          notes: "7-course tasting menu. Deposit: €50 (charged to credit card). Confirmation sent to raelanmrlambert@gmail.com. ALLERGY NOTE: Raelan is intolerant to fresh garlic — restaurant has been notified. Cancellation policy: 24 hours in advance or full menu price charged. Smart casual dress code. Allow ~3.5 hours for the experience."
+        }
       ],
       recommendations: [
-        { name: "Canal District Walk", description: "Stroll the UNESCO-listed canal ring; stop at Café 't Smalle for traditional Dutch atmosphere." }
+        {
+          name: "Canal District Walk",
+          description: "Stroll the UNESCO-listed canal ring; stop at Café 't Smalle for traditional Dutch atmosphere"
+        }
       ],
       gaps: []
     },
     {
-      day: 0, date: "2026-03-19", dateFormatted: "Thursday, March 19, 2026",
-      label: "Pre-Cruise: Amsterdam → Málaga", port: null, country: null, type: "travel",
-      hotel: { name: "Hotel Vincci Selección Posada del Patio", status: "booked", confirmation: "xbgpa999u1", address: "Pasillo Santa Isabel, 7, 29005 Málaga", phone: "(+34) 951 001 020", room: "Vincci Essence Triple Superior", totalCost: "€461.99", checkIn: "3:00 PM", checkOut: "12:00 PM (March 20)" },
-      excursions: [], dining: [],
-      recommendations: [
-        { name: "Málaga Historic Center", description: "Explore the cathedral and Picasso Museum if arriving with time to spare." },
-        { name: "Bodegas El Pimpi", description: "Iconic Málaga wine bar adjacent to the Alcazaba — excellent sherries and tapas." }
-      ],
-      gaps: []
-    },
-    {
-      day: 1, date: "2026-03-20", dateFormatted: "Friday, March 20, 2026",
-      port: "Málaga", country: "Spain", type: "embark",
-      arrive: null, depart: "11:00 PM", board: "By 4:00 PM",
-      excursions: [
-        { name: "Hammam Al Ándalus — MIMMA60 Ritual", time: "10:00 AM", guests: 2, costPerPerson: 139, totalCost: 278, currency: "EUR", estimatedUSD: 300, status: "booked", confirmation: "419456", address: "Plaza de los Mártires, 5, Málaga", phone: "952 215 018" }
-      ],
-      dining: [
-        { name: "Dinner on the yacht", time: "Evening", status: "planned", notes: "First night aboard — explore the restaurants. Dinner is pay-as-you-go." }
-      ],
-      recommendations: [
-        { name: "Blossom (1 Michelin Star)", description: "Chef Emi Schobert's modern fusion — terrace overlooks the Alcazaba. Only 8 tables." },
-        { name: "Kaleja (1 Michelin Star)", description: "Ember and wood-fired Andalusian cooking in the old Jewish quarter." },
-        { name: "José Carlos García (1 Michelin Star)", description: "10 consecutive years starred. At Muelle Uno — walk to boarding after lunch." },
-        { name: "Centre Pompidou Málaga", description: "Picasso, Miró, Bacon, Kahlo — right at Muelle Uno. Combine with JCG lunch." },
-        { name: "Alcazaba & Gibralfaro Castle", description: "11th-century Moorish fortress with panoramic port views. Allow 1.5–2 hours." },
-        { name: "Atarazanas Market", description: "Historic market for seafood, olives, and produce. Perfect for morning grazing." }
-      ],
-      gaps: [
-        { severity: "LOW", description: "Hammam at 10 AM, boarding by 4 PM. Afternoon free (~12–4 PM) — consider Atarazanas Market or Centre Pompidou before boarding." }
-      ]
-    },
-    {
-      day: 2, date: "2026-03-21", dateFormatted: "Saturday, March 21, 2026",
-      port: null, country: null, type: "sea", label: "At Sea",
+      day: 0,
+      date: "2026-03-19",
+      dateFormatted: "Thursday, March 19, 2026",
+      label: "Pre-Cruise: Amsterdam → Málaga",
+      port: null,
+      country: null,
+      type: "travel",
+      description: "Vueling IB5689 — AMS 11:40 AM → AGP 2:50 PM (3h 10m). Economy class, confirmation K60WW. Transfer to Hotel Vincci Selección Posada del Patio upon arrival in Málaga.",
+      hotel: {
+        name: "Hotel Vincci Selección Posada del Patio",
+        status: "booked",
+        confirmation: "xbgpa999u1",
+        address: "Pasillo Santa Isabel, 7, 29005 Málaga",
+        phone: "(+34) 951 001 020",
+        email: "posadadelpatio@vinccihoteles.com",
+        room: "Vincci Essence Triple Superior — 5-star hotel in Málaga's historic center",
+        checkIn: "3:00 PM",
+        checkOut: "12:00 PM (March 20)",
+        totalCost: "EUR 461.99 (taxes included, 12% discount applied)",
+        cancellation: "Free cancellation until March 18, 2026. From March 18 at 2:00 PM: full stay charged (€461.99). Payment at hotel.",
+        reservationHolder: "Robert Lambert (robert.lambert@gmail.com)"
+      },
       excursions: [],
       dining: [
-        { name: "Terrasse", time: "6:30 PM", guests: 2, status: "booked", notes: "Alfresco Mediterranean dining." }
+        {
+          name: "Bodegas El Pimpi",
+          time: "Evening (walk-in)",
+          guests: 2,
+          status: "planned",
+          address: "Calle Granada 62, Málaga",
+          notes: "Walk-in — expect ~20-minute wait. Online reservations not available. Iconic Málaga wine bar adjacent to the Alcazaba. Excellent sherries, tapas, and fritura malagueña."
+        }
       ],
       recommendations: [
-        { name: "Spa & Wellness", description: "Full-service spa aboard — book treatments early." },
-        { name: "Pool Deck", description: "Relax on the sun deck; intimate yacht means no crowds." }
+        {
+          name: "Málaga Historic Center",
+          description: "Explore the cathedral and Picasso Museum if arriving with time to spare"
+        },
+        {
+          name: "Bodegas El Pimpi (PLANNED — walk-in dinner)",
+          description: "Iconic Málaga wine bar adjacent to the Alcazaba, Calle Granada 62. Walk-in only — no online reservations. Expect ~20-minute wait. Sherries from the barrel, tapas, fritura malagueña. The definitive Málaga evening."
+        }
       ],
       gaps: []
     },
     {
-      day: 3, date: "2026-03-22", dateFormatted: "Sunday, March 22, 2026",
-      port: "Mahón, Menorca", country: "Spain", type: "port",
-      arrive: "8:00 AM", depart: "3:00 PM", board: "By 3:00 PM",
+      day: 1,
+      date: "2026-03-20",
+      dateFormatted: "Friday, March 20, 2026",
+      port: "Málaga",
+      country: "Spain",
+      type: "embark",
+      arrive: null,
+      depart: "11:00 PM",
+      board: "By 4:00 PM",
       excursions: [
-        { name: "Subaida Cheese Farm Visit", time: "10:00 AM (requested)", guests: 2, status: "pending", notes: "Contacted via WhatsApp — awaiting confirmation. D.O.P. Mahón-Menorca. Need car/driver for the day." }
+        {
+          name: "Hammam Al Ándalus — MIMMA60 Ritual",
+          time: "10:00 AM",
+          guests: 2,
+          costPerPerson: 139,
+          totalCost: 278,
+          currency: "EUR",
+          estimatedUSD: 300,
+          status: "booked",
+          confirmation: "419456",
+          address: "C/ Plaza de los Mártires, 5, Málaga",
+          phone: "952 215 018",
+          notes: "2x MIMMA60 y bruma perfumada de El Jardín del Hammam. 60-minute bath ritual with perfumed mist experience. Total: €278.00."
+        }
       ],
       dining: [
-        { name: "Smoix (Bib Gourmand)", time: "1:00 PM", guests: 2, status: "booked", location: "Ciutadella de Menorca", phone: "+34 971 38 28 08", notes: "Table held 10 min. Arrive on time. ~45 min drive back to Mahón port after." }
+        {
+          name: "Cambara at Muelle Uno",
+          time: "~1:00 PM (walk-in)",
+          guests: 2,
+          status: "planned",
+          address: "Muelle Uno, Puerto de Málaga",
+          phone: "+34 669 00 98 48",
+          notes: "Post-Hammam lunch (~12:30 PM finish → walk to port). Mediterranean/fusion, rice dishes, harbor terrace. Right at the port — zero transit stress before 4:00 PM boarding. ~€20–30/person. Walk-in friendly."
+        },
+        {
+          name: "Dinner on the yacht",
+          time: "Evening (first night aboard)",
+          guests: 2,
+          status: "planned",
+          notes: "Eating onboard for first evening — explore the ship's restaurants. Note: dinner is pay-as-you-go (only breakfast at Terrasse is complimentary)."
+        }
       ],
       recommendations: [
-        { name: "Talayotic Menorca UNESCO Sites", description: "2023 UNESCO inscription — mysterious taulas found nowhere else on Earth." },
-        { name: "Xoriguer Gin Distillery", description: "Family-owned since 1784 — gin, pomada, and hierbas tastings. Near the port." },
-        { name: "Hauser & Wirth Gallery", description: "World-class art on Illa del Rei. Confirm March opening: +34 871 18 38 45." },
-        { name: "Cala Macarella", description: "Stunning Mediterranean cove — scenic hike in March (beach facilities closed)." }
+        {
+          name: "Blossom (1 Michelin Star)",
+          description: "Chef Emi Schobert's modern fusion on the 4th floor of Palacio de la Aduana — terrace overlooks the Alcazaba. 9-course 'Esencia' or 15-course 'Confluencia' tasting menus. Only 8 tables. The most exciting new restaurant in Málaga."
+        },
+        {
+          name: "Kaleja (1 Michelin Star)",
+          description: "Chef Dani Carnero's 'cocina de candela' — ember and wood-fired cooking reviving Andalusian traditions with modern technique. Hidden in the old Jewish quarter. ~16-course tasting menu."
+        },
+        {
+          name: "Palodu (1 Michelin Star, new 2026)",
+          description: "Chefs Cristina Cánovas & Diego Aguilar's 'dual cuisine' concept — both chefs must approve every dish. Steps from Atarazanas Market. Lunch seating 1:30–2:30 PM. Closed Sun/Mon."
+        },
+        {
+          name: "José Carlos García (1 Michelin Star)",
+          description: "10 consecutive years starred. Two tasting menus: standard (~€160) or JCG Menu (~€236). Located at Muelle Uno, directly on the port — walk to boarding after lunch. Glass-and-steel design with vertical garden."
+        },
+        {
+          name: "Centre Pompidou Málaga",
+          description: "The Centre Pompidou's first international outpost, housed in Daniel Buren's multicolored glass cube on the port. Works by Picasso, Miró, Bacon, Magritte, and Frida Kahlo. Right at Muelle Uno — combine with José Carlos García."
+        },
+        {
+          name: "Hammam Al Ándalus (BOOKED — 10:00 AM)",
+          description: "BOOKED: MIMMA60 ritual at 10:00 AM. Luxury Arab baths in the historic center inspired by Málaga's Moorish heritage. Hot, warm, and cold thermal pools, steam room, and perfumed mist experience. Booking #419456."
+        },
+        {
+          name: "Alcazaba & Gibralfaro Castle",
+          description: "11th-century Moorish fortress with panoramic port views. Allow 1.5–2 hours; it's uphill. Best as a morning activity before lunch — choose this or Picasso Museum, not both, given boarding deadline."
+        },
+        {
+          name: "Museo Picasso Málaga & Casa Natal",
+          description: "Over 285 works in the Buenavista Palace, plus Picasso's birthplace at Plaza de la Merced. Consider a private guided Picasso walk connecting both sites."
+        },
+        {
+          name: "Atarazanas Market",
+          description: "Historic 19th-century iron-and-glass market for fresh seafood, olives, and local produce. Perfect for morning grazing before a Michelin lunch."
+        }
       ],
       gaps: [
-        { severity: "MODERATE", description: "Cheese farm visit pending confirmation. Still need car/driver for the day." }
+        {
+          severity: "LOW",
+          description: "Hammam 10:00 AM → Cambara lunch ~1:00 PM → boarding by 4:00 PM. Consider Centre Pompidou or Muelle Uno stroll between lunch and boarding."
+        }
       ]
     },
     {
-      day: 4, date: "2026-03-23", dateFormatted: "Monday, March 23, 2026",
-      port: "La Joliette, Marseille", country: "France", type: "port",
-      arrive: "8:00 AM", depart: "6:00 PM", board: "By 6:00 PM",
+      day: 2,
+      date: "2026-03-21",
+      dateFormatted: "Saturday, March 21, 2026",
+      port: null,
+      country: null,
+      type: "sea",
+      label: "At Sea",
+      arrive: null,
+      depart: null,
+      board: null,
       excursions: [],
       dining: [
-        { name: "Sedna", time: "6:00 PM", guests: 2, status: "booked", notes: "Onboard — Japanese-inspired seafood." }
+        {
+          name: "Terrasse",
+          time: "6:30 PM",
+          guests: 2,
+          status: "booked",
+          notes: "Onboard restaurant — alfresco Mediterranean dining"
+        }
       ],
       recommendations: [
-        { name: "AM par Alexandre Mazzia (3 Stars)", description: "'Gourmet anarchy' blending Mediterranean, African, and Japanese. Tasting menu only." },
-        { name: "Le Petit Nice (3 Stars)", description: "Gérald Passédat's legendary all-seafood restaurant." },
-        { name: "Belle de Mars (1 Star, new 2025)", description: "Hottest new table in Marseille. Near the Vieux-Port." },
-        { name: "MuCEM + Bouillant by Mazzia", description: "Museum + Mazzia's new restaurant on the top floor." },
-        { name: "Calanques National Park", description: "Private boat tour — scenic cruise (water ~14°C in March)." },
-        { name: "Le Panier Quarter", description: "Marseille's oldest neighborhood — walkable from port." }
-      ],
-      gaps: [
-        { severity: "MODERATE", description: "No shore excursion booked. Full day available (8 AM–6 PM). Back onboard for Sedna at 6 PM." }
-      ]
-    },
-    {
-      day: 5, date: "2026-03-24", dateFormatted: "Tuesday, March 24, 2026",
-      port: "Saint-Tropez", country: "France", type: "port",
-      arrive: "8:00 AM", depart: "11:00 PM", board: "By 11:00 PM",
-      excursions: [
-        { name: "Golf Club Saint-Tropez", time: "9:00 AM – 3:30 PM", guests: 2, costPerPerson: 1155, totalCost: 2310, status: "booked", notes: "18-hole round. Includes transfers." }
-      ],
-      dining: [
-        { name: "Le Café (Saint-Tropez)", time: "8:00 PM", guests: 2, status: "hold_pending", phone: "+33 4 94 97 44 69", notes: "HOLD PENDING — must call to book. Iconic Place des Lices." }
-      ],
-      recommendations: [
-        { name: "Musée de l'Annonciade", description: "Post-Impressionist and Fauvist art in a converted 16th-century chapel." },
-        { name: "Place des Lices Market", description: "Morning Provençal market (Tuesdays & Saturdays)." },
-        { name: "Club 55", description: "The original Pampelonne Beach club — legendary since 1955." },
-        { name: "La Vague d'Or (3 Stars)", description: "Arnaud Donckele's Mediterranean haute cuisine." }
-      ],
-      gaps: [
-        { severity: "LOW", description: "Le Café dinner still pending — call to confirm: +33 4 94 97 44 69" }
-      ]
-    },
-    {
-      day: 6, date: "2026-03-25", dateFormatted: "Wednesday, March 25, 2026",
-      port: null, country: null, type: "sea", label: "At Sea",
-      excursions: [], dining: [],
-      recommendations: [
-        { name: "Recovery Day", description: "Rest after Saint-Tropez. Spa, pool, or catch up on reading." }
+        {
+          name: "Spa & Wellness",
+          description: "Full-service spa aboard the Four Seasons I — book treatments early"
+        },
+        {
+          name: "Pool Deck",
+          description: "Relax on the sun deck; the yacht's intimate size means no crowds"
+        }
       ],
       gaps: []
     },
     {
-      day: 7, date: "2026-03-26", dateFormatted: "Thursday, March 26, 2026",
-      port: "Isola di Ponza", country: "Italy", type: "port",
-      arrive: "8:00 AM", depart: "5:00 PM", board: "By 5:00 PM",
+      day: 3,
+      date: "2026-03-22",
+      dateFormatted: "Sunday, March 22, 2026",
+      port: "Mahón, Menorca",
+      country: "Spain",
+      type: "port",
+      arrive: "8:00 AM",
+      depart: "3:00 PM",
+      board: "By 3:00 PM",
+      excursions: [
+        {
+          name: "Subaida Farm — Guided Tour & Cheese Tasting",
+          time: "11:30 AM",
+          guests: 2,
+          status: "booked",
+          notes: "CONFIRMED: Subaida Farm (Alaior), 2 guests, 11:30 AM – 1:00 PM guided tour + cheese tasting. D.O.P. certified, 350-hectare estate, 3 generations of cheesemaking. ~20–30 min drive from Mahón port. Includes cheese & sausage tasting. After tour: drive back to Mahón, lunch aboard yacht at Terrasse, board by 3 PM.",
+          optionA: {
+            name: "Quesos Sa Roqueta (Ferreries)",
+            type: "Hands-on cheesemaking + farm tour + tasting (2.5 hrs, max 6 people)",
+            highlights: "Make your own Mahón cheese, feed cows/calves, personalize a cheese shipped home after 8-week cure",
+            location: "Carretera General M1, KM 25.8, 07750 Ferreries",
+            idealTime: "9:00–11:30 AM",
+            costPerPerson: 46,
+            currency: "USD",
+            booking: "Contact farm directly (GetYourGuide sold out for 3/22)",
+            website: "https://menorca-guide.com/en/menorca-traditional-cheese-farm"
+          },
+          optionB: {
+            name: "Subaida Farm (Alaior)",
+            type: "Guided farm tour + Menorcan breakfast (1 hr)",
+            highlights: "D.O.P. certified, 350-hectare estate, 3 generations of cheesemaking, master cheesemaker demo, calf feeding, cheese & sausage tasting",
+            location: "Road from Alaior to Arenal d'en Castell",
+            idealTime: "9:30–10:30 AM",
+            phone: "+34 606 32 66 13",
+            website: "https://www.subaida.com/en/visits"
+          },
+          logistics: "Car service: Zone Transfers — WhatsApp +34 654 381 547 (hours: 9:00–14:00 & 16:00–19:00), email info@zonetransfers.com. Route: Mahón port → Subaida Farm, Alaior (~20–30 min) → Mahón port. Need to contact to book."
+        }
+      ],
+      dining: [],
+      recommendations: [
+        {
+          name: "Talayotic Menorca UNESCO Sites",
+          description: "2023 UNESCO World Heritage inscription. ~1,600 prehistoric sites including mysterious taulas (T-shaped megaliths found nowhere else on Earth). Key sites: Naveta des Tudons (oldest roofed building in Europe), Torralba d'en Salort, Torre d'en Galmes. Private archaeologist-guided half-day tours available. Perfect for March — outdoor, year-round."
+        },
+        {
+          name: "Xoriguer Gin Distillery + Mahón Markets",
+          description: "If time allows before farm visit: guided tour at Xoriguer (family-owned since 1784, 1 hr, €15/person, includes gin, pomada, and hierbas tastings paired with local cheese). Then walk to Mercat de Peix (century-old fish market with tapas bars). All year-round, near the port."
+        },
+        {
+          name: "Hauser & Wirth Gallery + Cantina on Illa del Rei",
+          description: "World-class art gallery on a tiny island in Mahón harbor, occupying a restored 18th-century British naval hospital. Features a Piet Oudolf-designed garden (the High Line designer). Cantina restaurant serves Mediterranean plates in an olive grove with harbor views. Free ferry, free gallery entry. MUST CONFIRM MARCH OPENING — contact +34 871 18 38 45 or menorca@hauserwirth.com."
+        },
+        {
+          name: "Subaida Farm (BOOKED — 11:30 AM)",
+          description: "BOOKED: 11:30 AM – 1:00 PM guided tour & cheese tasting at Subaida Farm, Alaior. D.O.P. certified estate, master cheesemaker demo, cheese & sausage tasting. After tour: drive back to Mahón, lunch aboard yacht at Terrasse, board by 3 PM."
+        },
+        {
+          name: "Es Tast de na Sílvia (Ciutadella)",
+          description: "The only restaurant in the Balearics with both Slow Food and Km.0 certifications. Chef Sílvia shops the market daily; menu changes every day. Cash only. In Ciutadella (~45 min drive). Confirm March hours: +34 971 387 895."
+        },
+        {
+          name: "Cala Macarella (scenic hike only in March)",
+          description: "One of the Mediterranean's most beautiful coves (30 min drive). Note: water is ~59°F in March and beach facilities are closed. Worth visiting as a scenic coastal hike, not a beach day."
+        }
+      ],
+      gaps: [
+        {
+          severity: "MODERATE",
+          description: "Subaida Farm booked (11:30 AM – 1:00 PM). Car service identified: Zone Transfers (WhatsApp +34 654 381 547, info@zonetransfers.com) — still need to book."
+        }
+      ]
+    },
+    {
+      day: 4,
+      date: "2026-03-23",
+      dateFormatted: "Monday, March 23, 2026",
+      port: "La Joliette, Marseille",
+      country: "France",
+      type: "port",
+      arrive: "8:00 AM",
+      depart: "6:00 PM",
+      board: "By 6:00 PM",
+      excursions: [],
+      dining: [
+        {
+          name: "Sedna",
+          time: "6:00 PM",
+          guests: 2,
+          status: "booked",
+          notes: "Onboard restaurant — Japanese-inspired seafood"
+        }
+      ],
+      recommendations: [
+        {
+          name: "Morning: Le Panier Quarter + MuCEM",
+          description: "Recommended morning plan. Walk Le Panier (Marseille's oldest neighborhood, 5 min from tender zone) — narrow streets, colorful façades, street art, artisan studios. Then MuCEM museum (open Mondays, closed Tuesdays). Walkable from La Joliette port. Allow 2–3 hours for both."
+        },
+        {
+          name: "Bouillant by Alexandre Mazzia (MuCEM rooftop) — PRIMARY LUNCH",
+          description: "Alexandre Mazzia's casual bistro on the MuCEM rooftop (opened Sept 2025). His 3-star creative DNA in an accessible format — €18–24/dish, no reservations needed. Panoramic sea and cathedral views. Pairs perfectly with the museum visit. Open Monday lunch ~12:00–2:30 PM."
+        },
+        {
+          name: "Belle de Mars (1 Michelin Star, new 2025)",
+          description: "The hottest new table in Marseille. Chefs Michel Marini & Kim-Mai Bui (Passédat alumni). Pretty, seasonal dishes of local seafood and vegetables. Near the Vieux-Port at 56 Rue de Forbin. OPEN MONDAY — tight lunch window 12:15–1:30 PM. Needs reservation NOW: +33 9 86 57 24 58."
+        },
+        {
+          name: "Chez Fonfon (Bib Gourmand)",
+          description: "Iconic bouillabaisse since 1952 in the Vallon des Auffes — Marseille's tiny fisherman's harbor. ~€65/person for the full bouillabaisse (the reason to come). Must order 24 hours ahead: +33 4 91 52 14 38. Open Monday lunch 12:00–2:00 PM. 15 min taxi from port."
+        },
+        {
+          name: "Une Table au Sud (1 Michelin Star)",
+          description: "Chef Ludovic Turac's Provençal-Armenian fusion directly overlooking the Vieux-Port with views to Notre-Dame de la Garde. Ideal setting for a yacht-day lunch. 2 Quai du Port."
+        },
+        {
+          name: "La Mercerie",
+          description: "Not starred but editorially essential — named across Eater, Le Fooding, and The Infatuation. British chef Harry Cummins in a former haberdashery in Noailles. Seasonal, Mediterranean-inflected, ingredient-driven. 9 Cours Saint-Louis."
+        },
+        {
+          name: "Calanques National Park (Scenic Boat Tour)",
+          description: "Dramatic limestone fjords — hire a private boat from the Vieux-Port. Operators like Bleu Évasion offer luxury charters with skipper, wine, and Provençal tapas. Scenic cruise only — water is ~14°C in March, no swimming. Beautiful from the boat."
+        },
+        {
+          name: "Château d'If — ⚠️ CLOSED MONDAYS (Oct–Mar)",
+          description: "The island fortress that inspired Dumas's 'The Count of Monte Cristo.' CLOSED on Mondays in low season (Oct 1–Mar 31) — confirmed via chateau-if.fr. The Frioul Islands ferry still runs for scenery, but the castle itself is inaccessible March 23."
+        },
+        {
+          name: "Le Vieux-Port",
+          description: "The historic Old Port — morning fish market, cafés, and the Norman Foster mirror canopy. Departure point for Calanques boats."
+        }
+      ],
+      gaps: [
+        {
+          severity: "MODERATE",
+          description: "No formal excursion booked. Suggested plan: Le Panier + MuCEM morning → Bouillant lunch on MuCEM rooftop → return aboard for Sedna at 6 PM. Note: AM par Alexandre Mazzia and Le Petit Nice are both CLOSED Mondays. Château d'If also closed."
+        }
+      ]
+    },
+    {
+      day: 5,
+      date: "2026-03-24",
+      dateFormatted: "Tuesday, March 24, 2026",
+      port: "Saint-Tropez",
+      country: "France",
+      type: "port",
+      arrive: "8:00 AM",
+      depart: "11:00 PM",
+      board: "By 11:00 PM",
+      excursions: [
+        {
+          name: "Golf Club Saint-Tropez",
+          time: "9:00 AM – 3:30 PM",
+          guests: 2,
+          costPerPerson: 1155,
+          totalCost: 2310,
+          status: "booked",
+          notes: "18-hole round at one of the Riviera's premier courses. Includes transfers."
+        }
+      ],
+      dining: [
+        {
+          name: "Le Café (Saint-Tropez)",
+          time: "7:30 PM",
+          guests: 2,
+          status: "pending",
+          confirmation: "SevenRooms request submitted",
+          notes: "PENDING — reservation request submitted via SevenRooms for Raelan Lambert, Tuesday March 24, 7:30 PM, 2 guests. Restaurant has 19 days to respond. No phone call needed. Iconic Place des Lices restaurant."
+        }
+      ],
+      recommendations: [
+        {
+          name: "Musée de l'Annonciade",
+          description: "Exceptional post-Impressionist and Fauvist art in a converted 16th-century chapel. Signac, Matisse, Bonnard. Small enough to see in 45 minutes."
+        },
+        {
+          name: "Place des Lices Market — IT'S TUESDAY!",
+          description: "The town's famous Provençal market runs Tuesdays & Saturdays — you're here on a Tuesday. Lavender, olive oils, produce, antiques. Arrives early morning, winds down by ~1 PM. Don't miss it."
+        },
+        {
+          name: "Colette at Hotel Sezz (1 Michelin Star)",
+          description: "Evening dinner alternative if Le Café falls through. Elegant Mediterranean cuisine at the design-forward Hotel Sezz. Call to verify Tuesday opening: +33 (0)4 94 44 53 11."
+        },
+        {
+          name: "Au Caprice des Deux",
+          description: "Provençal bistro since 1994, romantic setting. Solid fallback dinner option. Confirm Tuesday hours: +33 (0)4 94 97 76 78."
+        }
+      ],
+      gaps: [
+        {
+          severity: "LOW",
+          description: "Le Café reservation request submitted (7:30 PM, 2 guests) — awaiting restaurant confirmation via SevenRooms."
+        }
+      ]
+    },
+    {
+      day: 6,
+      date: "2026-03-25",
+      dateFormatted: "Wednesday, March 25, 2026",
+      port: null,
+      country: null,
+      type: "sea",
+      label: "At Sea",
+      arrive: null,
+      depart: null,
+      board: null,
       excursions: [],
       dining: [],
       recommendations: [
-        { name: "Private Boat Circumnavigation", description: "The single best thing to do. Grotte di Pilato, sea caves, Palmarola extension. Allow 4–5 hours." },
-        { name: "Acqua Pazza (1 Star)", description: "20+ consecutive years starred. Panoramic port views. Confirm March hours: +39 0771 80643." },
-        { name: "Palmarola Island", description: "Uninhabited island 30 min west — dramatic rock formations. You'll have it to yourselves in March." },
-        { name: "Biancolella di Ponza Wine", description: "One of Italy's rarest wines (~1,500 bottles/year). Order at any restaurant." }
+        {
+          name: "Recovery Day",
+          description: "Rest and recharge after Saint-Tropez. Spa, pool, or catch up on reading."
+        }
       ],
-      gaps: [
-        { severity: "HIGH", description: "No excursion booked. Full day open (8 AM–5 PM). March is off-season — confirm restaurant availability." }
-      ]
+      gaps: []
     },
     {
-      day: 8, date: "2026-03-27", dateFormatted: "Friday, March 27, 2026",
-      port: "Trapani, Sicily", country: "Italy", type: "port",
-      arrive: "8:00 AM", depart: "6:00 PM", board: "By 6:00 PM",
+      day: 7,
+      date: "2026-03-26",
+      dateFormatted: "Thursday, March 26, 2026",
+      port: "Isola di Ponza",
+      country: "Italy",
+      type: "port",
+      arrive: "8:00 AM",
+      depart: "5:00 PM",
+      board: "By 5:00 PM",
       excursions: [
-        { name: "Ancient Ruins & Authentic Flavours", time: "8:45 AM – 2:30 PM", guests: 2, costPerPerson: 675, totalCost: 1350, status: "booked", notes: "Segesta ruins + Sicilian food experience. Four Seasons excursion." }
+        {
+          name: "A Day on Ponza Island (Four Seasons Excursion)",
+          time: "TBD (5 hrs)",
+          guests: 2,
+          costPerPerson: 2945,
+          totalCost: 5890,
+          status: "available",
+          notes: "Four Seasons shore excursion: explore Ponza's port and ancient streets, Michelin-star lunch with sea views, visit iconic Chiaia di Luna beach. $2,945/guest. All ages. Need to reserve."
+        }
       ],
       dining: [],
       recommendations: [
-        { name: "Erice", description: "Medieval hilltop village — cable car ride, Norman castle, Maria Grammatico's pastries." },
-        { name: "Saline di Trapani", description: "Salt flats and windmills — stunning at sunset." },
-        { name: "La Bettolaccia", description: "Outstanding Trapanese couscous in the historic center." }
+        {
+          name: "Private Boat Circumnavigation of Ponza",
+          description: "The single best thing to do on Ponza. Key stops: Grotte di Pilato (2,000-year-old Roman fish farm), Punta di Capo Bianco (extraordinary blue light at midday), Grotta della Maga Circe, Cala del Core (heart-shaped cliff scar), Le Formiche (crystal-clear visibility). Allow 4–5 hours with stops. Can extend to Palmarola Island. OPERATORS: (1) Cooperativa Barcaioli Ponzesi — the island's main boat cooperative. Off-season contact: Fabio Conte +39 340 397 9916, info@barcaioliponza.it, barcaioliponza.it. (2) ZioJack Ponza — private charter specialist, vessel 'Carmine' (up to 7 guests). +39 349 556 0424, ziojackponza@gmail.com. (3) Ciccio Nero Nautica — 40+ years, motorboat rentals + guided tours. +39 0771 80697, isolaponza.it. (4) SamBoat platform (samboat.com) as online fallback. Also: Four Seasons concierge may arrange through local contacts — worth asking."
+        },
+        {
+          name: "Palmarola Island",
+          description: "Uninhabited island 30 min west of Ponza — described by Condé Nast Traveler as 'one of the most beautiful islands in the Mediterranean.' Dramatic Faraglioni di San Silverio rock formations. In March you'll have it essentially to yourselves."
+        },
+        {
+          name: "Grotte di Pilato (Roman Grottoes)",
+          description: "Five interconnected rock-cut basins from the 1st century CE — an elaborate Roman moray eel farm connected to Augustus's imperial villa above. Archaeological finds include a marble statue (discovered 1997). Accessible by boat near the port. Genuinely unique."
+        },
+        {
+          name: "Acqua Pazza (1 Michelin Star)",
+          description: "Luigi Pesce's celebrated seafood with 20+ consecutive years starred. Multi-tiered terraces with panoramic port views — 'one of the most spectacular views in Italy.' Begin with the raw seafood crudi selection. MUST CONFIRM MARCH HOURS: +39 0771 80643. March is off-season."
+        },
+        {
+          name: "Il Tramonto",
+          description: "Perched high above the sea with the best views on Ponza, looking out to Palmarola. Refined seafood — the paccheri with prawns is phenomenal. Finish with a chilled glass of finocchietto (wild fennel liqueur, a Ponza specialty). Confirm March availability."
+        },
+        {
+          name: "Biancolella di Ponza Wine",
+          description: "One of Italy's rarest wines (~1,500 bottles/year) from Antiche Cantine Migliaccio. Made from vines brought to Ponza in 1734, grown on volcanic tuff soil reachable only by swimming or a 40-min hike. Intensely mineral with citrus notes. Order at any restaurant."
+        },
+        {
+          name: "Natural Pools of Cala Feola",
+          description: "Beautiful natural rock pools on the western coast. Note: beach facilities closed in March. Best visited as a stop on the boat tour rather than a land-based excursion."
+        },
+        {
+          name: "Chiaia di Luna Viewpoint",
+          description: "The beach itself is permanently closed due to fatal rockfalls from the unstable cliffs. However, the clifftop overlook offers a dramatic view of the crescent beach and towering white tuff cliffs. Brief stop during a port village walk."
+        }
       ],
       gaps: [
-        { severity: "LOW", description: "Afternoon free after 2:30 PM. Consider Erice cable car or salt flats." }
+        {
+          severity: "HIGH",
+          description: "No excursion booked yet. Four Seasons 'A Day on Ponza Island' available ($2,945/guest, 5 hrs) — or arrange private boat + Acqua Pazza independently. March is off-season — confirm restaurant availability in advance."
+        }
       ]
     },
     {
-      day: 9, date: "2026-03-28", dateFormatted: "Saturday, March 28, 2026",
-      port: "Gozo & Valletta", country: "Malta", type: "port",
-      arrive: "8:00 AM (Gozo)", depart: "Overnight in Valletta harbor", board: "Return to yacht",
+      day: 8,
+      date: "2026-03-27",
+      dateFormatted: "Friday, March 27, 2026",
+      port: "Trapani, Sicily",
+      country: "Italy",
+      type: "port",
+      arrive: "8:00 AM",
+      depart: "6:00 PM",
+      board: "By 6:00 PM",
       excursions: [
-        { name: "Guided Dive — Gozo", time: "9:30 AM – 1:00 PM", guests: 2, costPerPerson: 380, totalCost: 760, status: "booked", notes: "Morning dive excursion. Gozo is one of the Med's top dive destinations." }
+        {
+          name: "Ancient Ruins & Authentic Flavours",
+          time: "8:45 AM – 2:30 PM",
+          guests: 2,
+          costPerPerson: 675,
+          totalCost: 1350,
+          status: "booked",
+          notes: "Visit the Valley of the Temples–era ruins near Segesta, followed by a Sicilian food experience. Four Seasons excursion."
+        }
       ],
       dining: [],
+      anniversary: "22nd wedding anniversary — ask Four Seasons concierge to arrange a special anniversary dinner onboard: private table, champagne, anniversary touches.",
       recommendations: [
-        { name: "ION Harbour by Simon Rogan (2 Stars)", description: "Malta's only two-star. 13-course tasting menu. THE farewell dinner. Book well ahead." },
-        { name: "Under Grain (1 Star)", description: "Vaulted stone ceilings in a 17th-century cellar. Seven consecutive years starred." },
-        { name: "Upper Barrakka Gardens", description: "Panoramic harbor views. Cannon ceremony at noon & 4 PM." },
-        { name: "St. John's Co-Cathedral", description: "Caravaggio's largest painting — the only one he signed." }
+        {
+          name: "Erice — Afternoon After Excursion (RECOMMENDED)",
+          description: "Medieval hilltop village, the afternoon highlight. Timeline: 2:30 PM excursion ends → taxi to cable car station (~€10, 10 min) → Funivia di Erice cable car (Via Capua, Trapani → Erice in 10 min, €11 round trip, buy online at funiviaerice.skiperformance.com) → 3:00–4:30 PM in Erice → 4:45 PM back in Trapani → aboard by 5:30 PM (buffer before 6 PM departure). ⚠️ Verify March 27 cable car hours — seasonal transition is March 28: funiviaerice.it."
+        },
+        {
+          name: "Maria Grammatico Pasticceria (Erice)",
+          description: "Sicily's most legendary pastry shop. Cassatelle (ricotta-filled fried pastries), genovesi (custard-filled shortcrust), cannoli. Maria Grammatico learned her craft from cloistered nuns as a girl. Via Vittorio Emanuele 14, Erice. Open daily 7 AM–10 PM."
+        },
+        {
+          name: "Castello di Venere (Norman Castle, Erice)",
+          description: "12th-century Norman fortress at the summit of Erice with panoramic views to the Egadi Islands and across western Sicily. Quick 15-min visit, combines with the pastry stop."
+        },
+        {
+          name: "Saline di Trapani",
+          description: "Salt flats and windmills along the coast — particularly stunning at sunset. If skipping Erice, this is the alternative afternoon option."
+        },
+        {
+          name: "La Bettolaccia",
+          description: "Outstanding Trapanese couscous (the local signature dish) in the historic center. If you're hungry after Erice."
+        },
+        {
+          name: "Anniversary Dinner Onboard 🥂",
+          description: "22nd wedding anniversary. Ask Four Seasons concierge to arrange: private table, champagne, anniversary touches. Erice is for the afternoon experience (Maria Grammatico pastries + prosecco with hilltop views), dinner is back aboard the yacht."
+        }
       ],
       gaps: [
-        { severity: "MODERATE", description: "Valletta evening open — no farewell dinner booked. Consider ION Harbour." }
+        {
+          severity: "LOW",
+          description: "Afternoon plan: Erice via cable car after excursion (2:30–4:30 PM). Verify cable car hours for March 27 (seasonal transition March 28). Anniversary dinner onboard — contact concierge to arrange."
+        }
       ]
     },
     {
-      day: 10, date: "2026-03-29", dateFormatted: "Sunday, March 29, 2026",
-      label: "Disembarkation & Malta", port: "Valletta", country: "Malta", type: "disembark",
+      day: 9,
+      date: "2026-03-28",
+      dateFormatted: "Saturday, March 28, 2026",
+      port: "Gozo & Valletta, Malta",
+      country: "Malta",
+      type: "port",
+      arrive: "8:00 AM (Gozo)",
+      depart: "Overnight in Valletta harbor",
+      board: "Return to yacht for overnight",
+      excursions: [
+        {
+          name: "Guided Dive — Gozo",
+          time: "9:30 AM – 1:00 PM",
+          guests: 2,
+          costPerPerson: 380,
+          totalCost: 760,
+          status: "booked",
+          notes: "Morning dive excursion off Gozo. Gozo is considered one of the Mediterranean's top dive destinations."
+        }
+      ],
+      dining: [
+        {
+          name: "Under Grain (1 Michelin Star)",
+          time: "7:00 PM",
+          guests: 2,
+          status: "booked",
+          confirmation: "2JG-Z1M",
+          provider: "Tableo",
+          address: "Beneath the Rosselli hotel, Merchants Street, Valletta",
+          notes: "CONFIRMED via Tableo. Raelan Lambert, Saturday March 28, 7:00 PM, 2 adults, indoor seating. Comment on booking: '22 year wedding anniversary.' Vaulted 17th-century stone cellars. Seven consecutive years Michelin-starred. Cancellation: 24-hour notice required, €50/person penalty.",
+          estimatedCost: "~€120–150 for two (tasting menu)"
+        }
+      ],
+      recommendations: [
+        {
+          name: "Under Grain (BOOKED — 7:00 PM)",
+          description: "BOOKED: 7:00 PM, 2 guests, confirmation 2JG-Z1M. Atmospheric vaulted stone ceilings in a 17th-century cellar beneath the Rosselli hotel. Seven consecutive years starred. Bold combinations — mussels with sweet Gorgonzola, Châteaubriand with mushroom variations. Anniversary dinner (22 years)."
+        },
+        {
+          name: "Noni (1 Michelin Star)",
+          description: "Chef Jonathan Brincat's 'playful and unstuffy' modern Maltese cuisine in a converted 17th-century townhouse. Standout deconstructed prawn cocktail. Alternative if Under Grain plans change."
+        },
+        {
+          name: "Trabuxu Wine Bar",
+          description: "Valletta's first wine bar, set in a 400-year-old stone cellar on Strait Street. Over 20 years running. Exceptional wine list (Maltese, European, New World), artisan cheese and charcuterie. Perfect pre-dinner drinks before Under Grain."
+        },
+        {
+          name: "Upper Barrakka Gardens",
+          description: "Stunning views of the Grand Harbour and the Three Cities. Don't miss the daily cannon-firing ceremony (noon and 4:00 PM). Free, iconic, essential Valletta."
+        },
+        {
+          name: "St. John's Co-Cathedral",
+          description: "One of Europe's most important Baroque churches. Houses Caravaggio's 'Beheading of Saint John the Baptist' — his largest painting and the only one he signed."
+        },
+        {
+          name: "The Three Cities (by water taxi)",
+          description: "Birgu, Senglea, and Cospicua — across the Grand Harbour by a 5-minute water taxi. Fort St. Angelo (the fortress that held during the Great Siege of 1565), narrow medieval streets, far fewer tourists than Valletta."
+        }
+      ],
+      gaps: []
+    },
+    {
+      day: 10,
+      date: "2026-03-29",
+      dateFormatted: "Sunday, March 29, 2026",
+      label: "Disembarkation & Malta",
+      port: "Valletta",
+      country: "Malta",
+      type: "disembark",
       disembarkWindow: "8:00–10:30 AM",
-      hotel: { name: "The Phoenicia Malta", status: "booked", confirmation: "6884SGO67919", address: "The Mall, Floriana, Malta", phone: "00-356-21225241", room: "Pegasus Suite", totalCost: "EUR 1,163.85", checkIn: "3:00 PM", includes: "Daily breakfast, early check-in subject to availability, free Wi-Fi" },
-      excursions: [], dining: [],
+      description: "Disembark Four Seasons I between 8:00–10:30 AM. Full day to explore Valletta. Overnight at The Phoenicia Malta. Early flight the next morning (6:00 AM MLA→CDG) — get to airport by 4:00 AM.",
+      hotel: {
+        name: "The Phoenicia Malta",
+        address: "The Mall, Floriana, Malta",
+        status: "booked",
+        itinerary: "24447B21976704",
+        confirmation: "6884SGO67919",
+        hotelConfirmation: "2592226",
+        phone: "00-356-21225241",
+        chiefHost: "Jovana Novakovic — jovana.novakovic@phoeniciamalta.com, +356 22911000, WhatsApp +35679220004 (available before/during/after stay). Requested: advise estimated arrival time.",
+        room: "Pegasus Suite — Art Deco design, king bed, separate living room, 441 ft². Fully stocked minibar, espresso machine, bathtub + separate shower.",
+        rate: "Leaders Club Exclusive - Flexible",
+        totalCost: "EUR 1,163.85 (incl. VAT)",
+        checkIn: "3:00 PM",
+        checkOut: "12:00 PM",
+        includes: "Daily breakfast at Contessa (main restaurant), early check-in/out (subject to availability), free Wi-Fi, free cancellation up to 3 days prior",
+        ecoTax: "EUR 1.50/night/guest — collected at checkout",
+        spa: "Phoenicia Spa & Wellness available until checkout. Bookings: spa@phoeniciamalta.com"
+      },
+      excursions: [],
+      dining: [],
       recommendations: [
-        { name: "Mdina (The Silent City)", description: "Malta's former capital — honey-colored limestone alleys, fewer than 250 residents. 25 min from Valletta." },
-        { name: "De Mondion (1 Star, Mdina)", description: "Michelin-starred dining with terrace views across the countryside." },
-        { name: "MICAS", description: "Contemporary art gallery with rooftop sculpture garden." }
+        {
+          name: "Upper Barrakka Gardens (morning)",
+          description: "5-min walk from The Phoenicia. Panoramic Grand Harbour views, noon cannon ceremony. Free. Perfect way to start the day after disembarkation."
+        },
+        {
+          name: "Caffè Cordina (morning coffee)",
+          description: "Republic Street, founded 1837. Coffee, pastries, light lunch under painted ceilings. The most civilized way to pass time before hotel check-in. Iconic Valletta institution."
+        },
+        {
+          name: "St. John's Co-Cathedral",
+          description: "Caravaggio's largest painting ('Beheading of Saint John the Baptist'), ornate Baroque interior, 45–60 min. ~€15/person. Book tickets: sjccocathedral.com."
+        },
+        {
+          name: "The Phoenicia Spa (afternoon)",
+          description: "Leave bags with concierge after disembark, check in at 3 PM, book spa treatments for afternoon. Phone: +356 2291 1131."
+        },
+        {
+          name: "Mdina (The Silent City)",
+          description: "Malta's former capital — a tiny walled hilltop city with fewer than 250 residents and 4,000 years of history. Honey-colored limestone alleys, Baroque palaces, quiet courtyards. Stop at Fontanella Tea Garden for coffee with sweeping countryside views. 25 min by car from Valletta."
+        },
+        {
+          name: "MICAS (Malta International Contemporary Art Space)",
+          description: "16,000 sq ft contemporary art gallery just outside Valletta. Designed by IPO Studio (Florence). Rooftop sculpture garden with commissions by Michele Oka Doner and Cristina Iglesias. Highlighted by Robb Report."
+        },
+        {
+          name: "ION Harbour by Simon Rogan (2 Michelin Stars) — SUNDAY DINNER",
+          description: "⚠️ March 29 is a Sunday. Rubino (Bib Gourmand) and Guzé Bistro (1★) are both CLOSED Sundays. ION Harbour is the quality option — hotel restaurant, likely open Sunday. Call: +356 9911 0166. Book 6:00–6:30 PM (need to be in bed by ~9:30 PM for 4:00 AM airport departure)."
+        },
+        {
+          name: "The Phoenix (at The Phoenicia hotel)",
+          description: "Fallback dinner option — ask concierge about Sunday dinner service. Convenient since you're staying at the hotel. Early seating recommended (~6:00 PM)."
+        }
       ],
-      gaps: []
+      gaps: [
+        {
+          severity: "MODERATE",
+          description: "No dinner booked for Sunday evening. ION Harbour (2★) is the best Sunday option — call +356 9911 0166 for 6:00–6:30 PM. Need early dinner: 4:00 AM airport departure next morning."
+        }
+      ]
     },
     {
-      day: 11, date: "2026-03-30", dateFormatted: "Monday, March 30, 2026",
-      label: "Return Flights", port: null, country: null, type: "travel",
-      description: "MLA → CDG → LAX → SMF. Depart 6:00 AM, arrive Sacramento 11:08 PM. Total: 26h 8m.",
-      excursions: [], dining: [], recommendations: [], gaps: []
+      day: 11,
+      date: "2026-03-30",
+      dateFormatted: "Monday, March 30, 2026",
+      label: "Return Flights",
+      port: null,
+      country: null,
+      type: "travel",
+      description: "MLA → CDG → LAX → SMF. Depart Malta 6:00 AM, arrive Sacramento 11:08 PM same day. Total duration: 26h 8m. Delta First Class, confirmation GEVMLH.",
+      excursions: [],
+      dining: [],
+      recommendations: [],
+      gaps: []
     }
   ],
   expenses: {
     excursions: [
-      { item: "Rijksmuseum Guided Tour, Amsterdam (Mar 18)", perPerson: 72.25, quantity: 2, total: 144.50 },
-      { item: "Hammam Al Ándalus, Málaga (Mar 20)", perPerson: 139, quantity: 2, total: 278, currency: "EUR", estimatedUSD: 300, notes: "€278 total" },
-      { item: "Smoix lunch, Menorca (Mar 22)", perPerson: 65, quantity: 2, total: 130, notes: "Estimated" },
-      { item: "Golf Club Saint-Tropez (Mar 24)", perPerson: 1155, quantity: 2, total: 2310 },
-      { item: "Ancient Ruins & Flavours, Trapani (Mar 27)", perPerson: 675, quantity: 2, total: 1350 },
-      { item: "Guided Dive, Gozo (Mar 28)", perPerson: 380, quantity: 2, total: 760 }
+      {
+        item: "Rijksmuseum Semi-Private Guided Tour, Amsterdam (Mar 18)",
+        perPerson: 72.25,
+        quantity: 2,
+        total: 144.5
+      },
+      {
+        item: "Hammam Al Ándalus — MIMMA60 Ritual, Málaga (Mar 20)",
+        perPerson: 139,
+        quantity: 2,
+        total: 278,
+        currency: "EUR",
+        estimatedUSD: 300,
+        notes: "€278 total. USD estimate at ~$1.08/EUR."
+      },
+      {
+        item: "Golf Club Saint-Tropez (Mar 24)",
+        perPerson: 1155,
+        quantity: 2,
+        total: 2310
+      },
+      {
+        item: "Ancient Ruins & Authentic Flavours, Trapani (Mar 27)",
+        perPerson: 675,
+        quantity: 2,
+        total: 1350
+      },
+      {
+        item: "Guided Dive — Gozo (Mar 28)",
+        perPerson: 380,
+        quantity: 2,
+        total: 760
+      },
+      {
+        item: "Under Grain dinner, Valletta (Mar 28)",
+        perPerson: 75,
+        quantity: 2,
+        total: 150,
+        currency: "EUR",
+        estimatedUSD: 162,
+        notes: "Estimated ~€120–150 for two (tasting menu). Using €150 midpoint. USD estimate at ~$1.08/EUR."
+      }
     ],
-    totalExcursions: 4994.50,
-    totalExcursionsNote: "Includes ~$300 USD estimate for Hammam (€278) and ~$130 estimate for Smoix.",
-    flights: [{ item: "Vueling AMS → AGP (Mar 19)", total: 385.20 }],
-    notes: "Delta flights (GEVMLH) ticketed separately. Cruise fare not included."
+    totalExcursions: 5026.5,
+    totalExcursionsNote: "Includes ~$300 USD estimate for Hammam Al Ándalus (€278 EUR) and ~$162 USD estimate for Under Grain dinner (€150 EUR). All other amounts in USD.",
+    flights: [
+      {
+        item: "Vueling AMS → AGP (Mar 19)",
+        total: 385.2
+      }
+    ],
+    notes: "Delta flights (GEVMLH) priced separately / already ticketed. Cruise fare not included in this total."
   },
   actionItems: [
-    { priority: "HIGH", action: "Contact Subaida Farm — awaiting WhatsApp confirmation for Mar 22, 10:00 AM", status: "open" },
-    { priority: "HIGH", action: "Arrange car/driver for Menorca (Mar 22): Mahón → farm → Ciutadella → Mahón", status: "open" },
-    { priority: "HIGH", action: "Book excursion for Ponza (Mar 26) — full day open", status: "open" },
-    { priority: "HIGH", action: "Call Acqua Pazza (+39 0771 80643) — confirm open Mar 26 (off-season)", status: "open" },
-    { priority: "MODERATE", action: "Reserve ION Harbour for farewell dinner in Valletta (Mar 28 evening)", status: "open" },
-    { priority: "MODERATE", action: "Reserve AM par Mazzia or Le Petit Nice for Marseille lunch (Mar 23)", status: "open" },
-    { priority: "MODERATE", action: "Book shore excursion for Marseille (Mar 23) — full day available", status: "open" },
-    { priority: "MODERATE", action: "Contact Hauser & Wirth Menorca (+34 871 18 38 45) — confirm Mar 22 opening", status: "open" },
-    { priority: "LOW", action: "Call Le Café Saint-Tropez (+33 4 94 97 44 69) — confirm dinner hold (Mar 24, 8 PM)", status: "open" },
-    { priority: "LOW", action: "Plan afternoon in Trapani after excursion ends at 2:30 PM (Mar 27)", status: "open" },
-    { priority: "OPTIONAL", action: "Book spa treatments aboard Four Seasons I", status: "open" },
-    { priority: "OPTIONAL", action: "Arrange private boat for Ponza circumnavigation (Mar 26)", status: "open" }
+    {
+      priority: "HIGH",
+      action: "Book Zone Transfers for Menorca (Mar 22): Mahón port → Subaida Farm (Alaior) → Mahón port. WhatsApp +34 654 381 547 (hours: 9:00–14:00 & 16:00–19:00), email info@zonetransfers.com.",
+      status: "open"
+    },
+    {
+      priority: "HIGH",
+      action: "Book excursion for Ponza (Mar 26) — arrange private boat circumnavigation. Contact: Cooperativa Barcaioli (+39 340 397 9916), ZioJack (+39 349 556 0424), or Ciccio Nero (+39 0771 80697). Or ask Four Seasons concierge.",
+      status: "open"
+    },
+    {
+      priority: "HIGH",
+      action: "Call Acqua Pazza (+39 0771 80643) to confirm open Mar 26 — off-season",
+      status: "open"
+    },
+    {
+      priority: "HIGH",
+      action: "Verify Erice cable car hours for March 27 (seasonal transition is March 28): funiviaerice.it",
+      status: "open"
+    },
+    {
+      priority: "HIGH",
+      action: "Contact Four Seasons concierge to arrange anniversary dinner onboard (Mar 27) — 22nd wedding anniversary, private table, champagne",
+      status: "open"
+    },
+    {
+      priority: "MODERATE",
+      action: "Book ION Harbour by Simon Rogan for Sunday dinner in Valletta (Mar 29, 6:00–6:30 PM): +356 9911 0166. Best Sunday option — early dinner needed (4 AM airport departure).",
+      status: "open"
+    },
+    {
+      priority: "MODERATE",
+      action: "Contact Hauser & Wirth Menorca (+34 871 18 38 45) to confirm Mar 22 opening — seasonal closure",
+      status: "open"
+    },
+    {
+      priority: "MODERATE",
+      action: "Reply to The Phoenicia Malta with estimated arrival time (Chief Host: Jovana Novakovic, WhatsApp +35679220004)",
+      status: "open"
+    },
+    {
+      priority: "LOW",
+      action: "Reserve Belle de Mars for Marseille lunch (Mar 23, 12:15 PM): +33 9 86 57 24 58. Tight Monday window. Alternative: Bouillant at MuCEM (no reservation needed).",
+      status: "open"
+    },
+    {
+      priority: "LOW",
+      action: "Order bouillabaisse 24h ahead if doing Chez Fonfon for Marseille lunch (Mar 23): +33 4 91 52 14 38",
+      status: "open"
+    },
+    {
+      priority: "OPTIONAL",
+      action: "Book spa treatments aboard Four Seasons I — popular time slots fill up",
+      status: "open"
+    },
+    {
+      priority: "OPTIONAL",
+      action: "Verify Colette at Hotel Sezz (Saint-Tropez) is open Tuesday Mar 24: +33 (0)4 94 44 53 11 — dinner backup if Le Café falls through",
+      status: "open"
+    }
   ],
   shipInfo: [
-    { question: "What is the Four Seasons I?", answer: "A 14-deck, 207-meter luxury yacht by Four Seasons. 222 guests in 95 suites. Launched 2025." },
-    { question: "What dining options are onboard?", answer: "Terrasse (Mediterranean), Sedna (Japanese seafood), and more. Breakfast at Terrasse (7:30–11 AM) is complimentary — the only included meal. All other dining is pay-as-you-go." },
-    { question: "What is the dress code?", answer: "Resort elegant. Smart-casual daytime; collared shirts for evening dining. No formal night requirement." },
-    { question: "Is Wi-Fi available?", answer: "Complimentary high-speed Wi-Fi throughout the yacht, including suites." },
-    { question: "What about gratuities?", answer: "Included in the cruise fare. No additional tipping expected." },
-    { question: "What currency is used onboard?", answer: "USD. Charges go to your suite account, settled with credit card." },
-    { question: "What electrical outlets are in suites?", answer: "European (Type C/F) + North American (Type A/B) + USB-A/USB-C. No adapter needed for US devices." },
-    { question: "How do shore excursions work?", answer: "Four Seasons offers curated excursions via the app. Independent exploration also welcome — concierge can arrange private tours and restaurants." },
-    { question: "What is included in the cruise fare?", answer: "Breakfast (7:30–11 AM), Wi-Fi, fitness center, non-motorized water sports, gratuities. Lunch, dinner, beverages, spa, and premium excursions are extra." },
-    { question: "How does tendering work?", answer: "At some ports, the yacht anchors offshore. Guests are ferried via the yacht's tender boats. Keep your cruise card with you." }
-  ]
+    {
+      question: "What is the Four Seasons I?",
+      answer: "A 14-deck, 207-meter luxury yacht operated by Four Seasons Hotels and Resorts. Capacity of 222 guests in 95 suites. Launched in 2025 as one of the most exclusive cruise ships in the world."
+    },
+    {
+      question: "What dining options are available onboard?",
+      answer: "Multiple restaurants including Terrasse (alfresco Mediterranean), Sedna (Japanese-inspired seafood), and additional venues. Breakfast at Terrasse (7:30–11:00 AM) is complimentary — the only included meal. All other onboard dining (lunch, dinner, room service) is pay-as-you-go. Reservations are made through the Four Seasons app or onboard concierge."
+    },
+    {
+      question: "What is the dress code?",
+      answer: "Resort elegant. Think smart-casual for daytime; collared shirts and closed-toe shoes for evening dining. No formal night requirement, but many guests dress up for dinner. Swimwear is appropriate only at the pool deck."
+    },
+    {
+      question: "Is Wi-Fi available?",
+      answer: "Complimentary high-speed Wi-Fi is available throughout the yacht, including in suites."
+    },
+    {
+      question: "What about gratuities?",
+      answer: "Gratuities are included in the cruise fare. No additional tipping is expected, though it is welcomed for exceptional service."
+    },
+    {
+      question: "What currency is used onboard?",
+      answer: "The onboard currency is USD. All purchases are charged to your suite account, which can be settled with a credit card."
+    },
+    {
+      question: "What electrical outlets are in the suites?",
+      answer: "Suites have both European (Type C/F) and North American (Type A/B) outlets, plus USB-A and USB-C ports. No adapter needed for US devices."
+    },
+    {
+      question: "What about shore excursions?",
+      answer: "Four Seasons offers curated excursions at each port, bookable through the app. Independent exploration is also welcome — the yacht's concierge can arrange private tours, cars, and restaurant reservations."
+    },
+    {
+      question: "What is included in the cruise fare?",
+      answer: "Breakfast at Terrasse (7:30–11:00 AM daily), Wi-Fi, fitness center, non-motorized water sports, gratuities, and select excursions. All other dining (lunch, dinner, room service), beverages, spa treatments, specialty excursions, and premium experiences are additional fees."
+    },
+    {
+      question: "How does tendering work?",
+      answer: "At some ports, the yacht anchors offshore and guests are ferried to shore via the yacht's own tender boats. The crew will announce tendering procedures each morning. Keep your cruise card with you at all times."
+    }
+  ],
+  metadata: {
+    version: 11,
+    generatedDate: "2026-03-04",
+    source: "Compiled from Delta itinerary (GEVMLH), Vueling confirmation (K60WW), Four Seasons cruise itinerary, editorial research from Michelin Guide, Eater, Robb Report, Condé Nast Traveller, Goop, and Town & Country. v11 updates: Bodegas El Pimpi walk-in dinner (Mar 19), Cambara lunch (Mar 20), Smoix removed (Mar 22), Marseille Monday closures noted (Mar 23), Le Café time fix 7:30 PM + SevenRooms pending (Mar 24), Ponza boat operator contacts (Mar 26), Erice cable car details + 22nd anniversary (Mar 27), Under Grain confirmed 2JG-Z1M (Mar 28), Malta Sunday dinner plan (Mar 29)"
+  }
 };
 
 /* ════════════════════
@@ -1179,6 +1933,7 @@ function renderTimeline() {
         html += '<div class="dining-meta">';
         if (di.time) html += esc(di.time);
         if (di.status === 'booked') html += ' · <span style="color:var(--green);font-weight:600">Booked</span>';
+        else if (di.status === 'cancelled') html += ' · <span style="color:#888;font-weight:600;text-decoration:line-through">Cancelled</span>';
         else if (di.status === 'hold_pending') html += ' · <span style="color:var(--coral);font-weight:600">Hold Pending</span>';
         else if (di.status === 'planned') html += ' · <span style="color:var(--text-muted)">Planned</span>';
         html += '</div>';
@@ -1226,26 +1981,45 @@ function renderTimeline() {
     html += '</section>';
   });
 
-  // Action Items — at bottom of timeline
+  el.innerHTML = html;
+}
+
+/* ═══════════════════
+   RENDER: ACTION ITEMS
+   ═══════════════════ */
+function renderActionItems() {
+  const el = document.getElementById('tab-action');
   const openItems = D.actionItems.filter(a => a.status === 'open');
-  if (openItems.length) {
-    html += '<div class="action-section" style="margin-top:8px"><h3 class="font-display">Action Items</h3>';
-    const groups = ['HIGH', 'MODERATE', 'LOW', 'OPTIONAL'];
-    groups.forEach(priority => {
-      const items = openItems.filter(a => a.priority === priority);
-      if (!items.length) return;
-      html += `<div class="action-group-label ${priority.toLowerCase()}">${priority}</div>`;
-      items.forEach(a => {
-        let text = esc(a.action).replace(/(\+\d[\d\s\-]+\d)/g, (m) => {
-          const clean = m.replace(/[^+\d]/g, '');
-          return `<a href="tel:${clean}" class="phone-link">${m}</a>`;
-        });
-        html += `<div class="action-item">${text}</div>`;
+  const doneItems = D.actionItems.filter(a => a.status === 'done');
+  let html = '<div class="action-section" style="padding:16px">';
+  html += '<h2 class="font-display" style="margin-bottom:4px">Action Items</h2>';
+  html += `<p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">${openItems.length} open item${openItems.length !== 1 ? 's' : ''}</p>`;
+
+  const groups = ['HIGH', 'MODERATE', 'LOW', 'OPTIONAL'];
+  groups.forEach(priority => {
+    const items = openItems.filter(a => a.priority === priority);
+    if (!items.length) return;
+    html += `<div class="action-group-label ${priority.toLowerCase()}">${priority}</div>`;
+    items.forEach(a => {
+      let text = esc(a.action).replace(/(\+\d[\d\s\-]+\d)/g, (m) => {
+        const clean = m.replace(/[^+\d]/g, '');
+        return `<a href="tel:${clean}" class="phone-link">${m}</a>`;
       });
+      html += `<div class="action-item">${text}</div>`;
+    });
+  });
+
+  if (doneItems.length) {
+    html += `<button class="accordion-toggle section-label" style="margin-top:20px" onclick="toggleAccordion(this)">`;
+    html += `COMPLETED (${doneItems.length}) <span class="accordion-arrow">▸</span></button>`;
+    html += '<div class="accordion-body">';
+    doneItems.forEach(a => {
+      html += `<div class="action-item" style="opacity:0.5;text-decoration:line-through">${esc(a.action)}</div>`;
     });
     html += '</div>';
   }
 
+  html += '</div>';
   el.innerHTML = html;
 }
 
@@ -1686,6 +2460,7 @@ function init() {
   renderBudget();
   renderPack();
   renderInfo();
+  renderActionItems();
   initMap();
 }
 
