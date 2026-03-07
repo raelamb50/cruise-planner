@@ -334,7 +334,15 @@
       "arrive": null,
       "depart": null,
       "board": null,
-      "excursions": [],
+      "excursions": [
+        {
+          "name": "Couples Massage aboard Four Seasons I",
+          "time": "TBD",
+          "guests": 2,
+          "status": "booked",
+          "notes": "CONFIRMED for both Raelan and Robert. Time to be scheduled with spa. First sea day — perfect for relaxation after embarkation."
+        }
+      ],
       "dining": [
         {
           "name": "Terrasse",
@@ -346,8 +354,8 @@
       ],
       "recommendations": [
         {
-          "name": "Spa & Wellness",
-          "description": "Full-service spa aboard the Four Seasons I — book treatments early"
+          "name": "Couples Massage (BOOKED — time TBD)",
+          "description": "CONFIRMED for both travelers. Schedule time with spa upon boarding. First sea day is ideal — no port rush, full day to unwind."
         },
         {
           "name": "Pool Deck",
@@ -393,7 +401,7 @@
             "phone": "+34 606 32 66 13",
             "website": "https://www.subaida.com/en/visits"
           },
-          "logistics": "Car service: Zone Transfers — WhatsApp +34 654 381 547 (hours: 9:00–14:00 & 16:00–19:00), email info@zonetransfers.com. Route: Mahón port → Subaida Farm, Alaior (~20–30 min) → Mahón port. Need to contact to book."
+          "logistics": "Car service: Zone Transfers — WhatsApp +34 654 381 547 (hours: 9:00–14:00 & 16:00–19:00), email info@zonetransfers.com. Route: Mahón port → Subaida Farm, Alaior (~20–30 min) → Mahón port. Emailed 3/6 requesting pickup by 10:50 AM, return after 1:00 PM. Awaiting reply."
         }
       ],
       "dining": [],
@@ -426,7 +434,7 @@
       "gaps": [
         {
           "severity": "MODERATE",
-          "description": "Subaida Farm booked (11:30 AM – 1:00 PM). Car service identified: Zone Transfers (WhatsApp +34 654 381 547, info@zonetransfers.com) — still need to book."
+          "description": "Subaida Farm booked (11:30 AM – 1:00 PM). Zone Transfers emailed 3/6 — requested pickup from Mahón port by 10:50 AM → Subaida Farm, return to port after 1:00 PM. Check raelan.lambert@gmail.com for response."
         }
       ]
     },
@@ -440,28 +448,46 @@
       "arrive": "8:00 AM",
       "depart": "6:00 PM",
       "board": "By 6:00 PM",
-      "excursions": [],
+      "excursions": [
+        {
+          "name": "MuCEM Guided Tour (90 minutes)",
+          "time": "10:30 AM – 12:00 PM (requested)",
+          "guests": 2,
+          "totalCost": 320,
+          "currency": "EUR",
+          "estimatedUSD": 346,
+          "status": "pending",
+          "provider": "MuCEM",
+          "email": "reservation@mucem.org",
+          "notes": "Emailed reservation@mucem.org on 3/6 requesting 90-min guided tour, 10:30 AM – noon (timed to finish before Bouillant at 12:15 PM). Price: €320 (entrance tickets included) — 20% discount from standard €400. Awaiting confirmation. Check raelan.lambert@gmail.com for response."
+        }
+      ],
       "dining": [
         {
-          "name": "Sedna",
-          "time": "6:00 PM",
+          "name": "Bouillant by Alexandre Mazzia",
+          "time": "12:30 PM",
           "guests": 2,
           "status": "booked",
-          "notes": "Onboard restaurant — Japanese-inspired seafood"
+          "address": "1, esplanade du J4, 13002 Marseille (MuCEM rooftop)",
+          "phone": "04 13 65 01 31",
+          "notes": "CONFIRMED via Guestonline. Raelan Lambert, Monday 23 March 2026 at 12:30 PM, 2 seats. Access via main entrance of MuCEM — show reservation to security guard. Table held 15 min after scheduled time. Alexandre Mazzia's casual bistro on the MuCEM rooftop — his 3-star creative DNA in an accessible format."
+        },
+        {
+          "name": "Casual dinner onboard",
+          "time": "Evening",
+          "guests": 2,
+          "status": "planned",
+          "notes": "Flexible evening — explore the yacht's restaurants at your own pace. Bouillant lunch covers the culinary highlight for the day."
         }
       ],
       "recommendations": [
         {
-          "name": "Morning: Le Panier Quarter + MuCEM",
-          "description": "Recommended morning plan. Walk Le Panier (Marseille's oldest neighborhood, 5 min from tender zone) — narrow streets, colorful façades, street art, artisan studios. Then MuCEM museum (open Mondays, closed Tuesdays). Walkable from La Joliette port. Allow 2–3 hours for both."
+          "name": "Morning: Le Panier Quarter + MuCEM Guided Tour",
+          "description": "Recommended morning plan. Walk Le Panier (Marseille's oldest neighborhood, 5 min from tender zone) — narrow streets, colorful façades, street art, artisan studios. Then MuCEM guided tour 10:30 AM – noon (90 min, €320 for 2 incl. entrance — 20% discount, pending confirmation). Walkable from La Joliette port."
         },
         {
-          "name": "Bouillant by Alexandre Mazzia (MuCEM rooftop) — PRIMARY LUNCH",
-          "description": "Alexandre Mazzia's casual bistro on the MuCEM rooftop (opened Sept 2025). His 3-star creative DNA in an accessible format — €18–24/dish, no reservations needed. Panoramic sea and cathedral views. Pairs perfectly with the museum visit. Open Monday lunch ~12:00–2:30 PM."
-        },
-        {
-          "name": "Belle de Mars (1 Michelin Star, new 2025)",
-          "description": "The hottest new table in Marseille. Chefs Michel Marini & Kim-Mai Bui (Passédat alumni). Pretty, seasonal dishes of local seafood and vegetables. Near the Vieux-Port at 56 Rue de Forbin. OPEN MONDAY — tight lunch window 12:15–1:30 PM. Needs reservation NOW: +33 9 86 57 24 58."
+          "name": "Bouillant by Alexandre Mazzia (BOOKED — 12:30 PM)",
+          "description": "BOOKED: 12:30 PM, 2 guests. Alexandre Mazzia's casual bistro on the MuCEM rooftop (opened Sept 2025). His 3-star creative DNA in an accessible format — €18–24/dish. Panoramic sea and cathedral views. Access via MuCEM main entrance — show reservation to security guard."
         },
         {
           "name": "Chez Fonfon (Bib Gourmand)",
@@ -490,8 +516,8 @@
       ],
       "gaps": [
         {
-          "severity": "MODERATE",
-          "description": "No formal excursion booked. Suggested plan: Le Panier + MuCEM morning → Bouillant lunch on MuCEM rooftop → return aboard for Sedna at 6 PM. Note: AM par Alexandre Mazzia and Le Petit Nice are both CLOSED Mondays. Château d'If also closed."
+          "severity": "LOW",
+          "description": "MuCEM guided tour pending confirmation (emailed reservation@mucem.org 3/6 for 10:30 AM – noon slot). Plan: Le Panier walk → MuCEM guided tour 10:30 AM → Bouillant lunch 12:30 PM → return aboard by 6 PM for casual dinner. Note: AM par Alexandre Mazzia and Le Petit Nice are both CLOSED Mondays."
         }
       ]
     },
@@ -513,7 +539,7 @@
           "costPerPerson": 1155,
           "totalCost": 2310,
           "status": "booked",
-          "notes": "18-hole round at one of the Riviera's premier courses. Includes transfers."
+          "notes": "18-hole round at one of the Riviera's premier courses. Includes transfers. Golf club rental available on-site — no need to bring your own."
         }
       ],
       "dining": [
@@ -521,9 +547,9 @@
           "name": "Le Café (Saint-Tropez)",
           "time": "7:30 PM",
           "guests": 2,
-          "status": "pending",
-          "confirmation": "SevenRooms request submitted",
-          "notes": "PENDING — reservation request submitted via SevenRooms for Raelan Lambert, Tuesday March 24, 7:30 PM, 2 guests. Restaurant has 19 days to respond. No phone call needed. Iconic Place des Lices restaurant."
+          "status": "booked",
+          "confirmation": "Confirmed via iMessage (Valentin, Mar 5)",
+          "notes": "BOOKED — 2 guests, Tuesday March 24, 7:30 PM. Confirmed by restaurant (Valentin) via iMessage. Iconic Place des Lices restaurant."
         }
       ],
       "recommendations": [
@@ -537,19 +563,14 @@
         },
         {
           "name": "Colette at Hotel Sezz (1 Michelin Star)",
-          "description": "Evening dinner alternative if Le Café falls through. Elegant Mediterranean cuisine at the design-forward Hotel Sezz. Call to verify Tuesday opening: +33 (0)4 94 44 53 11."
+          "description": "Elegant Mediterranean cuisine at the design-forward Hotel Sezz. +33 (0)4 94 44 53 11."
         },
         {
           "name": "Au Caprice des Deux",
-          "description": "Provençal bistro since 1994, romantic setting. Solid fallback dinner option. Confirm Tuesday hours: +33 (0)4 94 97 76 78."
+          "description": "Provençal bistro since 1994, romantic setting. +33 (0)4 94 97 76 78."
         }
       ],
-      "gaps": [
-        {
-          "severity": "LOW",
-          "description": "Le Café reservation request submitted (7:30 PM, 2 guests) — awaiting restaurant confirmation via SevenRooms."
-        }
-      ]
+      "gaps": []
     },
     {
       "day": 6,
@@ -584,13 +605,14 @@
       "board": "By 5:00 PM",
       "excursions": [
         {
-          "name": "A Day on Ponza Island (Four Seasons Excursion)",
-          "time": "TBD (5 hrs)",
+          "name": "Guided Hike & Aperitivos in Ponza (BACKUP — pending ZioJack private boat)",
+          "time": "9:15 AM – 1:15 PM",
           "guests": 2,
-          "costPerPerson": 2945,
-          "totalCost": 5890,
-          "status": "available",
-          "notes": "Four Seasons shore excursion: explore Ponza's port and ancient streets, Michelin-star lunch with sea views, visit iconic Chiaia di Luna beach. $2,945/guest. All ages. Need to reserve."
+          "costPerPerson": 1080,
+          "totalCost": 2160,
+          "status": "booked",
+          "notes": "Four Seasons excursion: hike Ponza's ancient trails with a guide, then local wine, seafood, and scenic port stroll. 4 hours, all ages. Cancellation: 48 hours in advance or full penalty. This is the BACKUP — preferred option is private boat tour via ZioJack. Emailed ziojackponza@gmail.com on 3/6 with specific stop requests: Grotte di Pilato, Punta di Capo Bianco, Grotta della Maga Circe, Cala del Core, Le Formiche, Palmarola Island (4–5 hrs). Awaiting availability + pricing. If ZioJack confirms, cancel this excursion 48 hrs before Mar 26.",
+          "whatToBring": "Hiking shoes or comfortable footwear, hat, jacket, credit card and/or local currency"
         }
       ],
       "dining": [],
@@ -630,8 +652,8 @@
       ],
       "gaps": [
         {
-          "severity": "HIGH",
-          "description": "No excursion booked yet. Four Seasons 'A Day on Ponza Island' available ($2,945/guest, 5 hrs) — or arrange private boat + Acqua Pazza independently. March is off-season — confirm restaurant availability in advance."
+          "severity": "MODERATE",
+          "description": "Guided Hike & Aperitivos booked as backup (9:15 AM – 1:15 PM, $2,160). Preferred: private boat via ZioJack — emailed 3/6 with specific stops (Grotte di Pilato, Capo Bianco, Maga Circe, Cala del Core, Le Formiche, Palmarola). Awaiting reply. If confirmed, cancel hike 48 hrs in advance. Boarding by 5 PM — no time for dinner ashore."
         }
       ]
     },
@@ -657,37 +679,25 @@
         }
       ],
       "dining": [],
-      "anniversary": "22nd wedding anniversary — ask Four Seasons concierge to arrange a special anniversary dinner onboard: private table, champagne, anniversary touches.",
+      "anniversary": "22nd wedding anniversary. Couples massage moved to Mar 21 (sea day). Anniversary dinner onboard — Raelan coordinating directly with concierge.",
       "recommendations": [
         {
-          "name": "Erice — Afternoon After Excursion (RECOMMENDED)",
-          "description": "Medieval hilltop village, the afternoon highlight. Timeline: 2:30 PM excursion ends → taxi to cable car station (~€10, 10 min) → Funivia di Erice cable car (Via Capua, Trapani → Erice in 10 min, €11 round trip, buy online at funiviaerice.skiperformance.com) → 3:00–4:30 PM in Erice → 4:45 PM back in Trapani → aboard by 5:30 PM (buffer before 6 PM departure). ⚠️ Verify March 27 cable car hours — seasonal transition is March 28: funiviaerice.it."
-        },
-        {
-          "name": "Maria Grammatico Pasticceria (Erice)",
-          "description": "Sicily's most legendary pastry shop. Cassatelle (ricotta-filled fried pastries), genovesi (custard-filled shortcrust), cannoli. Maria Grammatico learned her craft from cloistered nuns as a girl. Via Vittorio Emanuele 14, Erice. Open daily 7 AM–10 PM."
-        },
-        {
-          "name": "Castello di Venere (Norman Castle, Erice)",
-          "description": "12th-century Norman fortress at the summit of Erice with panoramic views to the Egadi Islands and across western Sicily. Quick 15-min visit, combines with the pastry stop."
-        },
-        {
           "name": "Saline di Trapani",
-          "description": "Salt flats and windmills along the coast — particularly stunning at sunset. If skipping Erice, this is the alternative afternoon option."
+          "description": "Salt flats and windmills along the coast — particularly stunning at sunset. Afternoon option after excursion ends at 2:30 PM."
         },
         {
           "name": "La Bettolaccia",
-          "description": "Outstanding Trapanese couscous (the local signature dish) in the historic center. If you're hungry after Erice."
+          "description": "Outstanding Trapanese couscous (the local signature dish) in the historic center. If you're hungry after the excursion."
         },
         {
-          "name": "Anniversary Dinner Onboard 🥂",
-          "description": "22nd wedding anniversary. Ask Four Seasons concierge to arrange: private table, champagne, anniversary touches. Erice is for the afternoon experience (Maria Grammatico pastries + prosecco with hilltop views), dinner is back aboard the yacht."
+          "name": "22nd Wedding Anniversary Dinner",
+          "description": "22nd wedding anniversary. Couples massage booked for Mar 21 (sea day). Anniversary dinner onboard — Raelan coordinating directly with concierge for a special dine-in arrangement."
         }
       ],
       "gaps": [
         {
           "severity": "LOW",
-          "description": "Afternoon plan: Erice via cable car after excursion (2:30–4:30 PM). Verify cable car hours for March 27 (seasonal transition March 28). Anniversary dinner onboard — contact concierge to arrange."
+          "description": "Afternoon free after excursion ends at 2:30 PM — Saline di Trapani or relax aboard. Anniversary dinner onboard being arranged directly."
         }
       ]
     },
@@ -707,6 +717,7 @@
           "time": "9:30 AM – 1:00 PM",
           "guests": 2,
           "costPerPerson": 380,
+          "gearNote": "Full gear provided: wetsuit, mask, scuba gloves, fins, tank, regulator, compass, weightbelt, snorkel. PADI-certified dive shop. Water temp ~15–16°C (59–61°F) — wetsuits essential and included.",
           "totalCost": 760,
           "status": "booked",
           "notes": "Morning dive excursion off Gozo. Gozo is considered one of the Mediterranean's top dive destinations."
@@ -771,7 +782,7 @@
         "confirmation": "6884SGO67919",
         "hotelConfirmation": "2592226",
         "phone": "00-356-21225241",
-        "chiefHost": "Jovana Novakovic — jovana.novakovic@phoeniciamalta.com, +356 22911000, WhatsApp +35679220004 (available before/during/after stay). Requested: advise estimated arrival time.",
+        "chiefHost": "Jovana Novakovic — jovana.novakovic@phoeniciamalta.com, +356 22911000, WhatsApp +35679220004 (available before/during/after stay). ETA 10:30 AM communicated, early check-in requested.",
         "room": "Pegasus Suite — Art Deco design, king bed, separate living room, 441 ft². Fully stocked minibar, espresso machine, bathtub + separate shower.",
         "rate": "Leaders Club Exclusive - Flexible",
         "totalCost": "EUR 1,163.85 (incl. VAT)",
@@ -782,7 +793,16 @@
         "spa": "Phoenicia Spa & Wellness available until checkout. Bookings: spa@phoeniciamalta.com"
       },
       "excursions": [],
-      "dining": [],
+      "dining": [
+        {
+          "name": "ION Harbour by Simon Rogan (2 Michelin Stars)",
+          "time": "6:30 PM",
+          "guests": 2,
+          "status": "booked",
+          "notes": "BOOKED: 6:30 PM, tasting menu, 2 guests. Restaurant knows it's 22nd wedding anniversary. Need early dinner — 4:00 AM airport departure next morning, in bed by ~9:30 PM.",
+          "estimatedCost": "~€200–250 for two (tasting menu)"
+        }
+      ],
       "recommendations": [
         {
           "name": "Upper Barrakka Gardens (morning)",
@@ -809,20 +829,11 @@
           "description": "16,000 sq ft contemporary art gallery just outside Valletta. Designed by IPO Studio (Florence). Rooftop sculpture garden with commissions by Michele Oka Doner and Cristina Iglesias. Highlighted by Robb Report."
         },
         {
-          "name": "ION Harbour by Simon Rogan (2 Michelin Stars) — SUNDAY DINNER",
-          "description": "⚠️ March 29 is a Sunday. Rubino (Bib Gourmand) and Guzé Bistro (1★) are both CLOSED Sundays. ION Harbour is the quality option — hotel restaurant, likely open Sunday. Call: +356 9911 0166. Book 6:00–6:30 PM (need to be in bed by ~9:30 PM for 4:00 AM airport departure)."
-        },
-        {
-          "name": "The Phoenix (at The Phoenicia hotel)",
-          "description": "Fallback dinner option — ask concierge about Sunday dinner service. Convenient since you're staying at the hotel. Early seating recommended (~6:00 PM)."
+          "name": "ION Harbour by Simon Rogan (BOOKED — 6:30 PM)",
+          "description": "BOOKED: 6:30 PM, tasting menu, 22nd wedding anniversary noted. 2 Michelin Stars. Simon Rogan's Mediterranean-meets-British seasonal cuisine. Need early dinner — in bed by ~9:30 PM for 4:00 AM airport departure."
         }
       ],
-      "gaps": [
-        {
-          "severity": "MODERATE",
-          "description": "No dinner booked for Sunday evening. ION Harbour (2★) is the best Sunday option — call +356 9911 0166 for 6:00–6:30 PM. Need early dinner: 4:00 AM airport departure next morning."
-        }
-      ]
+      "gaps": []
     },
     {
       "day": 11,
@@ -882,10 +893,44 @@
         "currency": "EUR",
         "estimatedUSD": 162,
         "notes": "Estimated ~€120–150 for two (tasting menu). Using €150 midpoint. USD estimate at ~$1.08/EUR."
+      },
+      {
+        "item": "Guided Hike & Aperitivos, Ponza (Mar 26) — BACKUP",
+        "perPerson": 1080,
+        "quantity": 2,
+        "total": 2160,
+        "notes": "Backup excursion — may be cancelled if ZioJack private boat confirms. Cancel 48 hrs in advance."
+      },
+      {
+        "item": "MuCEM Guided Tour, Marseille (Mar 23) — PENDING",
+        "perPerson": 160,
+        "quantity": 1,
+        "total": 320,
+        "currency": "EUR",
+        "estimatedUSD": 346,
+        "notes": "€320 flat rate for 2 guests (entrance included). 20% discount from €400. Awaiting confirmation from reservation@mucem.org."
+      },
+      {
+        "item": "Bouillant lunch, Marseille (Mar 23)",
+        "perPerson": 40,
+        "quantity": 2,
+        "total": 80,
+        "currency": "EUR",
+        "estimatedUSD": 86,
+        "notes": "Estimated ~€35–45/person (à la carte, €18–24/dish). BOOKED 12:30 PM."
+      },
+      {
+        "item": "ION Harbour dinner, Valletta (Mar 29)",
+        "perPerson": 112.50,
+        "quantity": 2,
+        "total": 225,
+        "currency": "EUR",
+        "estimatedUSD": 243,
+        "notes": "Estimated ~€200–250 for two (tasting menu). Using €225 midpoint. BOOKED 6:30 PM, anniversary."
       }
     ],
-    "totalExcursions": 5026.50,
-    "totalExcursionsNote": "Includes ~$300 USD estimate for Hammam Al Ándalus (€278 EUR) and ~$162 USD estimate for Under Grain dinner (€150 EUR). All other amounts in USD.",
+    "totalExcursions": 7861.50,
+    "totalExcursionsNote": "Includes EUR estimates converted at ~$1.08/EUR: Hammam (~$300), Under Grain (~$162), MuCEM tour (~$346, pending), Bouillant (~$86), ION Harbour (~$243). Ponza hike ($2,160) is backup — may be cancelled. All other amounts in USD.",
     "flights": [
       {
         "item": "Vueling AMS → AGP (Mar 19)",
@@ -897,63 +942,18 @@
   "actionItems": [
     {
       "priority": "HIGH",
-      "action": "Book Zone Transfers for Menorca (Mar 22): Mahón port → Subaida Farm (Alaior) → Mahón port. WhatsApp +34 654 381 547 (hours: 9:00–14:00 & 16:00–19:00), email info@zonetransfers.com.",
-      "status": "open"
+      "action": "Check raelan.lambert@gmail.com for Zone Transfers reply re: Menorca (Mar 22) — emailed info@zonetransfers.com on 3/6 requesting pickup from Mahón port by 10:50 AM → Subaida Farm → return after 1:00 PM. If no reply, follow up via WhatsApp +34 654 381 547 (hours: 9:00–14:00 & 16:00–19:00).",
+      "status": "in-progress"
     },
     {
       "priority": "HIGH",
-      "action": "Book excursion for Ponza (Mar 26) — arrange private boat circumnavigation. Contact: Cooperativa Barcaioli (+39 340 397 9916), ZioJack (+39 349 556 0424), or Ciccio Nero (+39 0771 80697). Or ask Four Seasons concierge.",
-      "status": "open"
+      "action": "Check for ZioJack reply re: private boat tour Ponza (Mar 26) — emailed ziojackponza@gmail.com on 3/6 with specific stops (Grotte di Pilato, Capo Bianco, Maga Circe, Cala del Core, Le Formiche, Palmarola). Awaiting availability + pricing. If confirmed, cancel Guided Hike & Aperitivos backup 48 hrs before Mar 26. Other fallback: Ciccio Nero (+39 0771 80697) or Four Seasons concierge.",
+      "status": "in-progress"
     },
     {
       "priority": "HIGH",
-      "action": "Call Acqua Pazza (+39 0771 80643) to confirm open Mar 26 — off-season",
-      "status": "open"
-    },
-    {
-      "priority": "HIGH",
-      "action": "Verify Erice cable car hours for March 27 (seasonal transition is March 28): funiviaerice.it",
-      "status": "open"
-    },
-    {
-      "priority": "HIGH",
-      "action": "Contact Four Seasons concierge to arrange anniversary dinner onboard (Mar 27) — 22nd wedding anniversary, private table, champagne",
-      "status": "open"
-    },
-    {
-      "priority": "MODERATE",
-      "action": "Book ION Harbour by Simon Rogan for Sunday dinner in Valletta (Mar 29, 6:00–6:30 PM): +356 9911 0166. Best Sunday option — early dinner needed (4 AM airport departure).",
-      "status": "open"
-    },
-    {
-      "priority": "MODERATE",
-      "action": "Contact Hauser & Wirth Menorca (+34 871 18 38 45) to confirm Mar 22 opening — seasonal closure",
-      "status": "open"
-    },
-    {
-      "priority": "MODERATE",
-      "action": "Reply to The Phoenicia Malta with estimated arrival time (Chief Host: Jovana Novakovic, WhatsApp +35679220004)",
-      "status": "open"
-    },
-    {
-      "priority": "LOW",
-      "action": "Reserve Belle de Mars for Marseille lunch (Mar 23, 12:15 PM): +33 9 86 57 24 58. Tight Monday window. Alternative: Bouillant at MuCEM (no reservation needed).",
-      "status": "open"
-    },
-    {
-      "priority": "LOW",
-      "action": "Order bouillabaisse 24h ahead if doing Chez Fonfon for Marseille lunch (Mar 23): +33 4 91 52 14 38",
-      "status": "open"
-    },
-    {
-      "priority": "OPTIONAL",
-      "action": "Book spa treatments aboard Four Seasons I — popular time slots fill up",
-      "status": "open"
-    },
-    {
-      "priority": "OPTIONAL",
-      "action": "Verify Colette at Hotel Sezz (Saint-Tropez) is open Tuesday Mar 24: +33 (0)4 94 44 53 11 — dinner backup if Le Café falls through",
-      "status": "open"
+      "action": "Check raelan.lambert@gmail.com for MuCEM guided tour confirmation (Mar 23) — emailed reservation@mucem.org on 3/6 requesting 10:30 AM – noon slot. 90-min tour, €320 (20% discount, entrance included).",
+      "status": "in-progress"
     }
   ],
   "shipInfo": [
@@ -963,7 +963,7 @@
     },
     {
       "question": "What dining options are available onboard?",
-      "answer": "Multiple restaurants including Terrasse (alfresco Mediterranean), Sedna (Japanese-inspired seafood), and additional venues. Breakfast at Terrasse (7:30–11:00 AM) is complimentary — the only included meal. All other onboard dining (lunch, dinner, room service) is pay-as-you-go. Reservations are made through the Four Seasons app or onboard concierge."
+      "answer": "11 culinary options onboard, including Terrasse (alfresco Mediterranean), Sedna (Japanese-inspired seafood), and more. Most don't require reservations — you can go with the flow. Reservations recommended but not required for the main restaurants. Breakfast at Terrasse (7:30–11:00 AM) is complimentary — the only included meal. All other dining is pay-as-you-go. Full details: fourseasons.com/culinary-and-beverage"
     },
     {
       "question": "What is the dress code?",
@@ -991,7 +991,15 @@
     },
     {
       "question": "What is included in the cruise fare?",
-      "answer": "Breakfast at Terrasse (7:30–11:00 AM daily), Wi-Fi, fitness center, non-motorized water sports, gratuities, and select excursions. All other dining (lunch, dinner, room service), beverages, spa treatments, specialty excursions, and premium experiences are additional fees."
+      "answer": "Breakfast at Terrasse (7:30–11:00 AM daily), Wi-Fi, fitness center (Deck 4), non-motorized water sports, gratuities, and select excursions. All other dining (lunch, dinner, room service), beverages, spa treatments, specialty excursions, and premium experiences are additional fees."
+    },
+    {
+      "question": "Is there a gym onboard?",
+      "answer": "Yes — the fitness center is on Deck 4, included in the cruise fare. Open daily."
+    },
+    {
+      "question": "Who is our key contact for the yacht experience?",
+      "answer": "Laura Zambrano, Yacht Service Specialist, Guest Activities. Four Seasons, 1441 Brickell Avenue, Suite 1530, Miami, FL 33131. Instagram: @fourseasons. fourseasons.com"
     },
     {
       "question": "How does tendering work?",
@@ -999,8 +1007,8 @@
     }
   ],
   "metadata": {
-    "version": 11,
-    "generatedDate": "2026-03-04",
-    "source": "Compiled from Delta itinerary (GEVMLH), Vueling confirmation (K60WW), Four Seasons cruise itinerary, editorial research from Michelin Guide, Eater, Robb Report, Condé Nast Traveller, Goop, and Town & Country. v11 updates: Bodegas El Pimpi walk-in dinner (Mar 19), Cambara lunch (Mar 20), Smoix removed (Mar 22), Marseille Monday closures noted (Mar 23), Le Café time fix 7:30 PM + SevenRooms pending (Mar 24), Ponza boat operator contacts (Mar 26), Erice cable car details + 22nd anniversary (Mar 27), Under Grain confirmed 2JG-Z1M (Mar 28), Malta Sunday dinner plan (Mar 29)"
+    "version": 15,
+    "generatedDate": "2026-03-07",
+    "source": "Compiled from Delta itinerary (GEVMLH), Vueling confirmation (K60WW), Four Seasons cruise itinerary, editorial research from Michelin Guide, Eater, Robb Report, Condé Nast Traveller, Goop, and Town & Country. v15 updates: All v14 changes plus removed Sedna dinner (Mar 23) — replaced with casual evening onboard. Added page number footers to .docx guide."
   }
 }

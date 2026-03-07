@@ -12,5 +12,8 @@
   "type": "commonjs",
   "dependencies": {
     "docx": "^9.6.0"
+  },
+  "devDependencies": {
+    "pdfjs-dist": "^5.5.207"
   }
 }

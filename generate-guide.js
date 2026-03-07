@@ -16,6 +16,8 @@ const {
   TabStopPosition,
   TabStopType,
   convertInchesToTwip,
+  Footer,
+  PageNumber,
 } = require("docx");
 
 // ─── Load Data ───
@@ -433,7 +435,7 @@ for (const day of data.days) {
       dayChildren.push(labeledLine(exc.name, `(${exc.status.toUpperCase()})`));
       dayChildren.push(labeledLine("  Time:", exc.time));
       dayChildren.push(labeledLine("  Guests:", String(exc.guests)));
-      if (exc.totalCost) {
+      if (exc.totalCost && exc.costPerPerson) {
         const excSym = exc.currency === "EUR" ? "\u20AC" : "$";
         const excTotalLabel = exc.currency === "EUR"
           ? `${excSym}${exc.costPerPerson.toLocaleString()} x ${exc.guests} = ${excSym}${exc.totalCost.toLocaleString()} (~$${exc.estimatedUSD} USD)`
@@ -535,10 +537,30 @@ const doc = new Document({
       },
     },
   },
-  sections: sections.map((s, i) => ({
-    properties: i > 0 ? { page: { margin: { top: 1000, bottom: 1000, left: 1200, right: 1200 } } } : { page: { margin: { top: 800, bottom: 800, left: 1200, right: 1200 } } },
-    children: s.children,
-  })),
+  sections: sections.map((s, i) => {
+    const margin = i > 0
+      ? { top: 1000, bottom: 1000, left: 1200, right: 1200 }
+      : { top: 800, bottom: 800, left: 1200, right: 1200 };
+    const sectionObj = {
+      properties: { page: { margin } },
+      children: s.children,
+    };
+    if (i > 0) {
+      sectionObj.footers = {
+        default: new Footer({
+          children: [
+            new Paragraph({
+              alignment: AlignmentType.CENTER,
+              children: [
+                new TextRun({ children: [PageNumber.CURRENT], font: "Calibri", size: 18, color: MUTED }),
+              ],
+            }),
+          ],
+        }),
+      };
+    }
+    return sectionObj;
+  }),
 });
 
 const today = new Date();
