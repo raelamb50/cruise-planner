@@ -5,7 +5,7 @@
     "travelers": ["Raelan Lambert", "Robert Lambert"],
     "dateRange": "March 17–30, 2026",
     "cruiseDateRange": "March 20–29, 2026",
-    "route": "Málaga → Menorca → La Joliette → Saint-Tropez → Ponza → Trapani → Gozo → Valletta"
+    "route": "Málaga → Menorca → La Joliette → Nice → Ponza → Trapani → Gozo → Valletta"
   },
   "confirmations": {
     "delta": "GEVMLH",
@@ -336,11 +336,12 @@
       "board": null,
       "excursions": [
         {
-          "name": "Couples Massage aboard Four Seasons I",
-          "time": "TBD",
+          "name": "Spa Treatments aboard Four Seasons I",
+          "time": "10:00 AM (arrive by 9:30 AM)",
           "guests": 2,
+          "costPerPerson": null,
           "status": "booked",
-          "notes": "CONFIRMED for both Raelan and Robert. Time to be scheduled with spa. First sea day — perfect for relaxation after embarkation."
+          "notes": "CONFIRMED by Dawn Pender (Shore Operations Manager, dawn.pender@fourseasons.com, +1 689 285 9487). Raelan: Massage — Muscular Renewal (90 min, $390). Robert: Ignae's Azorean Rebirth Body Ritual (75 min, $310). Total: $700. Arrive 30 min early to enjoy wet area and thermal circuit. Infrared sauna available 10:00 AM – 7:00 PM daily (no reservation needed, complimentary). Cancellation: 100% fee if cancelled <24 hours before treatment."
         }
       ],
       "dining": [
@@ -354,8 +355,8 @@
       ],
       "recommendations": [
         {
-          "name": "Couples Massage (BOOKED — time TBD)",
-          "description": "CONFIRMED for both travelers. Schedule time with spa upon boarding. First sea day is ideal — no port rush, full day to unwind."
+          "name": "Spa Treatments (BOOKED — 10:00 AM)",
+          "description": "CONFIRMED: Both at 10:00 AM (arrive by 9:30 AM). Raelan: Muscular Renewal massage (90 min, $390). Robert: Ignae's Azorean Rebirth Body Ritual (75 min, $310). Infrared sauna available daily 10 AM – 7 PM, no reservation needed."
         },
         {
           "name": "Pool Deck",
@@ -401,7 +402,7 @@
             "phone": "+34 606 32 66 13",
             "website": "https://www.subaida.com/en/visits"
           },
-          "logistics": "Car service: Zone Transfers — WhatsApp +34 654 381 547 (hours: 9:00–14:00 & 16:00–19:00), email info@zonetransfers.com. Route: Mahón port → Subaida Farm, Alaior (~20–30 min) → Mahón port. Emailed 3/6 requesting pickup by 10:50 AM, return after 1:00 PM. Awaiting reply."
+          "logistics": "Car service: Zone Transfers — BOOKED & PAID. €161.16, auth code 215474, card ending 2000. Booking refs: 42321 (outbound), 42322 (return). Route: Mahón port → Subaida Farm, Alaior (~20–30 min) → Mahón port. Pickup by 10:50 AM, return after 1:00 PM. 24-hour phone: +34 665264451. Email: info@zonetransfers.com."
         }
       ],
       "dining": [],
@@ -433,8 +434,8 @@
       ],
       "gaps": [
         {
-          "severity": "MODERATE",
-          "description": "Subaida Farm booked (11:30 AM – 1:00 PM). Zone Transfers emailed 3/6 — requested pickup from Mahón port by 10:50 AM → Subaida Farm, return to port after 1:00 PM. Check raelan.lambert@gmail.com for response."
+          "severity": "LOW",
+          "description": "Subaida Farm booked (11:30 AM – 1:00 PM). Zone Transfers BOOKED & PAID (refs 42321/42322). Morning before 10:50 AM pickup is open — consider Xoriguer Gin Distillery or waterfront stroll."
         }
       ]
     },
@@ -525,7 +526,7 @@
       "day": 5,
       "date": "2026-03-24",
       "dateFormatted": "Tuesday, March 24, 2026",
-      "port": "Saint-Tropez",
+      "port": "Nice",
       "country": "France",
       "type": "port",
       "arrive": "8:00 AM",
@@ -533,44 +534,51 @@
       "board": "By 11:00 PM",
       "excursions": [
         {
-          "name": "Golf Club Saint-Tropez",
-          "time": "9:00 AM – 3:30 PM",
+          "name": "Golf d'Opio Valbonne",
+          "time": "TBD",
           "guests": 2,
           "costPerPerson": 1155,
           "totalCost": 2310,
-          "status": "booked",
-          "notes": "18-hole round at one of the Riviera's premier courses. Includes transfers. Golf club rental available on-site — no need to bring your own."
+          "status": "researching",
+          "notes": "Raelan researching Opio Valbonne as replacement for cancelled Golf Club Saint-Tropez. Through Four Seasons: $1,155/person ($2,310 total) — same price. May be significantly cheaper booked independently. ~30–40 min drive from Nice. 18-hole championship course in the hills above Cannes."
         }
       ],
       "dining": [
         {
-          "name": "Le Café (Saint-Tropez)",
-          "time": "7:30 PM",
+          "name": "Flaveur (2 Michelin Stars)",
+          "time": "Evening (time TBD)",
           "guests": 2,
           "status": "booked",
-          "confirmation": "Confirmed via iMessage (Valentin, Mar 5)",
-          "notes": "BOOKED — 2 guests, Tuesday March 24, 7:30 PM. Confirmed by restaurant (Valentin) via iMessage. Iconic Place des Lices restaurant."
+          "address": "25 Rue Gubernatis, 06000 Nice",
+          "phone": "+33 4 93 62 53 95",
+          "email": "reservation@flaveur.net",
+          "notes": "BOOKED. Chefs Gaël and Mickaël Tourteaux — inventive modern French layered with Mediterranean, African, and Asian spice influences. Tasting menu only: 6-course (€220) or 7-course (€265). Intimate setting, bold flavors. Open Tue–Sat dinner. ALLERGY NOTE: Notify about Raelan's fresh garlic intolerance — email reservation@flaveur.net."
         }
       ],
       "recommendations": [
         {
-          "name": "Musée de l'Annonciade",
-          "description": "Exceptional post-Impressionist and Fauvist art in a converted 16th-century chapel. Signac, Matisse, Bonnard. Small enough to see in 45 minutes."
+          "name": "Flaveur (BOOKED — Evening)",
+          "description": "BOOKED: Nice's only 2-Michelin-star restaurant. Chefs Gaël and Mickaël Tourteaux — inventive modern French with African and Asian spice work. Tasting menu only (6-course €220 / 7-course €265). 25 Rue Gubernatis. ALLERGY: Email reservation@flaveur.net to flag Raelan's fresh garlic intolerance."
         },
         {
-          "name": "Place des Lices Market — IT'S TUESDAY!",
-          "description": "The town's famous Provençal market runs Tuesdays & Saturdays — you're here on a Tuesday. Lavender, olive oils, produce, antiques. Arrives early morning, winds down by ~1 PM. Don't miss it."
+          "name": "Promenade des Anglais & Vieux Nice",
+          "description": "Nice's iconic seafront boulevard and the atmospheric Old Town — narrow lanes, colorful markets, baroque churches. Cours Saleya flower market runs daily except Monday. Walkable from the port."
         },
         {
-          "name": "Colette at Hotel Sezz (1 Michelin Star)",
-          "description": "Elegant Mediterranean cuisine at the design-forward Hotel Sezz. +33 (0)4 94 44 53 11."
+          "name": "MAMAC (Museum of Modern and Contemporary Art)",
+          "description": "Yves Klein, Niki de Saint Phalle, Christo, Warhol. Free admission. Rooftop terrace with panoramic views of Nice. Near Place Garibaldi."
         },
         {
-          "name": "Au Caprice des Deux",
-          "description": "Provençal bistro since 1994, romantic setting. +33 (0)4 94 97 76 78."
+          "name": "Colline du Château (Castle Hill)",
+          "description": "Panoramic views over the Baie des Anges, the port, and the Old Town. Take the elevator or walk up. Waterfall and ruins worth the climb. Free."
         }
       ],
-      "gaps": []
+      "gaps": [
+        {
+          "severity": "MODERATE",
+          "description": "Golf at Opio Valbonne not yet booked — Raelan researching whether to book through Four Seasons ($2,310) or independently (potentially cheaper). Confirm and book."
+        }
+      ]
     },
     {
       "day": 6,
@@ -588,7 +596,7 @@
       "recommendations": [
         {
           "name": "Recovery Day",
-          "description": "Rest and recharge after Saint-Tropez. Spa, pool, or catch up on reading."
+          "description": "Rest and recharge after Nice. Spa, pool, or catch up on reading."
         }
       ],
       "gaps": []
@@ -868,10 +876,36 @@
         "notes": "€278 total. USD estimate at ~$1.08/EUR."
       },
       {
-        "item": "Golf Club Saint-Tropez (Mar 24)",
+        "item": "Golf d'Opio Valbonne, Nice (Mar 24) — RESEARCHING",
         "perPerson": 1155,
         "quantity": 2,
-        "total": 2310
+        "total": 2310,
+        "notes": "Price if booked through Four Seasons. May be significantly cheaper independently. Not yet confirmed."
+      },
+      {
+        "item": "Spa Treatments aboard Four Seasons I (Mar 21)",
+        "perPerson": 350,
+        "quantity": 2,
+        "total": 700,
+        "notes": "Raelan: Muscular Renewal 90 min ($390). Robert: Ignae's Azorean Rebirth Body Ritual 75 min ($310). CONFIRMED."
+      },
+      {
+        "item": "Zone Transfers — Menorca car service (Mar 22)",
+        "perPerson": 161.16,
+        "quantity": 1,
+        "total": 161.16,
+        "currency": "EUR",
+        "estimatedUSD": 174,
+        "notes": "€161.16. Mahón port → Subaida Farm → Mahón port. PAID, auth code 215474."
+      },
+      {
+        "item": "Flaveur dinner, Nice (Mar 24)",
+        "perPerson": 245,
+        "quantity": 2,
+        "total": 490,
+        "currency": "EUR",
+        "estimatedUSD": 529,
+        "notes": "Estimated ~€220–265/person (tasting menu). Using €245 midpoint. BOOKED."
       },
       {
         "item": "Ancient Ruins & Authentic Flavours, Trapani (Mar 27)",
@@ -929,8 +963,8 @@
         "notes": "Estimated ~€200–250 for two (tasting menu). Using €225 midpoint. BOOKED 6:30 PM, anniversary."
       }
     ],
-    "totalExcursions": 7861.50,
-    "totalExcursionsNote": "Includes EUR estimates converted at ~$1.08/EUR: Hammam (~$300), Under Grain (~$162), MuCEM tour (~$346, pending), Bouillant (~$86), ION Harbour (~$243). Ponza hike ($2,160) is backup — may be cancelled. All other amounts in USD.",
+    "totalExcursions": 9264.50,
+    "totalExcursionsNote": "Includes EUR estimates converted at ~$1.08/EUR: Hammam (~$300), Under Grain (~$162), MuCEM tour (~$346, pending), Bouillant (~$86), ION Harbour (~$243), Zone Transfers (~$174), Flaveur (~$529). Ponza hike ($2,160) is backup — may be cancelled. Golf ($2,310) is pending — price may decrease if booked independently. Spa ($700) in USD. All other amounts in USD.",
     "flights": [
       {
         "item": "Vueling AMS → AGP (Mar 19)",
@@ -942,8 +976,13 @@
   "actionItems": [
     {
       "priority": "HIGH",
-      "action": "Check raelan.lambert@gmail.com for Zone Transfers reply re: Menorca (Mar 22) — emailed info@zonetransfers.com on 3/6 requesting pickup from Mahón port by 10:50 AM → Subaida Farm → return after 1:00 PM. If no reply, follow up via WhatsApp +34 654 381 547 (hours: 9:00–14:00 & 16:00–19:00).",
+      "action": "Finalize golf booking for Nice (Mar 24): Opio Valbonne — decide whether to book through Four Seasons ($2,310) or independently (potentially much cheaper). Confirm ASAP.",
       "status": "in-progress"
+    },
+    {
+      "priority": "MODERATE",
+      "action": "Email Flaveur (reservation@flaveur.net) to flag Raelan's fresh garlic intolerance for Mar 24 dinner. Confirm reservation time.",
+      "status": "open"
     },
     {
       "priority": "HIGH",
@@ -1007,8 +1046,8 @@
     }
   ],
   "metadata": {
-    "version": 15,
-    "generatedDate": "2026-03-07",
-    "source": "Compiled from Delta itinerary (GEVMLH), Vueling confirmation (K60WW), Four Seasons cruise itinerary, editorial research from Michelin Guide, Eater, Robb Report, Condé Nast Traveller, Goop, and Town & Country. v15 updates: All v14 changes plus removed Sedna dinner (Mar 23) — replaced with casual evening onboard. Added page number footers to .docx guide."
+    "version": 16,
+    "generatedDate": "2026-03-10",
+    "source": "Compiled from Delta itinerary (GEVMLH), Vueling confirmation (K60WW), Four Seasons cruise itinerary, editorial research from Michelin Guide, Eater, Robb Report, Condé Nast Traveller, Goop, and Town & Country. v16 updates: Day 5 port changed from Saint-Tropez to Nice (itinerary change). Golf Club Saint-Tropez cancelled → Opio Valbonne (researching). Le Café cancelled. Flaveur dinner BOOKED (2 Michelin Stars, Nice). Spa treatments CONFIRMED (Mar 21, $700 total). Zone Transfers BOOKED & PAID (Menorca, €161.16). MuCEM booking form submitted."
   }
 }
