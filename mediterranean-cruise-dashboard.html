@@ -721,7 +721,7 @@ a:active { opacity: 0.7; }
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 /* ════════════════════════════════════════════
-   EMBEDDED TRIP DATA (from trip_data.json v16)
+   EMBEDDED TRIP DATA (from trip_data.json v17)
    ════════════════════════════════════════════ */
 const D = {
   trip: {
@@ -1269,33 +1269,56 @@ const D = {
       arrive: "8:00 AM",
       depart: "11:00 PM",
       board: "By 11:00 PM",
+      transfers: [
+        {
+          name: "Blacklane — Port of Nice → Golf Opio Valbonne",
+          time: "9:30 AM",
+          booking: "533821846",
+          status: "booked",
+          vehicle: "Business Class",
+          duration: "40 min (30.7 km)",
+          cost: 121.83,
+          currency: "EUR",
+          notes: "BOOKED & CONFIRMED. Pickup at Port of Nice, Traverse du Commerce. Not traveling with clubs."
+        },
+        {
+          name: "Blacklane — Golf Opio Valbonne → Port of Nice",
+          time: "3:30 PM",
+          booking: "628859938",
+          status: "booked",
+          vehicle: "Business Class",
+          duration: "44 min (30 km)",
+          cost: 120.05,
+          currency: "EUR",
+          notes: "BOOKED & CONFIRMED. Return from Golf Opio Valbonne to Port of Nice."
+        }
+      ],
       excursions: [
         {
           name: "Golf d'Opio Valbonne",
-          time: "TBD",
+          time: "11:00 AM",
           guests: 2,
-          costPerPerson: 1155,
-          totalCost: 2310,
-          status: "researching",
-          notes: "Raelan researching Opio Valbonne as replacement for cancelled Golf Club Saint-Tropez. Through Four Seasons: $1,155/person ($2,310 total) — same price. May be significantly cheaper booked independently. ~30–40 min drive from Nice. 18-hole championship course in the hills above Cannes."
+          status: "booked",
+          notes: "BOOKED independently (saved vs. $2,310 Four Seasons price). Tee time 11:00 AM. Players: Raelan (handicap 34) & Robert (handicap 20). Rental clubs (€45 × 2) + golf cart (€50) = €140. Green fees TBD. Contact: Caroline, opiovalbonne@resonance.golf, +33 4 93 12 00 08."
         }
       ],
       dining: [
         {
           name: "Flaveur (2 Michelin Stars)",
-          time: "Evening (time TBD)",
+          time: "7:30 PM",
           guests: 2,
           status: "booked",
           address: "25 Rue Gubernatis, 06000 Nice",
           phone: "+33 4 93 62 53 95",
           email: "reservation@flaveur.net",
-          notes: "BOOKED. Chefs Gaël and Mickaël Tourteaux — inventive modern French layered with Mediterranean, African, and Asian spice influences. Tasting menu only: 6-course (€220) or 7-course (€265). Intimate setting, bold flavors. Open Tue–Sat dinner. ALLERGY NOTE: Notify about Raelan's fresh garlic intolerance — email reservation@flaveur.net."
+          confirmation: "via restaurant-information.com (Mar 10)",
+          notes: "BOOKED 7:30 PM. Celebrating 22nd wedding anniversary. Tasting menu only: 6-course (€220) or 7-course (€265). 72-hour cancellation policy (€440 no-show). ALLERGY NOTE: Still need to email reservation@flaveur.net re: Raelan's fresh garlic intolerance."
         }
       ],
       recommendations: [
         {
-          name: "Flaveur (BOOKED — Evening)",
-          description: "BOOKED: Nice's only 2-Michelin-star restaurant. Chefs Gaël and Mickaël Tourteaux — inventive modern French with African and Asian spice work. Tasting menu only (6-course €220 / 7-course €265). 25 Rue Gubernatis. ALLERGY: Email reservation@flaveur.net to flag Raelan's fresh garlic intolerance."
+          name: "Flaveur (BOOKED — 7:30 PM)",
+          description: "BOOKED 7:30 PM: Nice's only 2-Michelin-star restaurant. Celebrating 22nd wedding anniversary. Tasting menu only (6-course €220 / 7-course €265). 25 Rue Gubernatis. 72-hour cancellation (€440 no-show). ALLERGY: Email reservation@flaveur.net re: garlic intolerance."
         },
         {
           name: "Promenade des Anglais & Vieux Nice",
@@ -1312,8 +1335,8 @@ const D = {
       ],
       gaps: [
         {
-          severity: "MODERATE",
-          description: "Golf at Opio Valbonne not yet booked — Raelan researching whether to book through Four Seasons ($2,310) or independently (potentially cheaper). Confirm and book."
+          severity: "LOW",
+          description: "Awaiting confirmation from Golf d'Opio Valbonne that online booking was received (Caroline, opiovalbonne@resonance.golf). Also: email Flaveur re: Raelan's garlic intolerance."
         }
       ]
     },
@@ -1613,11 +1636,20 @@ const D = {
         notes: "€278 total. USD estimate at ~$1.08/EUR."
       },
       {
-        item: "Golf d'Opio Valbonne, Nice (Mar 24) — RESEARCHING",
-        perPerson: 1155,
+        item: "Golf d'Opio Valbonne, Nice (Mar 24) — BOOKED independently",
+        perPerson: null,
         quantity: 2,
-        total: 2310,
-        notes: "Price if booked through Four Seasons. May be significantly cheaper independently. Not yet confirmed."
+        total: null,
+        notes: "Booked directly on website (not through Four Seasons — saved vs. $2,310 FS price). Green fees TBD. Rentals: 2 club sets (€90) + golf cart (€50) = €140 (~$151)."
+      },
+      {
+        item: "Blacklane roundtrip transfers, Nice ↔ Golf Opio Valbonne (Mar 24)",
+        perPerson: null,
+        quantity: 1,
+        total: 241.88,
+        currency: "EUR",
+        estimatedUSD: 261,
+        notes: "Business Class. Outbound €121.83 + Return €120.05. BOOKED & CONFIRMED."
       },
       {
         item: "Spa Treatments aboard Four Seasons I (Mar 21)",
@@ -1642,7 +1674,7 @@ const D = {
         total: 490,
         currency: "EUR",
         estimatedUSD: 529,
-        notes: "Estimated ~€220–265/person (tasting menu). Using €245 midpoint. BOOKED."
+        notes: "Estimated ~€220–265/person (tasting menu). Using €245 midpoint. BOOKED 7:30 PM, 22nd anniversary."
       },
       {
         item: "Ancient Ruins & Authentic Flavours, Trapani (Mar 27)",
@@ -1700,8 +1732,8 @@ const D = {
         notes: "Estimated ~€200–250 for two (tasting menu). Using €225 midpoint. BOOKED 6:30 PM, anniversary."
       }
     ],
-    totalExcursions: 9264.5,
-    totalExcursionsNote: "Includes EUR estimates converted at ~$1.08/EUR: Hammam (~$300), Under Grain (~$162), MuCEM tour (~$346, pending), Bouillant (~$86), ION Harbour (~$243), Zone Transfers (~$174), Flaveur (~$529). Ponza hike ($2,160) is backup — may be cancelled. Golf ($2,310) is pending — price may decrease if booked independently. Spa ($700) in USD. All other amounts in USD.",
+    totalExcursions: 7366.5,
+    totalExcursionsNote: "Excludes golf green fees (TBD — booked independently). Includes golf rentals (~$151) and Blacklane transfers (~$261). EUR estimates at ~$1.08/EUR: Hammam (~$300), Under Grain (~$162), MuCEM tour (~$346, pending), Bouillant (~$86), ION Harbour (~$243), Zone Transfers (~$174), Flaveur (~$529), Blacklane (~$261). Ponza hike ($2,160) is backup — may be cancelled. Spa ($700) in USD.",
     flights: [
       {
         item: "Vueling AMS → AGP (Mar 19)",
@@ -1712,13 +1744,13 @@ const D = {
   },
   actionItems: [
     {
-      priority: "HIGH",
-      action: "Finalize golf booking for Nice (Mar 24): Opio Valbonne — decide whether to book through Four Seasons ($2,310) or independently (potentially much cheaper). Confirm ASAP.",
+      priority: "MODERATE",
+      action: "Confirm Golf d'Opio Valbonne received online booking for 11:00 AM Mar 24 — Raelan emailed Caroline (opiovalbonne@resonance.golf) asking for confirmation. Check for reply.",
       status: "in-progress"
     },
     {
       priority: "MODERATE",
-      action: "Email Flaveur (reservation@flaveur.net) to flag Raelan's fresh garlic intolerance for Mar 24 dinner. Confirm reservation time.",
+      action: "Email Flaveur (reservation@flaveur.net) to flag Raelan's fresh garlic intolerance for Mar 24 dinner at 7:30 PM. Time is confirmed — just need allergy notification.",
       status: "open"
     },
     {
@@ -1783,9 +1815,9 @@ const D = {
     }
   ],
   metadata: {
-    version: 16,
-    generatedDate: "2026-03-10",
-    source: "Compiled from Delta itinerary (GEVMLH), Vueling confirmation (K60WW), Four Seasons cruise itinerary, editorial research from Michelin Guide, Eater, Robb Report, Condé Nast Traveller, Goop, and Town & Country. v16 updates: Day 5 port changed from Saint-Tropez to Nice (itinerary change). Golf Club Saint-Tropez cancelled → Opio Valbonne (researching). Le Café cancelled. Flaveur dinner BOOKED (2 Michelin Stars, Nice). Spa treatments CONFIRMED (Mar 21, $700 total). Zone Transfers BOOKED & PAID (Menorca, €161.16). MuCEM booking form submitted."
+    version: 17,
+    generatedDate: "2026-03-11",
+    source: "v17: Golf d'Opio Valbonne BOOKED independently (11 AM, saved vs. $2,310 FS). Blacklane roundtrip BOOKED (€241.88). Flaveur 7:30 PM CONFIRMED (22nd anniversary). Rental clubs + cart (€140)."
   }
 };
 
@@ -1939,6 +1971,24 @@ function renderTimeline() {
       if (day.hotel.luggageNote) html += `<em>${esc(day.hotel.luggageNote)}</em>`;
       if (day.hotel.includes) html += `<br>Includes: ${esc(day.hotel.includes)}`;
       html += '</div></div></div>';
+    }
+
+    // Transfers
+    if (day.transfers && day.transfers.length) {
+      html += '<div class="day-section"><div class="section-label">TRANSFERS</div>';
+      day.transfers.forEach(xfer => {
+        html += '<div class="excursion-item">';
+        html += `<div class="excursion-name">${esc(xfer.name)}</div>`;
+        html += '<div class="excursion-meta">';
+        if (xfer.time) html += `<span>${esc(xfer.time)}</span>`;
+        if (xfer.vehicle) html += `<span>${esc(xfer.vehicle)}</span>`;
+        if (xfer.duration) html += `<span>${esc(xfer.duration)}</span>`;
+        html += '<span class="excursion-status booked">Booked</span>';
+        html += '</div>';
+        if (xfer.booking) html += `<div class="excursion-notes">Booking: ${esc(xfer.booking)}</div>`;
+        html += '</div>';
+      });
+      html += '</div>';
     }
 
     // Excursions
@@ -2198,7 +2248,7 @@ function renderBudget() {
   // Excursion rows
   html += '<div class="section-label" style="margin-top:16px">EXCURSIONS & DINING</div>';
   D.expenses.excursions.forEach(ex => {
-    const total = ex.currency === 'EUR' ? `€${ex.total}` + (ex.estimatedUSD ? ` (~$${ex.estimatedUSD})` : '') : `$${ex.total.toLocaleString(undefined, {minimumFractionDigits: ex.total % 1 ? 2 : 0})}`;
+    const total = ex.total == null ? 'TBD' : ex.currency === 'EUR' ? `€${ex.total}` + (ex.estimatedUSD ? ` (~$${ex.estimatedUSD})` : '') : `$${ex.total.toLocaleString(undefined, {minimumFractionDigits: ex.total % 1 ? 2 : 0})}`;
     html += '<div class="budget-row">';
     html += '<div class="budget-item-info">';
     html += `<div class="budget-item-name">${esc(ex.item)}</div>`;

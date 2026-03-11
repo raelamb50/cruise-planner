@@ -532,33 +532,56 @@
       "arrive": "8:00 AM",
       "depart": "11:00 PM",
       "board": "By 11:00 PM",
+      "transfers": [
+        {
+          "name": "Blacklane — Port of Nice → Golf Opio Valbonne",
+          "time": "9:30 AM",
+          "booking": "533821846",
+          "status": "booked",
+          "vehicle": "Business Class",
+          "duration": "40 min (30.7 km)",
+          "cost": 121.83,
+          "currency": "EUR",
+          "notes": "BOOKED & CONFIRMED. Pickup at Port of Nice, Traverse du Commerce, 6300 Nice. Editable until Mar 24 at 8:30 AM. Not traveling with clubs."
+        },
+        {
+          "name": "Blacklane — Golf Opio Valbonne → Port of Nice",
+          "time": "3:30 PM",
+          "booking": "628859938",
+          "status": "booked",
+          "vehicle": "Business Class",
+          "duration": "44 min (30 km)",
+          "cost": 120.05,
+          "currency": "EUR",
+          "notes": "BOOKED & CONFIRMED. Return from Golf Opio Valbonne to Port of Nice. Editable until Mar 24 at 2:30 PM."
+        }
+      ],
       "excursions": [
         {
           "name": "Golf d'Opio Valbonne",
-          "time": "TBD",
+          "time": "11:00 AM",
           "guests": 2,
-          "costPerPerson": 1155,
-          "totalCost": 2310,
-          "status": "researching",
-          "notes": "Raelan researching Opio Valbonne as replacement for cancelled Golf Club Saint-Tropez. Through Four Seasons: $1,155/person ($2,310 total) — same price. May be significantly cheaper booked independently. ~30–40 min drive from Nice. 18-hole championship course in the hills above Cannes."
+          "status": "booked",
+          "notes": "BOOKED independently (not through Four Seasons — significant savings vs. $2,310 FS price). Tee time 11:00 AM, Mar 24. Players: Raelan (handicap 34) & Robert (handicap 20). Rental club sets (€45 × 2 = €90) + golf cart/buggy (€50) = €140 rentals. Green fees TBD — booked via website, awaiting course confirmation from Caroline (opiovalbonne@resonance.golf). Morning tee times require handicap ≤36. Address: Route de Roquefort les Pins, 06650 Opio. Phone: +33 4 93 12 00 08. TRANSPORT: Blacklane Business Class roundtrip (€241.88 total)."
         }
       ],
       "dining": [
         {
           "name": "Flaveur (2 Michelin Stars)",
-          "time": "Evening (time TBD)",
+          "time": "7:30 PM",
           "guests": 2,
           "status": "booked",
           "address": "25 Rue Gubernatis, 06000 Nice",
           "phone": "+33 4 93 62 53 95",
           "email": "reservation@flaveur.net",
-          "notes": "BOOKED. Chefs Gaël and Mickaël Tourteaux — inventive modern French layered with Mediterranean, African, and Asian spice influences. Tasting menu only: 6-course (€220) or 7-course (€265). Intimate setting, bold flavors. Open Tue–Sat dinner. ALLERGY NOTE: Notify about Raelan's fresh garlic intolerance — email reservation@flaveur.net."
+          "confirmation": "via restaurant-information.com (Mar 10)",
+          "notes": "BOOKED 7:30 PM. Celebrating 22nd wedding anniversary. Chefs Gaël and Mickaël Tourteaux — inventive modern French layered with Mediterranean, African, and Asian spice influences. Tasting menu only: 6-course (€220) or 7-course (€265). Cancellation: 72 hours in advance or €440 no-show fee. ALLERGY NOTE: Still need to email reservation@flaveur.net to flag Raelan's fresh garlic intolerance."
         }
       ],
       "recommendations": [
         {
-          "name": "Flaveur (BOOKED — Evening)",
-          "description": "BOOKED: Nice's only 2-Michelin-star restaurant. Chefs Gaël and Mickaël Tourteaux — inventive modern French with African and Asian spice work. Tasting menu only (6-course €220 / 7-course €265). 25 Rue Gubernatis. ALLERGY: Email reservation@flaveur.net to flag Raelan's fresh garlic intolerance."
+          "name": "Flaveur (BOOKED — 7:30 PM)",
+          "description": "BOOKED 7:30 PM: Nice's only 2-Michelin-star restaurant. Celebrating 22nd wedding anniversary. Chefs Gaël and Mickaël Tourteaux — inventive modern French with African and Asian spice work. Tasting menu only (6-course €220 / 7-course €265). 25 Rue Gubernatis. 72-hour cancellation policy (€440 no-show). ALLERGY: Email reservation@flaveur.net to flag Raelan's fresh garlic intolerance."
         },
         {
           "name": "Promenade des Anglais & Vieux Nice",
@@ -575,8 +598,8 @@
       ],
       "gaps": [
         {
-          "severity": "MODERATE",
-          "description": "Golf at Opio Valbonne not yet booked — Raelan researching whether to book through Four Seasons ($2,310) or independently (potentially cheaper). Confirm and book."
+          "severity": "LOW",
+          "description": "Awaiting confirmation from Golf d'Opio Valbonne that online booking was received (Caroline, opiovalbonne@resonance.golf). Also: email Flaveur re: Raelan's garlic intolerance."
         }
       ]
     },
@@ -876,11 +899,20 @@
         "notes": "€278 total. USD estimate at ~$1.08/EUR."
       },
       {
-        "item": "Golf d'Opio Valbonne, Nice (Mar 24) — RESEARCHING",
-        "perPerson": 1155,
+        "item": "Golf d'Opio Valbonne, Nice (Mar 24) — BOOKED independently",
+        "perPerson": null,
         "quantity": 2,
-        "total": 2310,
-        "notes": "Price if booked through Four Seasons. May be significantly cheaper independently. Not yet confirmed."
+        "total": null,
+        "notes": "Booked directly on website (not through Four Seasons — saved vs. $2,310 FS price). Green fees TBD — awaiting confirmation. Rentals: 2 club sets (€90) + golf cart (€50) = €140 (~$151). Awaiting course confirmation of total."
+      },
+      {
+        "item": "Blacklane roundtrip transfers, Nice ↔ Golf Opio Valbonne (Mar 24)",
+        "perPerson": null,
+        "quantity": 1,
+        "total": 241.88,
+        "currency": "EUR",
+        "estimatedUSD": 261,
+        "notes": "Business Class. Outbound: €121.83 (booking 533821846, 9:30 AM). Return: €120.05 (booking 628859938, 3:30 PM). BOOKED & CONFIRMED."
       },
       {
         "item": "Spa Treatments aboard Four Seasons I (Mar 21)",
@@ -963,8 +995,8 @@
         "notes": "Estimated ~€200–250 for two (tasting menu). Using €225 midpoint. BOOKED 6:30 PM, anniversary."
       }
     ],
-    "totalExcursions": 9264.50,
-    "totalExcursionsNote": "Includes EUR estimates converted at ~$1.08/EUR: Hammam (~$300), Under Grain (~$162), MuCEM tour (~$346, pending), Bouillant (~$86), ION Harbour (~$243), Zone Transfers (~$174), Flaveur (~$529). Ponza hike ($2,160) is backup — may be cancelled. Golf ($2,310) is pending — price may decrease if booked independently. Spa ($700) in USD. All other amounts in USD.",
+    "totalExcursions": 7366.50,
+    "totalExcursionsNote": "Excludes golf green fees (TBD — booked independently, awaiting confirmation). Includes golf rentals (~$151) and Blacklane transfers (~$261). EUR estimates at ~$1.08/EUR: Hammam (~$300), Under Grain (~$162), MuCEM tour (~$346, pending), Bouillant (~$86), ION Harbour (~$243), Zone Transfers (~$174), Flaveur (~$529), Blacklane (~$261). Ponza hike ($2,160) is backup — may be cancelled. Spa ($700) in USD. All other amounts in USD.",
     "flights": [
       {
         "item": "Vueling AMS → AGP (Mar 19)",
@@ -975,13 +1007,13 @@
   },
   "actionItems": [
     {
-      "priority": "HIGH",
-      "action": "Finalize golf booking for Nice (Mar 24): Opio Valbonne — decide whether to book through Four Seasons ($2,310) or independently (potentially much cheaper). Confirm ASAP.",
+      "priority": "MODERATE",
+      "action": "Confirm Golf d'Opio Valbonne received online booking for 11:00 AM Mar 24 — Raelan emailed Caroline (opiovalbonne@resonance.golf) asking for confirmation. Check for reply.",
       "status": "in-progress"
     },
     {
       "priority": "MODERATE",
-      "action": "Email Flaveur (reservation@flaveur.net) to flag Raelan's fresh garlic intolerance for Mar 24 dinner. Confirm reservation time.",
+      "action": "Email Flaveur (reservation@flaveur.net) to flag Raelan's fresh garlic intolerance for Mar 24 dinner at 7:30 PM. Time is confirmed — just need allergy notification.",
       "status": "open"
     },
     {
@@ -1046,8 +1078,8 @@
     }
   ],
   "metadata": {
-    "version": 16,
-    "generatedDate": "2026-03-10",
-    "source": "Compiled from Delta itinerary (GEVMLH), Vueling confirmation (K60WW), Four Seasons cruise itinerary, editorial research from Michelin Guide, Eater, Robb Report, Condé Nast Traveller, Goop, and Town & Country. v16 updates: Day 5 port changed from Saint-Tropez to Nice (itinerary change). Golf Club Saint-Tropez cancelled → Opio Valbonne (researching). Le Café cancelled. Flaveur dinner BOOKED (2 Michelin Stars, Nice). Spa treatments CONFIRMED (Mar 21, $700 total). Zone Transfers BOOKED & PAID (Menorca, €161.16). MuCEM booking form submitted."
+    "version": 17,
+    "generatedDate": "2026-03-11",
+    "source": "Compiled from Delta itinerary (GEVMLH), Vueling confirmation (K60WW), Four Seasons cruise itinerary, editorial research from Michelin Guide, Eater, Robb Report, Condé Nast Traveller, Goop, and Town & Country. v17 updates: Golf d'Opio Valbonne BOOKED independently (11:00 AM, saved vs. $2,310 FS price, green fees TBD). Blacklane roundtrip transfers BOOKED (€241.88 total, Nice ↔ golf course). Flaveur dinner time CONFIRMED (7:30 PM, 22nd anniversary). Rental clubs + cart reserved (€140)."
   }
 }

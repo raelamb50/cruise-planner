@@ -259,14 +259,17 @@ const headerRow = new TableRow({
 const expenseRows = [headerRow];
 for (const exp of data.expenses.excursions) {
   const sym = exp.currency === "EUR" ? "\u20AC" : "$";
-  const totalDisplay = exp.currency === "EUR"
-    ? `${sym}${exp.total.toLocaleString()} (~$${exp.estimatedUSD})`
-    : `$${exp.total.toLocaleString()}`;
+  const perPersonDisplay = exp.perPerson != null ? `${sym}${exp.perPerson.toLocaleString()}` : "TBD";
+  const totalDisplay = exp.total != null
+    ? (exp.currency === "EUR"
+      ? `${sym}${exp.total.toLocaleString()} (~$${exp.estimatedUSD})`
+      : `$${exp.total.toLocaleString()}`)
+    : "TBD";
   expenseRows.push(
     new TableRow({
       children: [
         cell(exp.item, { width: 50 }),
-        cell(`${sym}${exp.perPerson.toLocaleString()}`, { width: 17, align: AlignmentType.RIGHT }),
+        cell(perPersonDisplay, { width: 17, align: AlignmentType.RIGHT }),
         cell(String(exp.quantity), { width: 8, align: AlignmentType.CENTER }),
         cell(totalDisplay, { width: 25, align: AlignmentType.RIGHT }),
       ],
@@ -426,6 +429,21 @@ for (const day of data.days) {
         ],
       })
     );
+  }
+
+  // ── Transfers ──
+  if (day.transfers && day.transfers.length > 0) {
+    dayChildren.push(subHeading("Transfers"));
+    for (const xfer of day.transfers) {
+      dayChildren.push(labeledLine(xfer.name, `(${xfer.status.toUpperCase()})`));
+      dayChildren.push(labeledLine("  Time:", xfer.time));
+      if (xfer.vehicle) dayChildren.push(labeledLine("  Vehicle:", xfer.vehicle));
+      if (xfer.duration) dayChildren.push(labeledLine("  Duration:", xfer.duration));
+      if (xfer.booking) dayChildren.push(labeledLine("  Booking:", xfer.booking));
+      if (xfer.notes) {
+        dayChildren.push(bullet(xfer.notes, { italics: true }));
+      }
+    }
   }
 
   // ── Excursions ──
