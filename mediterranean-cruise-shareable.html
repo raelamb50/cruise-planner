@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0B1D3A">
+<title>Med Cruise 2026 — Itinerary</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+/* ── Design Tokens ── */
+:root {
+  --navy: #0B1D3A;
+  --navy-mid: #132B52;
+  --navy-light: #1a3260;
+  --sand: #F5E6D3;
+  --sand-light: #FBF5EE;
+  --gold: #C9A96E;
+  --gold-light: #e8d5a8;
+  --coral: #E07A5F;
+  --green: #2D6A4F;
+  --white: #FAFAFA;
+  --bg-page: var(--sand-light);
+  --bg-card: var(--white);
+  --bg-section: var(--sand);
+  --text-primary: var(--navy);
+  --text-secondary: #3d5a80;
+  --text-muted: #8a9ab5;
+  --border: rgba(11,29,58,0.08);
+  --shadow-sm: 0 1px 3px rgba(11,29,58,0.06);
+  --shadow-md: 0 4px 12px rgba(11,29,58,0.10);
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Source Sans 3', -apple-system, sans-serif;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --tab-height: 56px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-page: #080f1c;
+    --bg-card: #0B1D3A;
+    --bg-section: #132B52;
+    --text-primary: #F5E6D3;
+    --text-secondary: #b8c5d9;
+    --text-muted: #6b7fa0;
+    --border: rgba(245,230,211,0.08);
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.2);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.3);
+  }
+}
+
+/* ── Reset + Base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+body {
+  font-family: var(--font-body);
+  background: var(--bg-page);
+  color: var(--text-primary);
+  line-height: 1.5;
+  padding-bottom: calc(var(--tab-height) + var(--safe-bottom) + 8px);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a { color: var(--gold); text-decoration: none; }
+a:active { opacity: 0.7; }
+
+/* ── Typography ── */
+.font-display { font-family: var(--font-display); }
+.section-label {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+
+/* ── Tab System ── */
+.tab-pane { display: none; }
+.tab-pane.active { display: block; animation: fadeUp 250ms ease; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Tab Bar ── */
+#tab-bar {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 1000;
+  display: flex;
+  background: var(--navy);
+  padding-bottom: var(--safe-bottom);
+  box-shadow: 0 -2px 12px rgba(0,0,0,0.15);
+}
+.tab-btn {
+  flex: 1;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  height: var(--tab-height);
+  background: none; border: none; color: #6b7fa0;
+  font-family: var(--font-body); font-size: 10px; font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: color 200ms;
+  min-width: 44px; min-height: 44px;
+  position: relative;
+}
+.tab-btn.active { color: var(--gold); }
+.tab-btn.active::after {
+  content: ''; position: absolute; top: 0; left: 25%; right: 25%;
+  height: 2px; background: var(--gold); border-radius: 0 0 2px 2px;
+}
+.tab-btn .tab-icon { font-size: 20px; margin-bottom: 2px; }
+.tab-btn .tab-label { font-size: 10px; }
+
+/* ── Trip Header ── */
+.trip-header {
+  text-align: center;
+  padding: 20px 16px 12px;
+}
+.trip-header h1 {
+  font-family: var(--font-display);
+  font-size: 24px; font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: 1px;
+}
+.trip-header .subtitle {
+  font-family: var(--font-body);
+  font-size: 12px; font-weight: 300;
+  color: var(--text-muted);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* ── Map ── */
+#map-toggle {
+  text-align: center;
+  padding: 10px;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+#map-wrapper {
+  max-height: 300px;
+  overflow: hidden;
+  transition: max-height 400ms ease;
+}
+#map-wrapper.collapsed { max-height: 0; }
+#map {
+  height: 220px;
+  margin: 0 12px;
+  border-radius: 12px;
+  overflow: hidden;
+  z-index: 1;
+}
+.leaflet-container { background: var(--sand); }
+
+/* ── Port Strip ── */
+#port-strip {
+  display: flex;
+  gap: 8px;
+  padding: 10px 12px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+#port-strip::-webkit-scrollbar { display: none; }
+.port-pill {
+  flex-shrink: 0;
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1.5px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 12px; font-weight: 600;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
+  min-height: 44px;
+  display: flex; align-items: center;
+  transition: all 200ms;
+}
+.port-pill.active {
+  background: var(--gold);
+  color: var(--navy);
+  border-color: var(--gold);
+}
+
+/* ── Day Cards ── */
+#timeline { padding: 0 12px 16px; }
+.day-card {
+  background: var(--bg-card);
+  border-radius: 16px;
+  padding: 20px 16px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow-sm);
+  scroll-margin-top: 12px;
+}
+.day-card.sea-day { background: color-mix(in srgb, var(--bg-card) 92%, var(--navy)); }
+.day-badge {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 12px; font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 4px;
+}
+.day-location {
+  font-family: var(--font-display);
+  font-size: 26px; font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.2;
+  margin-bottom: 2px;
+  transition: color 500ms;
+}
+.day-location.highlight { color: var(--gold); }
+.day-date {
+  font-size: 12px; font-weight: 400;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.day-times {
+  display: flex; flex-wrap: wrap; gap: 8px 16px;
+  font-size: 12px; color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+.day-times span { display: flex; align-items: center; gap: 4px; }
+.day-times .time-val { font-weight: 600; }
+
+/* ── Status Badges ── */
+.status-badge {
+  display: inline-block;
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+.b-booked { background: rgba(45,106,79,0.12); color: var(--green); }
+.b-action { background: rgba(224,122,95,0.12); color: var(--coral); }
+.b-sea { background: rgba(201,169,110,0.12); color: var(--gold); }
+.b-travel { background: rgba(11,29,58,0.08); color: var(--text-secondary); }
+.b-open { background: rgba(201,169,110,0.08); color: #b8941c; }
+
+/* ── Day Sections ── */
+.day-section { margin-top: 14px; }
+.day-section:first-of-type { margin-top: 8px; }
+
+/* ── Transit Block ── */
+.transit-block {
+  background: var(--bg-section);
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 4px;
+}
+.transit-route {
+  font-family: var(--font-display);
+  font-size: 16px; font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+.transit-detail {
+  font-size: 12px; color: var(--text-secondary);
+  line-height: 1.6;
+}
+.transit-detail strong { font-weight: 600; color: var(--text-primary); }
+
+/* ── Hotel Block ── */
+.hotel-block {
+  background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+  border-radius: 10px;
+  padding: 14px;
+  color: #e0ddd6;
+}
+.hotel-name {
+  font-family: var(--font-display);
+  font-size: 17px; font-weight: 600;
+  color: var(--sand);
+  margin-bottom: 4px;
+}
+.hotel-status {
+  display: inline-block;
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1px;
+  padding: 2px 8px; border-radius: 8px;
+  background: rgba(45,106,79,0.25); color: #5fba8a;
+  margin-bottom: 6px;
+}
+.hotel-detail { font-size: 12px; line-height: 1.6; color: #b0b8c8; }
+.hotel-detail a { color: var(--gold-light); }
+
+/* ── Excursion Block ── */
+.excursion-item {
+  padding: 10px 12px;
+  background: var(--bg-page);
+  border-radius: 10px;
+  margin-bottom: 6px;
+}
+.excursion-item.pending { border-left: 3px solid var(--gold); }
+.excursion-name {
+  font-size: 14px; font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 3px;
+}
+.excursion-meta {
+  font-size: 12px; color: var(--text-secondary);
+  display: flex; flex-wrap: wrap; gap: 4px 12px;
+}
+.excursion-status {
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  padding: 1px 6px; border-radius: 6px;
+}
+.excursion-status.booked { background: rgba(45,106,79,0.12); color: var(--green); }
+.excursion-status.pending { background: rgba(201,169,110,0.15); color: #b8941c; }
+.excursion-status.hold { background: rgba(224,122,95,0.12); color: var(--coral); }
+.excursion-status.cancelled { background: rgba(120,120,120,0.12); color: #888; text-decoration: line-through; }
+.excursion-notes {
+  font-size: 11px; color: var(--text-muted);
+  margin-top: 4px; line-height: 1.5;
+}
+
+/* ── Dining Block ── */
+.dining-item {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  padding: 10px 12px;
+  background: var(--bg-page);
+  border-radius: 10px;
+  margin-bottom: 6px;
+}
+.dining-info { flex: 1; }
+.dining-name { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+.dining-meta { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+.dining-notes { font-size: 11px; color: var(--text-muted); margin-top: 3px; line-height: 1.4; }
+
+/* ── Gap Alerts ── */
+.gap-alert {
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 12px;
+  line-height: 1.5;
+  margin-bottom: 6px;
+}
+.gap-high { background: rgba(224,122,95,0.1); color: var(--coral); border-left: 3px solid var(--coral); }
+.gap-moderate { background: rgba(201,169,110,0.1); color: #b8941c; border-left: 3px solid var(--gold); }
+.gap-low { background: rgba(138,154,181,0.08); color: var(--text-muted); border-left: 3px solid var(--text-muted); }
+
+/* ── Recommendations Accordion ── */
+.accordion-toggle {
+  display: flex; justify-content: space-between; align-items: center;
+  width: 100%;
+  background: none; border: none;
+  padding: 8px 0; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 44px;
+}
+.accordion-arrow {
+  font-size: 12px; color: var(--gold);
+  transition: transform 300ms;
+}
+.accordion-toggle.open .accordion-arrow { transform: rotate(90deg); }
+.accordion-body {
+  max-height: 0; overflow: hidden;
+  transition: max-height 300ms ease;
+}
+.rec-item {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+.rec-item:last-child { border-bottom: none; }
+.rec-name { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+.rec-desc { font-size: 12px; color: var(--text-secondary); margin-top: 2px; line-height: 1.5; }
+
+/* ── Flights Tab ── */
+.flights-container { padding: 20px 12px; }
+.flights-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.flights-header h2 {
+  font-family: var(--font-display);
+  font-size: 24px; font-weight: 600;
+  color: var(--text-primary);
+}
+.flights-header .conf-code {
+  font-size: 12px; color: var(--text-muted);
+  letter-spacing: 1px;
+  margin-top: 4px;
+}
+.flight-card {
+  background: var(--bg-card);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 10px;
+  box-shadow: var(--shadow-sm);
+}
+.flight-leg-label {
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1.5px;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+.flight-route {
+  font-family: var(--font-display);
+  font-size: 20px; font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+.flight-number {
+  font-size: 13px; font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+.flight-times {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 8px;
+}
+.flight-time-block { text-align: center; }
+.flight-time-block .time { font-size: 20px; font-weight: 700; color: var(--text-primary); }
+.flight-time-block .airport { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+.flight-time-block .date { font-size: 10px; color: var(--text-muted); }
+.flight-arrow { color: var(--gold); font-size: 16px; }
+.flight-details {
+  font-size: 11px; color: var(--text-muted);
+  display: flex; flex-wrap: wrap; gap: 4px 14px;
+  margin-top: 4px;
+}
+.layover-card {
+  background: var(--bg-section);
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.layover-duration {
+  font-size: 13px; font-weight: 600;
+  color: var(--text-secondary);
+}
+.layover-location { font-size: 12px; color: var(--text-muted); }
+.cruise-block {
+  background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+  border-radius: 14px;
+  padding: 24px 16px;
+  text-align: center;
+  margin: 16px 0;
+}
+.cruise-block .cruise-icon { font-size: 32px; margin-bottom: 6px; }
+.cruise-block .cruise-label {
+  font-family: var(--font-display);
+  font-size: 20px; font-weight: 600;
+  color: var(--sand);
+}
+.cruise-block .cruise-dates { font-size: 12px; color: #8a9ab5; margin-top: 4px; }
+.cruise-block .cruise-route { font-size: 11px; color: #6b7fa0; margin-top: 6px; line-height: 1.5; }
+
+/* ── Info Tab ── */
+.info-container { padding: 20px 12px; }
+.info-quick {
+  background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+  color: var(--sand);
+}
+.info-quick h2 {
+  font-family: var(--font-display);
+  font-size: 20px; font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--sand);
+}
+.info-quick-row {
+  display: flex; justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(245,230,211,0.08);
+  font-size: 13px;
+}
+.info-quick-row:last-child { border-bottom: none; }
+.info-quick-label { color: #8a9ab5; }
+.info-quick-value { color: var(--sand); font-weight: 600; text-align: right; }
+.faq-section { margin-bottom: 20px; }
+.faq-item {
+  background: var(--bg-card);
+  border-radius: 12px;
+  margin-bottom: 8px;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+.faq-question {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 16px;
+  font-size: 14px; font-weight: 600;
+  color: var(--text-primary);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 44px;
+  background: none; border: none; width: 100%; text-align: left;
+  font-family: var(--font-body);
+}
+.faq-answer {
+  max-height: 0; overflow: hidden;
+  transition: max-height 300ms ease;
+}
+.faq-answer-inner {
+  padding: 0 16px 14px;
+  font-size: 13px; color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ── Utility ── */
+.phone-link { color: var(--gold); white-space: nowrap; }
+.divider { height: 1px; background: var(--border); margin: 12px 0; }
+
+/* ── Loading State ── */
+.loading {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+.loading-spinner {
+  width: 32px; height: 32px;
+  border: 3px solid var(--border);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 800ms linear infinite;
+  margin: 0 auto 16px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Scroll to Top ── */
+#scroll-top {
+  position: fixed;
+  bottom: calc(var(--tab-height) + var(--safe-bottom) + 16px);
+  right: 16px;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: var(--navy);
+  color: var(--gold);
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms;
+  z-index: 999;
+  display: flex; align-items: center; justify-content: center;
+}
+#scroll-top.visible { opacity: 1; pointer-events: auto; }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ═══ TAB 1: TRIP ═══ -->
+  <div id="tab-trip" class="tab-pane active">
+    <div class="trip-header">
+      <h1 class="font-display">Grand Mediterranean</h1>
+      <div class="subtitle">Four Seasons I &middot; March 17&ndash;30, 2026</div>
+    </div>
+    <div id="map-toggle">&#9650; Route Map &#9650;</div>
+    <div id="map-wrapper">
+      <div id="map"></div>
+      <div id="port-strip"></div>
+    </div>
+    <div id="timeline"><div class="loading"><div class="loading-spinner"></div>Loading itinerary...</div></div>
+  </div>
+
+  <!-- ═══ TAB 2: LOGISTICS ═══ -->
+  <div id="tab-flights" class="tab-pane"></div>
+
+  <!-- ═══ TAB 3: INFO ═══ -->
+  <div id="tab-info" class="tab-pane"></div>
+
+</div>
+
+<nav id="tab-bar">
+  <button class="tab-btn active" data-tab="trip" aria-label="Trip">
+    <span class="tab-icon">&#128506;</span><span class="tab-label">Trip</span>
+  </button>
+  <button class="tab-btn" data-tab="flights" aria-label="Logistics">
+    <span class="tab-icon">&#9992;&#65039;</span><span class="tab-label">Logistics</span>
+  </button>
+  <button class="tab-btn" data-tab="info" aria-label="Info">
+    <span class="tab-icon">&#8505;&#65039;</span><span class="tab-label">Info</span>
+  </button>
+</nav>
+
+<button id="scroll-top" aria-label="Scroll to top">&#9650;</button>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+/* ════════════════════════════════════════════
+   SHAREABLE ITINERARY — fetches trip_data.json
+   ════════════════════════════════════════════ */
+
+let D = null;
+
+const PORTS = [
+  { name: "Malaga", lat: 36.7213, lng: -4.4214, type: "embark", dayDate: "2026-03-20" },
+  { name: "Menorca", lat: 39.8885, lng: 4.2658, type: "port", dayDate: "2026-03-22" },
+  { name: "Marseille", lat: 43.2965, lng: 5.3698, type: "port", dayDate: "2026-03-23" },
+  { name: "Nice", lat: 43.6955, lng: 7.2716, type: "port", dayDate: "2026-03-24" },
+  { name: "Ponza", lat: 40.8954, lng: 12.9631, type: "port", dayDate: "2026-03-26" },
+  { name: "Trapani", lat: 38.0174, lng: 12.5114, type: "port", dayDate: "2026-03-27" },
+  { name: "Gozo", lat: 36.0444, lng: 14.2514, type: "port", dayDate: "2026-03-28" },
+  { name: "Valletta", lat: 35.8989, lng: 14.5146, type: "disembark", dayDate: "2026-03-29" }
+];
+
+const FLAGS = { Spain: "\u{1F1EA}\u{1F1F8}", Netherlands: "\u{1F1F3}\u{1F1F1}", France: "\u{1F1EB}\u{1F1F7}", Italy: "\u{1F1EE}\u{1F1F9}", Malta: "\u{1F1F2}\u{1F1F9}" };
+
+/* ═══ UTILITIES ═══ */
+function esc(s) { if (!s) return ''; const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+function phoneLink(phone) {
+  if (!phone) return '';
+  const clean = phone.replace(/[^+\d]/g, '');
+  return '<a href="tel:' + clean + '" class="phone-link">' + esc(phone) + '</a>';
+}
+
+function mapLink(address) {
+  if (!address) return '';
+  return '<a href="https://maps.apple.com/?q=' + encodeURIComponent(address) + '">' + esc(address) + '</a>';
+}
+
+function getDayBadge(day) {
+  if (day.day === 0) return 'PRE-CRUISE';
+  if (day.day >= 1 && day.day <= 10) return 'DAY ' + day.day;
+  return 'POST-CRUISE';
+}
+
+function getFlag(country) { return FLAGS[country] || ''; }
+
+function getLocation(day) {
+  if (day.type === 'sea') return '\u26F5 At Sea';
+  if (day.port && day.country) return getFlag(day.country) + ' ' + day.port + ', ' + day.country;
+  if (day.port) return getFlag(day.country) + ' ' + day.port;
+  if (day.label && day.label.includes('\u2192')) return '\u2708\uFE0F ' + day.label.replace(/^Pre-Cruise:\s*/, '');
+  if (day.date === '2026-03-17') return '\u2708\uFE0F Sacramento \u2192 Amsterdam';
+  if (day.date === '2026-03-30') return '\u2708\uFE0F Valletta \u2192 Sacramento';
+  return day.label || '';
+}
+
+function getStatusBadge(day) {
+  if (day.type === 'sea') return { cls: 'b-sea', label: 'Sea Day' };
+  if (day.type === 'travel') return { cls: 'b-travel', label: 'Transit' };
+  if (day.type === 'embark') return { cls: 'b-travel', label: 'Embarkation' };
+  if (day.type === 'disembark') return { cls: 'b-travel', label: 'Disembarkation' };
+  if (day.gaps && day.gaps.some(function(g) { return g.severity === 'HIGH'; })) return { cls: 'b-action', label: 'Needs Planning' };
+  if (day.excursions && day.excursions.some(function(e) { return e.status === 'booked'; })) return { cls: 'b-booked', label: 'Booked' };
+  return { cls: 'b-open', label: 'Open' };
+}
+
+/* ═══ RENDER: TIMELINE ═══ */
+function renderTimeline() {
+  const el = document.getElementById('timeline');
+  let html = '';
+
+  const flightsByDate = {
+    '2026-03-17': D.flights.outbound,
+    '2026-03-19': D.flights.connecting,
+    '2026-03-30': D.flights.return
+  };
+
+  D.days.forEach(function(day) {
+    const badge = getDayBadge(day);
+    const status = getStatusBadge(day);
+    const location = getLocation(day);
+    const isSea = day.type === 'sea';
+    const flights = flightsByDate[day.date] || [];
+
+    html += '<section class="day-card' + (isSea ? ' sea-day' : '') + '" id="day-' + day.date + '">';
+    html += '<div class="day-badge">' + badge + '</div>';
+    html += '<h2 class="day-location">' + esc(location) + '</h2>';
+    html += '<div class="day-date">' + esc(day.dateFormatted) + '</div>';
+
+    // Times
+    if (day.arrive || day.depart || day.board || day.disembarkWindow) {
+      html += '<div class="day-times">';
+      if (day.arrive) html += '<span>Arrive <span class="time-val">' + esc(day.arrive) + '</span></span>';
+      if (day.depart) html += '<span>Depart <span class="time-val">' + esc(day.depart) + '</span></span>';
+      if (day.board) html += '<span>All Aboard <span class="time-val">' + esc(day.board) + '</span></span>';
+      if (day.disembarkWindow) html += '<span>Disembark <span class="time-val">' + esc(day.disembarkWindow) + '</span></span>';
+      html += '</div>';
+    }
+
+    // Status badge
+    html += '<span class="status-badge ' + status.cls + '">' + status.label + '</span>';
+
+    // Transit blocks
+    if (flights.length) {
+      html += '<div class="day-section"><div class="section-label">FLIGHTS</div>';
+      flights.forEach(function(f) {
+        html += '<div class="transit-block">';
+        html += '<div class="transit-route">' + esc(f.from.split('(')[0].trim()) + ' \u2192 ' + esc(f.to.split('(')[0].trim()) + '</div>';
+        html += '<div class="transit-detail">';
+        html += '<strong>' + esc(f.flight) + '</strong>';
+        if (f.operator) html += ' \u00B7 ' + esc(f.operator);
+        html += '<br>' + esc(f.aircraft) + ' \u00B7 ' + esc(f.class);
+        html += '<br>Depart <strong>' + esc(f.departTime) + '</strong> \u2192 Arrive <strong>' + esc(f.arriveTime) + '</strong>';
+        if (f.seats) html += '<br>Seats: Robert ' + esc(f.seats.Robert) + ', Raelan ' + esc(f.seats.Raelan);
+        html += '</div></div>';
+      });
+      html += '</div>';
+    }
+
+    // Hotel
+    if (day.hotel) {
+      html += '<div class="day-section"><div class="section-label">ACCOMMODATION</div>';
+      html += '<div class="hotel-block">';
+      html += '<div class="hotel-name">' + esc(day.hotel.name) + '</div>';
+      if (day.hotel.status === 'booked') html += '<span class="hotel-status">\u2713 Booked</span>';
+      html += '<div class="hotel-detail">';
+      if (day.hotel.room) html += esc(day.hotel.room) + '<br>';
+      if (day.hotel.checkIn) html += 'Check-in: ' + esc(day.hotel.checkIn);
+      if (day.hotel.checkOut) html += ' \u00B7 Check-out: ' + esc(day.hotel.checkOut);
+      if (day.hotel.checkIn || day.hotel.checkOut) html += '<br>';
+      if (day.hotel.confirmation) html += 'Confirmation: ' + esc(day.hotel.confirmation) + '<br>';
+      if (day.hotel.address) html += mapLink(day.hotel.address) + '<br>';
+      if (day.hotel.phone) html += phoneLink(day.hotel.phone) + '<br>';
+      if (day.hotel.earlyCheckIn) html += '<em>' + esc(day.hotel.earlyCheckIn) + '</em><br>';
+      if (day.hotel.luggageNote) html += '<em>' + esc(day.hotel.luggageNote) + '</em>';
+      html += '</div></div></div>';
+    }
+
+    // Transfers
+    if (day.transfers && day.transfers.length) {
+      html += '<div class="day-section"><div class="section-label">TRANSFERS</div>';
+      day.transfers.forEach(function(xfer) {
+        html += '<div class="excursion-item">';
+        html += '<div class="excursion-name">' + esc(xfer.name) + '</div>';
+        html += '<div class="excursion-meta">';
+        if (xfer.time) html += '<span>' + esc(xfer.time) + '</span>';
+        if (xfer.vehicle) html += '<span>' + esc(xfer.vehicle) + '</span>';
+        if (xfer.duration) html += '<span>' + esc(xfer.duration) + '</span>';
+        html += '<span class="excursion-status booked">Booked</span>';
+        html += '</div>';
+        html += '</div>';
+      });
+      html += '</div>';
+    }
+
+    // Excursions (no costs in shareable version)
+    if (day.excursions && day.excursions.length) {
+      html += '<div class="day-section"><div class="section-label">ACTIVITIES</div>';
+      day.excursions.forEach(function(ex) {
+        var isPending = ex.status !== 'booked';
+        html += '<div class="excursion-item' + (isPending ? ' pending' : '') + '">';
+        html += '<div class="excursion-name">' + esc(ex.name) + '</div>';
+        html += '<div class="excursion-meta">';
+        if (ex.time) html += '<span>' + esc(ex.time) + '</span>';
+        var statusCls = ex.status === 'booked' ? 'booked' : (ex.status === 'hold_pending' ? 'hold' : 'pending');
+        var statusLabel = ex.status === 'booked' ? 'Booked' : (ex.status === 'hold_pending' ? 'Hold' : 'Pending');
+        html += '<span class="excursion-status ' + statusCls + '">' + statusLabel + '</span>';
+        html += '</div>';
+        if (ex.confirmation) html += '<div class="excursion-notes">Confirmation: ' + esc(ex.confirmation) + '</div>';
+        html += '</div>';
+      });
+      html += '</div>';
+    }
+
+    // Dining (no costs in shareable version)
+    if (day.dining && day.dining.length) {
+      html += '<div class="day-section"><div class="section-label">DINING</div>';
+      day.dining.forEach(function(di) {
+        html += '<div class="dining-item"><div class="dining-info">';
+        html += '<div class="dining-name">' + esc(di.name) + '</div>';
+        html += '<div class="dining-meta">';
+        if (di.time) html += esc(di.time);
+        if (di.status === 'booked') html += ' \u00B7 <span style="color:var(--green);font-weight:600">Booked</span>';
+        else if (di.status === 'cancelled') html += ' \u00B7 <span style="color:#888;font-weight:600;text-decoration:line-through">Cancelled</span>';
+        else if (di.status === 'planned') html += ' \u00B7 <span style="color:var(--text-muted)">Planned</span>';
+        html += '</div>';
+        if (di.address) html += '<div class="dining-notes">' + mapLink(di.address) + '</div>';
+        if (di.phone) html += '<div class="dining-notes">' + phoneLink(di.phone) + '</div>';
+        html += '</div></div>';
+      });
+      html += '</div>';
+    }
+
+    // Recommendations accordion
+    if (day.recommendations && day.recommendations.length) {
+      html += '<div class="day-section">';
+      html += '<button class="accordion-toggle section-label" onclick="toggleAccordion(this)">';
+      html += 'RECOMMENDATIONS (' + day.recommendations.length + ') <span class="accordion-arrow">\u25B8</span></button>';
+      html += '<div class="accordion-body">';
+      day.recommendations.forEach(function(r) {
+        var desc = r.description || '';
+        // Wrap phone numbers in tap-to-call links
+        desc = desc.replace(/(\+\d[\d\s\-]+\d)/g, function(m) {
+          var clean = m.replace(/[^+\d]/g, '');
+          return '<a href="tel:' + clean + '" class="phone-link">' + m + '</a>';
+        });
+        html += '<div class="rec-item"><div class="rec-name">' + esc(r.name) + '</div><div class="rec-desc">' + desc + '</div></div>';
+      });
+      html += '</div></div>';
+    }
+
+    // Description fallback for travel days
+    if (day.description && !flights.length && !(day.excursions && day.excursions.length) && !(day.dining && day.dining.length)) {
+      html += '<div class="day-section"><p style="font-size:13px;color:var(--text-secondary);line-height:1.6">' + esc(day.description) + '</p></div>';
+    }
+
+    html += '</section>';
+  });
+
+  el.innerHTML = html;
+}
+
+/* ═══ RENDER: LOGISTICS ═══ */
+function renderFlights() {
+  const el = document.getElementById('tab-flights');
+  let html = '<div class="flights-container">';
+  html += '<div class="flights-header"><h2 class="font-display">Transport & Logistics</h2>';
+  html += '<div class="conf-code">Delta: ' + D.confirmations.delta + ' \u00B7 Vueling: ' + D.confirmations.vueling + '</div></div>';
+
+  // Confirmation Codes
+  html += '<div class="section-label">CONFIRMATION CODES</div>';
+  html += '<div class="flight-card" style="margin-bottom:16px">';
+  html += '<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)"><span style="font-size:13px;color:var(--text-secondary)">Delta (all legs)</span><span style="font-size:14px;font-weight:700;color:var(--text-primary);letter-spacing:1px">GEVMLH</span></div>';
+  html += '<div style="display:flex;justify-content:space-between;padding:4px 0"><span style="font-size:13px;color:var(--text-secondary)">Vueling AMS \u2192 AGP</span><span style="font-size:14px;font-weight:700;color:var(--text-primary);letter-spacing:1px">K60WW</span></div>';
+  html += '</div>';
+
+  // Outbound + Connecting
+  html += '<div class="section-label">OUTBOUND FLIGHTS</div>';
+  var allLegs = [].concat(D.flights.outbound, D.flights.connecting);
+  allLegs.forEach(function(f) {
+    if (f.layoverBefore) {
+      html += '<div class="layover-card"><div class="layover-duration">\u23F1 ' + esc(f.layoverBefore) + '</div></div>';
+    }
+    html += renderFlightCard(f);
+  });
+
+  // Hotels
+  html += '<div class="section-label" style="margin-top:20px">HOTELS</div>';
+  var hotels = D.days.filter(function(d) { return d.hotel; });
+  hotels.forEach(function(day) {
+    var h = day.hotel;
+    html += '<div class="hotel-block" style="margin-bottom:10px">';
+    html += '<div class="hotel-name">' + esc(h.name) + '</div>';
+    if (h.status === 'booked') html += '<span class="hotel-status">\u2713 Booked</span>';
+    html += '<div class="hotel-detail">';
+    html += '<strong style="color:var(--gold-light)">' + esc(day.dateFormatted) + '</strong><br>';
+    if (h.room) html += esc(h.room) + '<br>';
+    if (h.checkIn) html += 'Check-in: ' + esc(h.checkIn);
+    if (h.checkOut) html += ' \u00B7 Check-out: ' + esc(h.checkOut);
+    if (h.checkIn || h.checkOut) html += '<br>';
+    if (h.confirmation) html += 'Confirmation: <strong>' + esc(h.confirmation) + '</strong><br>';
+    if (h.address) html += mapLink(h.address) + '<br>';
+    if (h.phone) html += phoneLink(h.phone) + '<br>';
+    if (h.includes) html += '<span style="color:#5fba8a">Includes:</span> ' + esc(h.includes);
+    html += '</div></div>';
+  });
+
+  // Cruise block
+  html += '<div class="cruise-block">';
+  html += '<div class="cruise-icon">\u{1F6A2}</div>';
+  html += '<div class="cruise-label">CRUISE</div>';
+  html += '<div class="cruise-dates">' + esc(D.trip.cruiseDateRange) + '</div>';
+  html += '<div class="cruise-route">' + esc(D.trip.route) + '</div>';
+  html += '</div>';
+
+  // Return Flights
+  html += '<div class="section-label">RETURN FLIGHTS</div>';
+  D.flights.return.forEach(function(f) {
+    if (f.layoverBefore) {
+      html += '<div class="layover-card"><div class="layover-duration">\u23F1 ' + esc(f.layoverBefore) + '</div></div>';
+    }
+    html += renderFlightCard(f);
+  });
+
+  html += '<div style="text-align:center;margin-top:16px;font-size:12px;color:var(--text-muted)">Total return duration: ' + esc(D.flights.returnTotalDuration) + '</div>';
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+function renderFlightCard(f) {
+  var fromCity = f.from.split('(')[0].trim();
+  var toCity = f.to.split('(')[0].trim();
+  var fromCode = (f.from.match(/\((\w+)\)/) || ['',''])[1];
+  var toCode = (f.to.match(/\((\w+)\)/) || ['',''])[1];
+
+  var html = '<div class="flight-card">';
+  html += '<div class="flight-leg-label">Leg ' + f.leg + '</div>';
+  html += '<div class="flight-route">' + esc(fromCity) + ' \u2192 ' + esc(toCity) + '</div>';
+  html += '<div class="flight-number">' + esc(f.flight);
+  if (f.operator) html += ' \u00B7 ' + esc(f.operator);
+  html += '</div>';
+
+  html += '<div class="flight-times">';
+  html += '<div class="flight-time-block"><div class="time">' + esc(f.departTime) + '</div><div class="airport">' + esc(fromCode) + '</div>';
+  if (f.fromTerminal) html += '<div class="date">' + esc(f.fromTerminal) + '</div>';
+  html += '</div>';
+  html += '<div class="flight-arrow">\u2192</div>';
+  html += '<div class="flight-time-block"><div class="time">' + esc(f.arriveTime) + '</div><div class="airport">' + esc(toCode) + '</div>';
+  if (f.toTerminal) html += '<div class="date">' + esc(f.toTerminal) + '</div>';
+  html += '</div></div>';
+
+  html += '<div class="flight-details">';
+  html += '<span>' + esc(f.aircraft) + '</span>';
+  html += '<span>' + esc(f.class) + '</span>';
+  if (f.seats) html += '<span>Seats: ' + f.seats.Robert + ', ' + f.seats.Raelan + '</span>';
+  if (f.duration) html += '<span>' + esc(f.duration) + '</span>';
+  html += '</div>';
+
+  html += '<div style="margin-top:6px;font-size:11px;color:var(--text-muted)">';
+  html += esc(f.departDate);
+  if (f.arriveDate !== f.departDate) html += ' \u2192 ' + esc(f.arriveDate);
+  html += '</div>';
+
+  html += '</div>';
+  return html;
+}
+
+/* ═══ RENDER: INFO ═══ */
+function renderInfo() {
+  const el = document.getElementById('tab-info');
+  let html = '<div class="info-container">';
+
+  html += '<div class="info-quick"><h2 class="font-display">Quick Reference</h2>';
+  var quickItems = [
+    ['Cruise', D.trip.cruiseDateRange],
+    ['Ship', 'Four Seasons I'],
+    ['Route', D.trip.route],
+    ['Wi-Fi', 'Complimentary'],
+    ['Outlets', 'US + EU + USB (no adapter)'],
+    ['Breakfast', 'Terrasse, 7:30\u201311 AM (included)'],
+    ['Dress Code', 'Resort elegant'],
+    ['Gratuities', 'Included in fare']
+  ];
+  quickItems.forEach(function(item) {
+    html += '<div class="info-quick-row"><span class="info-quick-label">' + item[0] + '</span><span class="info-quick-value">' + esc(item[1]) + '</span></div>';
+  });
+  html += '</div>';
+
+  // Ship FAQ
+  html += '<div class="section-label" style="margin-top:20px">SHIP FAQ</div>';
+  html += '<div class="faq-section">';
+  D.shipInfo.forEach(function(item) {
+    html += '<div class="faq-item">';
+    html += '<button class="faq-question" onclick="toggleFaq(this)">' + esc(item.question) + ' <span class="accordion-arrow">\u25B8</span></button>';
+    html += '<div class="faq-answer"><div class="faq-answer-inner">' + esc(item.answer) + '</div></div>';
+    html += '</div>';
+  });
+  html += '</div></div>';
+  el.innerHTML = html;
+}
+
+/* ═══ ACCORDION & FAQ ═══ */
+function toggleAccordion(btn) {
+  btn.classList.toggle('open');
+  var body = btn.nextElementSibling;
+  if (btn.classList.contains('open')) {
+    body.style.maxHeight = body.scrollHeight + 'px';
+  } else {
+    body.style.maxHeight = '0';
+  }
+}
+
+function toggleFaq(btn) {
+  var arrow = btn.querySelector('.accordion-arrow');
+  var answer = btn.nextElementSibling;
+  var isOpen = answer.style.maxHeight && answer.style.maxHeight !== '0px';
+  if (isOpen) {
+    answer.style.maxHeight = '0';
+    arrow.style.transform = 'rotate(0deg)';
+  } else {
+    answer.style.maxHeight = answer.scrollHeight + 'px';
+    arrow.style.transform = 'rotate(90deg)';
+  }
+}
+
+/* ═══ TAB SWITCHING ═══ */
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-pane').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('tab-' + tabId).classList.add('active');
+  document.querySelector('[data-tab="' + tabId + '"]').classList.add('active');
+
+  var mapWrapper = document.getElementById('map-wrapper');
+  var mapToggle = document.getElementById('map-toggle');
+  var tripHeader = document.querySelector('.trip-header');
+  if (tabId !== 'trip') {
+    if (mapWrapper) mapWrapper.style.display = 'none';
+    if (mapToggle) mapToggle.style.display = 'none';
+    if (tripHeader) tripHeader.style.display = 'none';
+  } else {
+    if (mapWrapper) mapWrapper.style.display = '';
+    if (mapToggle) mapToggle.style.display = '';
+    if (tripHeader) tripHeader.style.display = '';
+  }
+
+  window.scrollTo(0, 0);
+}
+
+document.querySelectorAll('.tab-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() { switchTab(btn.dataset.tab); });
+});
+
+/* ═══ MAP ═══ */
+var map = null;
+var mapCollapsed = false;
+
+function initMap() {
+  if (typeof L === 'undefined') {
+    document.getElementById('map-wrapper').style.display = 'none';
+    document.getElementById('map-toggle').style.display = 'none';
+    return;
+  }
+
+  map = L.map('map', { zoomControl: false, attributionControl: false });
+
+  var isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  var tileUrl = isDark
+    ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+    : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+  L.tileLayer(tileUrl, { maxZoom: 16 }).addTo(map);
+
+  var routeCoords = PORTS.map(function(p) { return [p.lat, p.lng]; });
+  L.polyline(routeCoords, {
+    color: '#C9A96E', weight: 2, dashArray: '6, 8', opacity: 0.8
+  }).addTo(map);
+
+  PORTS.forEach(function(port) {
+    var isEndpoint = port.type === 'embark' || port.type === 'disembark';
+    var marker = L.circleMarker([port.lat, port.lng], {
+      radius: isEndpoint ? 8 : 6,
+      fillColor: isEndpoint ? '#E07A5F' : '#C9A96E',
+      color: '#fff', weight: 2, fillOpacity: 1
+    }).addTo(map);
+
+    marker.bindTooltip(port.name, { permanent: false, direction: 'top', offset: [0, -8], className: 'port-tooltip' });
+    marker.on('click', function() { flyToPort(port); scrollToDay(port.dayDate); });
+  });
+
+  var bounds = L.latLngBounds(routeCoords);
+  map.fitBounds(bounds, { padding: [30, 30] });
+
+  renderPortStrip();
+
+  document.getElementById('map-toggle').addEventListener('click', function() {
+    var wrapper = document.getElementById('map-wrapper');
+    mapCollapsed = !mapCollapsed;
+    wrapper.classList.toggle('collapsed', mapCollapsed);
+    document.getElementById('map-toggle').textContent = mapCollapsed ? '\u25BC Route Map \u25BC' : '\u25B2 Route Map \u25B2';
+    if (!mapCollapsed) setTimeout(function() { map.invalidateSize(); }, 420);
+  });
+}
+
+function renderPortStrip() {
+  var strip = document.getElementById('port-strip');
+  var html = '<button class="port-pill active" data-port="all" onclick="showAllPorts()">All</button>';
+  PORTS.forEach(function(p) {
+    html += '<button class="port-pill" data-port="' + p.dayDate + '" onclick="selectPort(\'' + p.dayDate + '\', this)">' + esc(p.name) + '</button>';
+  });
+  strip.innerHTML = html;
+}
+
+function showAllPorts() {
+  document.querySelectorAll('.port-pill').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelector('[data-port="all"]').classList.add('active');
+  var bounds = L.latLngBounds(PORTS.map(function(p) { return [p.lat, p.lng]; }));
+  map.flyToBounds(bounds, { padding: [30, 30], duration: 0.8 });
+}
+
+function selectPort(dayDate, btn) {
+  if (mapCollapsed) document.getElementById('map-toggle').click();
+  document.querySelectorAll('.port-pill').forEach(function(p) { p.classList.remove('active'); });
+  if (btn) btn.classList.add('active');
+  var port = PORTS.find(function(p) { return p.dayDate === dayDate; });
+  if (port) flyToPort(port);
+  scrollToDay(dayDate);
+}
+
+function flyToPort(port) {
+  if (map) map.flyTo([port.lat, port.lng], 12, { duration: 0.8 });
+}
+
+function scrollToDay(date) {
+  var el = document.getElementById('day-' + date);
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    var loc = el.querySelector('.day-location');
+    if (loc) {
+      loc.classList.add('highlight');
+      setTimeout(function() { loc.classList.remove('highlight'); }, 2000);
+    }
+  }
+}
+
+/* ═══ SCROLL TO TOP ═══ */
+var scrollBtn = document.getElementById('scroll-top');
+window.addEventListener('scroll', function() {
+  scrollBtn.classList.toggle('visible', window.scrollY > 300);
+});
+scrollBtn.addEventListener('click', function() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+/* ═══ INITIALIZE ═══ */
+fetch('trip_data.json')
+  .then(function(res) { return res.json(); })
+  .then(function(data) {
+    D = data;
+    renderTimeline();
+    renderFlights();
+    renderInfo();
+    initMap();
+  })
+  .catch(function(err) {
+    document.getElementById('timeline').innerHTML =
+      '<div class="loading" style="color:var(--coral)">Could not load itinerary data.<br><small>' + err.message + '</small></div>';
+  });
+</script>
+</body>
+</html>
