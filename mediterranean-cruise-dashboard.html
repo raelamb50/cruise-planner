@@ -721,7 +721,7 @@ a:active { opacity: 0.7; }
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 /* ════════════════════════════════════════════
-   EMBEDDED TRIP DATA (from trip_data.json v18)
+   EMBEDDED TRIP DATA (from trip_data.json v19)
    ════════════════════════════════════════════ */
 const D = {
   trip: {
@@ -1186,20 +1186,7 @@ const D = {
       arrive: "8:00 AM",
       depart: "6:00 PM",
       board: "By 6:00 PM",
-      excursions: [
-        {
-          name: "MuCEM Guided Tour (90 minutes)",
-          time: "10:30 AM – 12:00 PM (requested)",
-          guests: 2,
-          totalCost: 320,
-          currency: "EUR",
-          estimatedUSD: 346,
-          status: "pending",
-          provider: "MuCEM",
-          email: "reservation@mucem.org",
-          notes: "Emailed reservation@mucem.org on 3/6 requesting 90-min guided tour, 10:30 AM – noon (timed to finish before Bouillant at 12:15 PM). Price: €320 (entrance tickets included) — 20% discount from standard €400. Awaiting confirmation. Check raelan.lambert@gmail.com for response."
-        }
-      ],
+      excursions: [],
       dining: [
         {
           name: "Bouillant by Alexandre Mazzia",
@@ -1220,8 +1207,8 @@ const D = {
       ],
       recommendations: [
         {
-          name: "Morning: Le Panier Quarter + MuCEM Guided Tour",
-          description: "Recommended morning plan. Walk Le Panier (Marseille's oldest neighborhood, 5 min from tender zone) — narrow streets, colorful façades, street art, artisan studios. Then MuCEM guided tour 10:30 AM – noon (90 min, €320 for 2 incl. entrance — 20% discount, pending confirmation). Walkable from La Joliette port."
+          name: "Morning: Le Panier Quarter + MuCEM (self-guided)",
+          description: "Recommended morning plan. Walk Le Panier (Marseille's oldest neighborhood, 5 min from tender zone) — narrow streets, colorful façades, street art, artisan studios. Then explore MuCEM on your own before Bouillant lunch at 12:30 PM. Walkable from La Joliette port."
         },
         {
           name: "Bouillant by Alexandre Mazzia (BOOKED — 12:30 PM)",
@@ -1252,12 +1239,7 @@ const D = {
           description: "The historic Old Port — morning fish market, cafés, and the Norman Foster mirror canopy. Departure point for Calanques boats."
         }
       ],
-      gaps: [
-        {
-          severity: "LOW",
-          description: "MuCEM guided tour pending confirmation (emailed reservation@mucem.org 3/6 for 10:30 AM – noon slot). Plan: Le Panier walk → MuCEM guided tour 10:30 AM → Bouillant lunch 12:30 PM → return aboard by 6 PM for casual dinner. Note: AM par Alexandre Mazzia and Le Petit Nice are both CLOSED Mondays."
-        }
-      ]
+      gaps: []
     },
     {
       day: 5,
@@ -1312,13 +1294,13 @@ const D = {
           phone: "+33 4 93 62 53 95",
           email: "reservation@flaveur.net",
           confirmation: "via restaurant-information.com (Mar 10)",
-          notes: "BOOKED 7:30 PM. Celebrating 22nd wedding anniversary. Tasting menu only: 6-course (€220) or 7-course (€265). 72-hour cancellation policy (€440 no-show). ALLERGY NOTE: Still need to email reservation@flaveur.net re: Raelan's fresh garlic intolerance."
+          notes: "BOOKED 7:30 PM. Celebrating 22nd wedding anniversary. Tasting menu only: 6-course (€220) or 7-course (€265). 72-hour cancellation policy (€440 no-show). ALLERGY NOTE: Flaveur has been notified of Raelan's fresh garlic intolerance."
         }
       ],
       recommendations: [
         {
           name: "Flaveur (BOOKED — 7:30 PM)",
-          description: "BOOKED 7:30 PM: Nice's only 2-Michelin-star restaurant. Celebrating 22nd wedding anniversary. Tasting menu only (6-course €220 / 7-course €265). 25 Rue Gubernatis. 72-hour cancellation (€440 no-show). ALLERGY: Email reservation@flaveur.net re: garlic intolerance."
+          description: "BOOKED 7:30 PM: Nice's only 2-Michelin-star restaurant. Celebrating 22nd wedding anniversary. Tasting menu only (6-course €220 / 7-course €265). 25 Rue Gubernatis. 72-hour cancellation (€440 no-show). Garlic intolerance communicated."
         },
         {
           name: "Promenade des Anglais & Vieux Nice",
@@ -1333,12 +1315,7 @@ const D = {
           description: "Panoramic views over the Baie des Anges, the port, and the Old Town. Take the elevator or walk up. Waterfall and ruins worth the climb. Free."
         }
       ],
-      gaps: [
-        {
-          severity: "LOW",
-          description: "Email Flaveur (reservation@flaveur.net) re: Raelan's fresh garlic intolerance for 7:30 PM dinner."
-        }
-      ]
+      gaps: []
     },
     {
       day: 6,
@@ -1373,13 +1350,13 @@ const D = {
       board: "By 5:00 PM",
       excursions: [
         {
-          name: "Guided Hike & Aperitivos in Ponza (BACKUP — pending ZioJack private boat)",
+          name: "Guided Hike & Aperitivos in Ponza",
           time: "9:15 AM – 1:15 PM",
           guests: 2,
           costPerPerson: 1080,
           totalCost: 2160,
           status: "booked",
-          notes: "Four Seasons excursion: hike Ponza's ancient trails with a guide, then local wine, seafood, and scenic port stroll. 4 hours, all ages. Cancellation: 48 hours in advance or full penalty. This is the BACKUP — preferred option is private boat tour via ZioJack. Emailed ziojackponza@gmail.com on 3/6 with specific stop requests: Grotte di Pilato, Punta di Capo Bianco, Grotta della Maga Circe, Cala del Core, Le Formiche, Palmarola Island (4–5 hrs). Awaiting availability + pricing. If ZioJack confirms, cancel this excursion 48 hrs before Mar 26.",
+          notes: "BOOKED via Four Seasons. Hike Ponza's ancient trails with a guide, then local wine, seafood, and scenic port stroll. 4 hours, all ages. Cancellation: 48 hours in advance or full penalty.",
           whatToBring: "Hiking shoes or comfortable footwear, hat, jacket, credit card and/or local currency"
         }
       ],
@@ -1418,12 +1395,7 @@ const D = {
           description: "The beach itself is permanently closed due to fatal rockfalls from the unstable cliffs. However, the clifftop overlook offers a dramatic view of the crescent beach and towering white tuff cliffs. Brief stop during a port village walk."
         }
       ],
-      gaps: [
-        {
-          severity: "MODERATE",
-          description: "Guided Hike & Aperitivos booked as backup (9:15 AM – 1:15 PM, $2,160). Preferred: private boat via ZioJack — emailed 3/6 with specific stops (Grotte di Pilato, Capo Bianco, Maga Circe, Cala del Core, Le Formiche, Palmarola). Awaiting reply. If confirmed, cancel hike 48 hrs in advance. Boarding by 5 PM — no time for dinner ashore."
-        }
-      ]
+      gaps: []
     },
     {
       day: 8,
@@ -1698,20 +1670,11 @@ const D = {
         notes: "Estimated ~€120–150 for two (tasting menu). Using €150 midpoint. USD estimate at ~$1.08/EUR."
       },
       {
-        item: "Guided Hike & Aperitivos, Ponza (Mar 26) — BACKUP",
+        item: "Guided Hike & Aperitivos, Ponza (Mar 26)",
         perPerson: 1080,
         quantity: 2,
         total: 2160,
-        notes: "Backup excursion — may be cancelled if ZioJack private boat confirms. Cancel 48 hrs in advance."
-      },
-      {
-        item: "MuCEM Guided Tour, Marseille (Mar 23) — PENDING",
-        perPerson: 160,
-        quantity: 1,
-        total: 320,
-        currency: "EUR",
-        estimatedUSD: 346,
-        notes: "€320 flat rate for 2 guests (entrance included). 20% discount from €400. Awaiting confirmation from reservation@mucem.org."
+        notes: "BOOKED via Four Seasons. 4-hour guided hike + aperitivos."
       },
       {
         item: "Bouillant lunch, Marseille (Mar 23)",
@@ -1732,8 +1695,8 @@ const D = {
         notes: "Estimated ~€200–250 for two (tasting menu). Using €225 midpoint. BOOKED 6:30 PM, anniversary."
       }
     ],
-    totalExcursions: 7366.5,
-    totalExcursionsNote: "Excludes golf green fees (pay on arrival — confirmed but price TBD). Includes golf rentals (~$151) and Blacklane transfers (~$261). EUR estimates at ~$1.08/EUR: Hammam (~$300), Under Grain (~$162), MuCEM tour (~$346, pending), Bouillant (~$86), ION Harbour (~$243), Zone Transfers (~$174), Flaveur (~$529), Blacklane (~$261). Ponza hike ($2,160) is backup — may be cancelled. Spa ($700) in USD.",
+    totalExcursions: 7020.5,
+    totalExcursionsNote: "Excludes golf green fees (pay on arrival — confirmed but price TBD). Includes golf rentals (~$151) and Blacklane transfers (~$261). EUR estimates at ~$1.08/EUR: Hammam (~$300), Under Grain (~$162), Bouillant (~$86), ION Harbour (~$243), Zone Transfers (~$174), Flaveur (~$529), Blacklane (~$261). Spa ($700) in USD.",
     flights: [
       {
         item: "Vueling AMS → AGP (Mar 19)",
@@ -1750,18 +1713,18 @@ const D = {
     },
     {
       priority: "MODERATE",
-      action: "Email Flaveur (reservation@flaveur.net) to flag Raelan's fresh garlic intolerance for Mar 24 dinner at 7:30 PM. Time is confirmed — just need allergy notification.",
-      status: "open"
+      action: "Email Flaveur (reservation@flaveur.net) to flag Raelan's fresh garlic intolerance for Mar 24 dinner at 7:30 PM — DONE, restaurant notified.",
+      status: "done"
     },
     {
       priority: "HIGH",
-      action: "Check for ZioJack reply re: private boat tour Ponza (Mar 26) — emailed ziojackponza@gmail.com on 3/6 with specific stops (Grotte di Pilato, Capo Bianco, Maga Circe, Cala del Core, Le Formiche, Palmarola). Awaiting availability + pricing. If confirmed, cancel Guided Hike & Aperitivos backup 48 hrs before Mar 26. Other fallback: Ciccio Nero (+39 0771 80697) or Four Seasons concierge.",
-      status: "in-progress"
+      action: "ZioJack private boat Ponza (Mar 26) — no reply received. Going with Four Seasons Guided Hike & Aperitivos excursion instead (already booked, $2,160).",
+      status: "done"
     },
     {
       priority: "HIGH",
-      action: "Check raelan.lambert@gmail.com for MuCEM guided tour confirmation (Mar 23) — emailed reservation@mucem.org on 3/6 requesting 10:30 AM – noon slot. 90-min tour, €320 (20% discount, entrance included).",
-      status: "in-progress"
+      action: "MuCEM guided tour (Mar 23) — not available that day. Removed from plan. Will explore MuCEM independently before Bouillant lunch.",
+      status: "done"
     }
   ],
   shipInfo: [
@@ -1815,9 +1778,9 @@ const D = {
     }
   ],
   metadata: {
-    version: 18,
+    version: 19,
     generatedDate: "2026-03-14",
-    source: "v18: Golf d'Opio Valbonne CONFIRMED by Katia (Mar 14) — tee time 11:00 AM, buggy + 2 club sets reserved, green fees pay on arrival."
+    source: "v19: Ponza — going with Four Seasons Guided Hike (ZioJack never replied). MuCEM guided tour removed (not available Mar 23). Flaveur garlic allergy communicated. All action items resolved."
   }
 };
 
