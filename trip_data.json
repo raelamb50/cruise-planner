@@ -562,7 +562,7 @@
           "time": "11:00 AM",
           "guests": 2,
           "status": "booked",
-          "notes": "BOOKED independently (not through Four Seasons — significant savings vs. $2,310 FS price). Tee time 11:00 AM, Mar 24. Players: Raelan (handicap 34) & Robert (handicap 20). Rental club sets (€45 × 2 = €90) + golf cart/buggy (€50) = €140 rentals. Green fees TBD — booked via website, awaiting course confirmation from Caroline (opiovalbonne@resonance.golf). Morning tee times require handicap ≤36. Address: Route de Roquefort les Pins, 06650 Opio. Phone: +33 4 93 12 00 08. TRANSPORT: Blacklane Business Class roundtrip (€241.88 total)."
+          "notes": "CONFIRMED by Katia (opiovalbonne@resonance.golf, Mar 14). Booked independently — significant savings vs. $2,310 Four Seasons price. Tee time 11:00 AM, Mar 24. Players: Raelan (handicap 34) & Robert (handicap 20). Buggy + 2 club sets reserved. Rentals: club sets (€45 × 2 = €90) + golf cart/buggy (€50) = €140. Green fees pay on arrival. Morning tee times require handicap ≤36. Address: Route de Roquefort les Pins, 06650 Opio. Phone: +33 4 93 12 00 08. TRANSPORT: Blacklane Business Class roundtrip (€241.88 total)."
         }
       ],
       "dining": [
@@ -599,7 +599,7 @@
       "gaps": [
         {
           "severity": "LOW",
-          "description": "Awaiting confirmation from Golf d'Opio Valbonne that online booking was received (Caroline, opiovalbonne@resonance.golf). Also: email Flaveur re: Raelan's garlic intolerance."
+          "description": "Email Flaveur (reservation@flaveur.net) re: Raelan's fresh garlic intolerance for 7:30 PM dinner."
         }
       ]
     },
@@ -899,11 +899,11 @@
         "notes": "€278 total. USD estimate at ~$1.08/EUR."
       },
       {
-        "item": "Golf d'Opio Valbonne, Nice (Mar 24) — BOOKED independently",
+        "item": "Golf d'Opio Valbonne, Nice (Mar 24) — CONFIRMED",
         "perPerson": null,
         "quantity": 2,
         "total": null,
-        "notes": "Booked directly on website (not through Four Seasons — saved vs. $2,310 FS price). Green fees TBD — awaiting confirmation. Rentals: 2 club sets (€90) + golf cart (€50) = €140 (~$151). Awaiting course confirmation of total."
+        "notes": "CONFIRMED by Katia (Mar 14). Booked independently — saved vs. $2,310 Four Seasons price. Green fees pay on arrival (TBD). Rentals: 2 club sets (€90) + golf cart (€50) = €140 (~$151)."
       },
       {
         "item": "Blacklane roundtrip transfers, Nice ↔ Golf Opio Valbonne (Mar 24)",
@@ -996,7 +996,7 @@
       }
     ],
     "totalExcursions": 7366.50,
-    "totalExcursionsNote": "Excludes golf green fees (TBD — booked independently, awaiting confirmation). Includes golf rentals (~$151) and Blacklane transfers (~$261). EUR estimates at ~$1.08/EUR: Hammam (~$300), Under Grain (~$162), MuCEM tour (~$346, pending), Bouillant (~$86), ION Harbour (~$243), Zone Transfers (~$174), Flaveur (~$529), Blacklane (~$261). Ponza hike ($2,160) is backup — may be cancelled. Spa ($700) in USD. All other amounts in USD.",
+    "totalExcursionsNote": "Excludes golf green fees (pay on arrival — confirmed but price TBD). Includes golf rentals (~$151) and Blacklane transfers (~$261). EUR estimates at ~$1.08/EUR: Hammam (~$300), Under Grain (~$162), MuCEM tour (~$346, pending), Bouillant (~$86), ION Harbour (~$243), Zone Transfers (~$174), Flaveur (~$529), Blacklane (~$261). Ponza hike ($2,160) is backup — may be cancelled. Spa ($700) in USD. All other amounts in USD.",
     "flights": [
       {
         "item": "Vueling AMS → AGP (Mar 19)",
@@ -1008,8 +1008,8 @@
   "actionItems": [
     {
       "priority": "MODERATE",
-      "action": "Confirm Golf d'Opio Valbonne received online booking for 11:00 AM Mar 24 — Raelan emailed Caroline (opiovalbonne@resonance.golf) asking for confirmation. Check for reply.",
-      "status": "in-progress"
+      "action": "Confirm Golf d'Opio Valbonne received online booking for 11:00 AM Mar 24 — CONFIRMED by Katia (Mar 14). Buggy + 2 club sets reserved. Green fees pay on arrival.",
+      "status": "done"
     },
     {
       "priority": "MODERATE",
@@ -1078,8 +1078,8 @@
     }
   ],
   "metadata": {
-    "version": 17,
-    "generatedDate": "2026-03-11",
-    "source": "Compiled from Delta itinerary (GEVMLH), Vueling confirmation (K60WW), Four Seasons cruise itinerary, editorial research from Michelin Guide, Eater, Robb Report, Condé Nast Traveller, Goop, and Town & Country. v17 updates: Golf d'Opio Valbonne BOOKED independently (11:00 AM, saved vs. $2,310 FS price, green fees TBD). Blacklane roundtrip transfers BOOKED (€241.88 total, Nice ↔ golf course). Flaveur dinner time CONFIRMED (7:30 PM, 22nd anniversary). Rental clubs + cart reserved (€140)."
+    "version": 18,
+    "generatedDate": "2026-03-14",
+    "source": "Compiled from Delta itinerary (GEVMLH), Vueling confirmation (K60WW), Four Seasons cruise itinerary, editorial research from Michelin Guide, Eater, Robb Report, Condé Nast Traveller, Goop, and Town & Country. v18 updates: Golf d'Opio Valbonne CONFIRMED by Katia (Mar 14) — tee time 11:00 AM, buggy + 2 club sets reserved, green fees pay on arrival."
   }
 }
