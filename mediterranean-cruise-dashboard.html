@@ -661,6 +661,112 @@ a:active { opacity: 0.7; }
 /* ── Utility ── */
 .phone-link { color: var(--gold); white-space: nowrap; }
 .divider { height: 1px; background: var(--border); margin: 12px 0; }
+
+/* ── Wardrobe Tab ── */
+.wardrobe-container { padding: 16px; }
+.wardrobe-toggle {
+  display: flex; background: var(--navy); border-radius: 28px; padding: 3px; margin-bottom: 16px;
+}
+.wardrobe-toggle-btn {
+  flex: 1; padding: 10px 0; border: none; border-radius: 25px;
+  font-family: var(--font-body); font-size: 14px; font-weight: 600; letter-spacing: 0.5px;
+  cursor: pointer; transition: all 200ms; min-height: 44px;
+  background: transparent; color: var(--text-muted);
+}
+.wardrobe-toggle-btn.active { background: var(--gold); color: var(--navy); }
+
+.weather-strip {
+  display: flex; overflow-x: auto; gap: 8px; padding: 8px 0 12px;
+  -webkit-overflow-scrolling: touch; scrollbar-width: none;
+}
+.weather-strip::-webkit-scrollbar { display: none; }
+.weather-pill {
+  flex-shrink: 0; display: flex; flex-direction: column; align-items: center;
+  padding: 8px 10px; border-radius: 12px; background: var(--bg-card);
+  border: 1px solid var(--border); font-family: var(--font-body); font-size: 11px;
+  color: var(--text-secondary); min-width: 60px; cursor: pointer; transition: all 200ms;
+}
+.weather-pill.active { border-color: var(--gold); background: rgba(201,169,110,0.1); }
+.weather-pill-date { font-weight: 600; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; }
+.weather-pill-icon { font-size: 18px; margin: 4px 0; }
+.weather-pill-temp { font-weight: 600; color: var(--text-primary); }
+
+.capsule-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 16px; background: var(--bg-card); border-radius: 12px;
+  border: 1px solid var(--border); margin-bottom: 12px; cursor: pointer; min-height: 44px;
+}
+.capsule-header h3 { font-family: var(--font-display); font-size: 18px; color: var(--text-primary); }
+.capsule-header .capsule-count { font-family: var(--font-body); font-size: 12px; color: var(--text-muted); }
+.capsule-body { max-height: 0; overflow: hidden; transition: max-height 350ms ease; }
+.capsule-body.open { max-height: 3000px; }
+.capsule-category { margin-bottom: 12px; }
+.capsule-cat-title {
+  font-family: var(--font-body); font-size: 10px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 2px; color: var(--gold); margin-bottom: 6px; padding: 0 4px;
+}
+.capsule-piece {
+  padding: 8px 12px; background: var(--bg-card); border-radius: 8px;
+  margin-bottom: 4px; border: 1px solid var(--border);
+}
+.capsule-piece-name { font-weight: 600; font-size: 13px; color: var(--text-primary); }
+.capsule-piece-desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+.outfit-card {
+  background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm); margin-bottom: 16px; overflow: hidden;
+}
+.outfit-card.sea-day { background: rgba(19,43,82,0.05); }
+@media (prefers-color-scheme: dark) { .outfit-card.sea-day { background: rgba(19,43,82,0.3); } }
+.outfit-card.anniversary { border-left: 3px solid var(--gold); }
+
+.outfit-card-header {
+  padding: 14px 16px 10px; display: flex; justify-content: space-between; align-items: flex-start;
+}
+.outfit-card-badge {
+  font-family: var(--font-display); font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 2px; color: var(--gold);
+}
+.outfit-card-location {
+  font-family: var(--font-display); font-size: 22px; font-weight: 600;
+  color: var(--text-primary); margin-top: 2px;
+}
+.outfit-card-date { font-size: 12px; color: var(--text-muted); }
+.outfit-card-weather { text-align: right; flex-shrink: 0; }
+.outfit-card-weather-icon { font-size: 24px; }
+.outfit-card-weather-temp { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+.outfit-card-weather-feels { font-size: 11px; color: var(--text-muted); max-width: 100px; }
+
+.outfit-weather-alert {
+  background: rgba(224,122,95,0.1); border-left: 3px solid var(--coral);
+  padding: 8px 12px; margin: 0 12px 8px; border-radius: 0 8px 8px 0;
+  font-size: 12px; color: var(--coral); font-weight: 600;
+}
+
+.outfit-occasion { padding: 10px 16px; border-top: 1px solid var(--border); }
+.outfit-occasion-time {
+  font-family: var(--font-body); font-size: 10px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 2px; color: var(--gold); margin-bottom: 4px;
+}
+.outfit-occasion-activity { font-weight: 600; font-size: 14px; color: var(--text-primary); margin-bottom: 6px; }
+.outfit-occasion-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 6px; }
+.outfit-occasion-weather { font-size: 12px; color: var(--text-muted); font-style: italic; }
+.outfit-occasion-weather::before { content: "\01f321 "; }
+.outfit-occasion-jewelry { font-size: 12px; color: var(--gold); margin-top: 4px; }
+.outfit-occasion-jewelry::before { content: "\01f48e "; }
+
+.jewelry-summary {
+  background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border);
+  padding: 16px; margin-top: 8px;
+}
+.jewelry-summary h3 { font-family: var(--font-display); font-size: 18px; color: var(--text-primary); margin-bottom: 8px; }
+.jewelry-item {
+  display: flex; justify-content: space-between; padding: 6px 0; font-size: 13px;
+  border-bottom: 1px solid var(--border);
+}
+.jewelry-item:last-child { border-bottom: none; }
+.jewelry-piece { font-weight: 600; color: var(--text-primary); }
+.jewelry-occasion { color: var(--text-muted); text-align: right; }
 </style>
 </head>
 <body>
@@ -695,6 +801,9 @@ a:active { opacity: 0.7; }
   <!-- ═══ TAB 6: ACTION ITEMS ═══ -->
   <div id="tab-action" class="tab-pane"></div>
 
+  <!-- ═══ TAB 7: WARDROBE ═══ -->
+  <div id="tab-wardrobe" class="tab-pane"></div>
+
 </div>
 
 <nav id="tab-bar">
@@ -712,6 +821,9 @@ a:active { opacity: 0.7; }
   </button>
   <button class="tab-btn" data-tab="info" aria-label="Info">
     <span class="tab-icon">ℹ️</span><span class="tab-label">Info</span>
+  </button>
+  <button class="tab-btn" data-tab="wardrobe" aria-label="Wardrobe">
+    <span class="tab-icon">👔</span><span class="tab-label">Wardrobe</span>
   </button>
   <button class="tab-btn" data-tab="action" aria-label="Action Items">
     <span class="tab-icon">📋</span><span class="tab-label">Actions</span>
@@ -1808,6 +1920,239 @@ const PACKING = [
   { cat: "🤿 Dive Day — Gozo (Mar 28)", items: ["Dive certification card", "Rash guard", "Reef-safe sunscreen", "Waterproof phone case"] }
 ];
 
+/* ════════════════════════════════════════════
+   WARDROBE DATA (weather + capsule + outfits)
+   ════════════════════════════════════════════ */
+const WARDROBE = {
+  weather: [
+    { date: "2026-03-17", location: "Sacramento", highF: 67, lowF: 46, rainChance: "20%", wind: "Light, 8-10 mph", feelsLike: "Mild spring", icon: "cloud-sun", warnings: [] },
+    { date: "2026-03-18", location: "Amsterdam", highF: 50, lowF: 39, rainChance: "55%", wind: "Breezy, 11 mph", feelsLike: "Raw and chilly, damp wind", icon: "cloud-rain", warnings: ["Damp wind makes 50\u00b0F feel like 40\u00b0F"] },
+    { date: "2026-03-19", location: "Amsterdam \u2192 M\u00e1laga", highF: 66, lowF: 39, rainChance: "55\u219220%", wind: "Breezy\u2192Light", feelsLike: "Dramatic improvement on arrival", icon: "cloud-sun", warnings: [] },
+    { date: "2026-03-20", location: "M\u00e1laga", highF: 66, lowF: 48, rainChance: "15%", wind: "Light, 8-10 mph", feelsLike: "Warm sun, pleasant breeze", icon: "sun", warnings: [] },
+    { date: "2026-03-21", location: "At Sea", highF: 63, lowF: 52, rainChance: "15%", wind: "Moderate, 10-15 mph", feelsLike: "Mild on deck, cool in wind", icon: "ship", warnings: [] },
+    { date: "2026-03-22", location: "Menorca", highF: 59, lowF: 46, rainChance: "25%", wind: "Fresh, 12-18 mph", feelsLike: "Sunny but noticeably windy", icon: "wind", warnings: ["The Windy Island \u2014 hair ties essential, wind chill makes 59\u00b0F feel like low 50s"] },
+    { date: "2026-03-23", location: "Marseille", highF: 59, lowF: 44, rainChance: "20%", wind: "11-20 mph, Mistral risk", feelsLike: "Cool and potentially blustery", icon: "wind", warnings: ["Mistral risk \u2014 cold powerful wind gusting 30-60 mph. Check forecast Mar 18-19."] },
+    { date: "2026-03-24", location: "Nice", highF: 59, lowF: 46, rainChance: "20%", wind: "Moderate, 13 mph", feelsLike: "Pleasant, Alps shelter", icon: "cloud-sun", warnings: [] },
+    { date: "2026-03-25", location: "At Sea", highF: 61, lowF: 50, rainChance: "15%", wind: "Moderate, 10-15 mph", feelsLike: "Mild, good conditions", icon: "ship", warnings: [] },
+    { date: "2026-03-26", location: "Ponza", highF: 61, lowF: 48, rainChance: "20%", wind: "Moderate, 10-15 mph", feelsLike: "Pleasantly cool, island breezes", icon: "cloud-sun", warnings: [] },
+    { date: "2026-03-27", location: "Trapani", highF: 62, lowF: 51, rainChance: "20%", wind: "Fresh, up to 21 mph", feelsLike: "Mild but windier than expected", icon: "wind", warnings: ["Erice cable car may close in high wind \u2014 taxi backup available"] },
+    { date: "2026-03-28", location: "Gozo / Valletta", highF: 60, lowF: 54, rainChance: "25%", wind: "Fresh, 17 mph", feelsLike: "Breezy coastal", icon: "cloud-sun", warnings: [] },
+    { date: "2026-03-29", location: "Valletta", highF: 60, lowF: 54, rainChance: "25%", wind: "Moderate, 15 mph", feelsLike: "Pleasant", icon: "cloud-sun", warnings: ["DST begins Mar 29 \u2014 clocks spring forward. Mar 30 departure at 6 AM."] },
+    { date: "2026-03-30", location: "Paris CDG (transit)", highF: 55, lowF: 39, rainChance: "25%", wind: "Light-moderate, 10 mph", feelsLike: "Cool and grey", icon: "cloud", warnings: ["DST in effect \u2014 you lost an hour. Multiple alarms for 4 AM departure."] }
+  ],
+  raelan: {
+    capsule: { totalPieces: 28, shoeCount: 5, categories: [
+      { name: "Layers", icon: "\ud83e\udde5", pieces: [
+        { id: "warm-coat", name: "Warm Coat", description: "Heaviest layer \u2014 Amsterdam, travel days, evening deck" },
+        { id: "leather-jacket", name: "Leather/Moto Jacket", description: "Wind barrier for coastal/island days \u2014 the workhorse" },
+        { id: "blazer", name: "Blazer", description: "Elevates any outfit for Michelin dining" },
+        { id: "chunky-sweater", name: "Chunky Sweater/Knit", description: "Amsterdam cold + sea day comfort" },
+        { id: "cashmere-wrap", name: "Cashmere Wrap/Poncho", description: "Dinner wrap, wind layer, plane blanket" }
+      ]},
+      { name: "Tops", icon: "\ud83d\udc5a", pieces: [
+        { id: "silk-blouse-1", name: "Silk Blouse (dark)", description: "De Silveren Spiegel, Under Grain, Valletta" },
+        { id: "silk-blouse-2", name: "Silk Blouse (light)", description: "Marseille day, Trapani excursion" },
+        { id: "silk-blouse-3", name: "Silk Blouse or Elevated Top", description: "Onboard anniversary dinner" },
+        { id: "quality-tee-1", name: "Quality Tee (neutral)", description: "Travel days, Menorca farm" },
+        { id: "quality-tee-2", name: "Quality Tee (accent)", description: "Ponza hike \u2014 sporty layer" },
+        { id: "knit-top", name: "Knit/Bodysuit Top", description: "Post-hammam, sea day casual" },
+        { id: "casual-top", name: "Casual Pull-on Top", description: "Pre/post dive easy wear" }
+      ]},
+      { name: "Bottoms", icon: "\ud83d\udc56", pieces: [
+        { id: "travel-pant-dark", name: "Travel Pants (dark)", description: "Tailored look, wind-appropriate" },
+        { id: "travel-pant-light", name: "Travel Pants (light)", description: "Travel + warm-weather ports" },
+        { id: "denim", name: "Quality Denim", description: "Rijksmuseum, Ponza hike, Valletta" },
+        { id: "golf-pants", name: "Golf Pants", description: "Dedicated golf outfit" },
+        { id: "dress-pant-skirt", name: "Dress Pant or Skirt", description: "Onboard anniversary \u2014 no wind concern" }
+      ]},
+      { name: "Dresses", icon: "\ud83d\udc57", pieces: [
+        { id: "dinner-dress-1", name: "Anniversary Dinner Dress", description: "Flaveur, 2 Michelin Stars \u2014 THE dress" },
+        { id: "dinner-dress-2", name: "Second Evening Dress", description: "Onboard anniversary alternative" },
+        { id: "day-dress", name: "Versatile Day Dress (optional)", description: "Hammam cover-up, sea day option" }
+      ]},
+      { name: "Shoes", icon: "\ud83d\udc60", pieces: [
+        { id: "walking-shoes", name: "Stylish Walking Shoes", description: "The workhorse \u2014 all-day comfort, grip for tenders" },
+        { id: "tennis-shoes", name: "Tennis/Athletic Shoes", description: "Ponza hike, Gozo dive dock" },
+        { id: "golf-shoes", name: "Golf Shoes", description: "Dedicated" },
+        { id: "evening-shoes", name: "Evening Shoes (low heel/flat)", description: "Michelin dinners, anniversary nights" },
+        { id: "sandals-deck", name: "Sandals or Deck Shoes", description: "Yacht life, sea days, hammam" }
+      ]},
+      { name: "Swim & Cover-ups", icon: "\ud83d\udc59", pieces: [
+        { id: "swimsuit", name: "Swimsuit", description: "Hammam, yacht pool, dive" },
+        { id: "coverup-1", name: "Cover-up 1", description: "Hammam exit, pool deck" },
+        { id: "coverup-2", name: "Cover-up 2", description: "Sea day variety" },
+        { id: "coverup-3", name: "Cover-up 3 (optional)", description: "Dive day cover" }
+      ]},
+      { name: "Golf", icon: "\u26f3", pieces: [
+        { id: "golf-shirt", name: "Golf Shirt (collared)", description: "European club requirement" },
+        { id: "golf-vest", name: "Golf Vest", description: "59\u00b0F morning, layering" }
+      ]},
+      { name: "Accessories", icon: "\ud83d\udc8e", pieces: [
+        { id: "diamond-earrings", name: "Diamond Earrings", description: "Everyday default \u2014 12+ days" },
+        { id: "diamond-necklace", name: "Diamond Necklace", description: "Onboard anniversary dinner (Mar 27)" },
+        { id: "vhernier-necklace", name: "Vhernier Black & Gold", description: "Flaveur anniversary dinner (Mar 24)" },
+        { id: "sunglasses", name: "Sunglasses", description: "Essential every outdoor day" },
+        { id: "hair-ties", name: "Hair Ties / Clips", description: "Critical for Menorca, Marseille Mistral" },
+        { id: "hat", name: "Hat or Cap", description: "Wind days, sun protection on deck" },
+        { id: "compression-socks", name: "Compression Socks", description: "Long-haul flights" }
+      ]}
+    ]},
+    dailyOutfits: [
+      { date: "2026-03-17", label: "Travel Day", location: "Sacramento \u2192 Amsterdam", weatherAlerts: [], occasions: [
+        { timeOfDay: "all-day", activity: "26+ hours of travel including overnight flight", description: "Soft travel pants + quality tee + chunky sweater + warm coat. Compression socks for overnight flight.", weatherNote: "Sacramento 67\u00b0F \u2192 Amsterdam 50\u00b0F" }
+      ]},
+      { date: "2026-03-18", label: "Amsterdam", location: "Amsterdam", weatherAlerts: ["Damp wind makes 50\u00b0F feel like 40\u00b0F"], occasions: [
+        { timeOfDay: "daytime", activity: "Rijksmuseum Tour (1:00 PM)", description: "Quality denim + chunky sweater + warm coat. Mostly indoors but cold/damp walk to museum.", weatherNote: "50\u00b0F, damp and breezy" },
+        { timeOfDay: "evening", activity: "De Silveren Spiegel \u2014 7-Course Tasting (6:30 PM)", description: "Silk blouse (dark) + dark travel pants + blazer. Warm coat for the walk.", weatherNote: "39\u00b0F by dinner", jewelry: "Diamond earrings" }
+      ]},
+      { date: "2026-03-19", label: "Amsterdam \u2192 M\u00e1laga", location: "Amsterdam \u2192 M\u00e1laga", weatherAlerts: [], occasions: [
+        { timeOfDay: "all-day", activity: "Vueling flight 11:40 AM + El Pimpi dinner", description: "Start bundled for Amsterdam, strip layers in M\u00e1laga. Tee + light layer for El Pimpi walk-in.", weatherNote: "50\u00b0F \u2192 66\u00b0F" }
+      ]},
+      { date: "2026-03-20", label: "M\u00e1laga (Embarkation)", location: "M\u00e1laga", weatherAlerts: [], occasions: [
+        { timeOfDay: "morning", activity: "Hammam Al \u00c1ndalus (10:00 AM)", description: "Swimsuit + cover-up. Hammam provides robes.", weatherNote: "66\u00b0F \u2014 warmest day of the trip" },
+        { timeOfDay: "afternoon", activity: "Cambara Lunch (1:00 PM) + Boarding by 4 PM", description: "Change after hammam: knit top + light travel pants + walking shoes.", weatherNote: "66\u00b0F, light breeze" },
+        { timeOfDay: "evening", activity: "First dinner onboard", description: "Settling in. No need to dress up for first night.", weatherNote: "On the yacht" }
+      ]},
+      { date: "2026-03-21", label: "At Sea", location: "At Sea", weatherAlerts: [], occasions: [
+        { timeOfDay: "daytime", activity: "Spa (Muscular Renewal 90 min) + deck", description: "Cover-up + swimsuit for spa/pool. Casual knit top for deck lounging.", weatherNote: "63\u00b0F on deck, cool in wind" },
+        { timeOfDay: "evening", activity: "Terrasse (6:30 PM, alfresco)", description: "Knit top + travel pants + cashmere wrap for outdoor dining breeze.", weatherNote: "Low 50s by evening" }
+      ]},
+      { date: "2026-03-22", label: "Menorca", location: "Menorca", weatherAlerts: ["The Windy Island \u2014 hair ties essential, wind chill feels like low 50s"], occasions: [
+        { timeOfDay: "all-day", activity: "Subaida Farm (11:30 AM) + Exploring", description: "Quality tee + light travel pants + leather/moto jacket (wind barrier). WIND DAY. Hair ties essential. Grip shoes for tender.", weatherNote: "59\u00b0F, wind 12-18 mph", jewelry: "Diamond earrings" }
+      ]},
+      { date: "2026-03-23", label: "Marseille", location: "Marseille", weatherAlerts: ["Mistral risk \u2014 gusts 30-60 mph possible. Check forecast Mar 18-19."], occasions: [
+        { timeOfDay: "daytime", activity: "MuCEM + Bouillant Lunch + Le Panier", description: "Silk blouse (light) + dark travel pants + leather jacket. If Mistral active: add cashmere wrap under jacket.", weatherNote: "59\u00b0F, Mistral could make it feel like 45\u00b0F" },
+        { timeOfDay: "evening", activity: "Casual dinner onboard", description: "Change to fresh knit top onboard. Relaxed evening.", weatherNote: "On the yacht" }
+      ]},
+      { date: "2026-03-24", label: "Nice", location: "Nice", weatherAlerts: [], specialDay: "anniversary", occasions: [
+        { timeOfDay: "morning", activity: "Golf d\u2019Opio Valbonne (9:30 AM Blacklane)", description: "Golf shirt + golf vest + golf pants + golf shoes. Blacklane transfer \u2014 no walking needed.", weatherNote: "59\u00b0F, calm \u2014 Alps block the Mistral" },
+        { timeOfDay: "evening", activity: "Flaveur, 2 Michelin Stars (7:30 PM) \u2014 ANNIVERSARY", description: "THE dress of the trip + cashmere wrap + blazer layer. Blacklane return transfer.", weatherNote: "46\u00b0F by evening", jewelry: "Vhernier black & gold necklace + diamond earrings" }
+      ]},
+      { date: "2026-03-25", label: "At Sea", location: "At Sea", weatherAlerts: [], occasions: [
+        { timeOfDay: "all-day", activity: "Recovery day \u2014 pool, deck, relax", description: "No reservations, no obligations. Mix and match. Laundry opportunity.", weatherNote: "61\u00b0F, mild" }
+      ]},
+      { date: "2026-03-26", label: "Ponza", location: "Ponza", weatherAlerts: [], occasions: [
+        { timeOfDay: "daytime", activity: "Guided Hike & Aperitivos (Four Seasons)", description: "Quality tee (accent) + denim + leather jacket for boat transfers. Athletic shoes for island terrain.", weatherNote: "61\u00b0F, moderate breezes" },
+        { timeOfDay: "evening", activity: "Dinner onboard", description: "Change to fresh top onboard. Casual after an active day.", weatherNote: "On the yacht" }
+      ]},
+      { date: "2026-03-27", label: "Trapani, Sicily", location: "Trapani", weatherAlerts: ["Erice cable car may close in high wind \u2014 taxi backup available"], specialDay: "anniversary", occasions: [
+        { timeOfDay: "morning", activity: "Ancient Ruins & Flavours (8:45 AM\u20132:30 PM)", description: "Silk blouse (light) + dark travel pants + leather jacket. Inland is sheltered. Same outfit for Erice.", weatherNote: "62\u00b0F, windy up to 21 mph" },
+        { timeOfDay: "evening", activity: "22nd Anniversary Dinner Onboard", description: "Silk blouse or elevated top + dress pant/skirt + evening shoes. Onboard = no wind.", weatherNote: "On the yacht", jewelry: "Diamond necklace + diamond earrings" }
+      ]},
+      { date: "2026-03-28", label: "Gozo + Valletta", location: "Gozo / Valletta", weatherAlerts: [], specialDay: "anniversary", occasions: [
+        { timeOfDay: "morning", activity: "Guided Dive in Gozo (9:30 AM\u20131:00 PM)", description: "Swimsuit + casual pull-on top + athletic shoes. Full gear provided. Don\u2019t bring nice pieces on dive boat.", weatherNote: "60\u00b0F, water 61\u00b0F" },
+        { timeOfDay: "afternoon", activity: "Valletta exploring", description: "Change on yacht: silk blouse (dark) + dark travel pants + leather jacket + walking shoes.", weatherNote: "60\u00b0F, moderate wind" },
+        { timeOfDay: "evening", activity: "Under Grain, 1 Michelin Star (7:00 PM)", description: "Same polished afternoon outfit. Swap to evening shoes.", weatherNote: "54\u00b0F", jewelry: "Diamond earrings" }
+      ]},
+      { date: "2026-03-29", label: "Valletta (Disembark)", location: "Valletta", weatherAlerts: ["DST begins \u2014 clocks spring forward. Tomorrow 6 AM departure."], occasions: [
+        { timeOfDay: "all-day", activity: "Phoenicia Malta + Valletta + optional Mdina", description: "Quality denim + silk blouse or nice top + blazer + walking shoes. Grand hotel \u2014 polished casual.", weatherNote: "60\u00b0F, pleasant", jewelry: "Diamond earrings" }
+      ]},
+      { date: "2026-03-30", label: "Return Flights", location: "Valletta \u2192 Sacramento", weatherAlerts: ["DST in effect \u2014 lost an hour. Multiple alarms for 4 AM."], occasions: [
+        { timeOfDay: "all-day", activity: "26 hours of travel. 4 AM departure. 3 flights.", description: "Mirror of Day 1 travel outfit (laundered). Warm coat for pre-dawn Malta + Paris. Compression socks.", weatherNote: "Malta pre-dawn \u2192 Paris 55\u00b0F \u2192 LA 72\u00b0F" }
+      ]}
+    ]
+  },
+  robert: {
+    capsule: { totalPieces: 23, shoeCount: 4, categories: [
+      { name: "Layers", icon: "\ud83e\udde5", pieces: [
+        { id: "r-warm-coat", name: "Warm Coat/Overcoat", description: "Amsterdam + travel days" },
+        { id: "r-lightweight-jacket", name: "Lightweight Jacket", description: "Wind barrier \u2014 bomber, Harrington, or field" },
+        { id: "r-sweater", name: "Quarter-Zip or Crewneck", description: "Amsterdam cold + sea day layering" },
+        { id: "r-blazer", name: "Unstructured Sport Coat", description: "Michelin dinners \u2014 elevates any shirt" }
+      ]},
+      { name: "Tops", icon: "\ud83d\udc55", pieces: [
+        { id: "r-button-down-dark", name: "Button-Down (dark)", description: "De Silveren Spiegel, onboard anniversary" },
+        { id: "r-button-down-light", name: "Button-Down (light)", description: "Flaveur anniversary, Under Grain" },
+        { id: "r-polo-1", name: "Polo (neutral)", description: "Port days \u2014 collared, versatile" },
+        { id: "r-polo-2", name: "Polo (accent)", description: "Post-hammam, golf (doubles as golf shirt)" },
+        { id: "r-tee-1", name: "Quality Tee (neutral)", description: "Travel days, Ponza hike" },
+        { id: "r-tee-2", name: "Quality Tee (warm tone)", description: "Sea days \u2014 casual comfort" },
+        { id: "r-tee-3", name: "Casual Pull-on Tee", description: "Pre/post dive easy wear" }
+      ]},
+      { name: "Bottoms", icon: "\ud83d\udc56", pieces: [
+        { id: "r-chinos-dark", name: "Chinos (dark)", description: "Michelin dinners, Marseille" },
+        { id: "r-chinos-light", name: "Chinos (light)", description: "Warm neutral workhorse" },
+        { id: "r-jeans", name: "Good Jeans", description: "Amsterdam, Ponza, relaxed days" },
+        { id: "r-golf-pants", name: "Golf Pants", description: "Dedicated" }
+      ]},
+      { name: "Shoes", icon: "\ud83d\udc5e", pieces: [
+        { id: "r-walking-shoes", name: "Stylish Walking Shoes", description: "The MVP \u2014 all-day comfort, dinner-passable" },
+        { id: "r-athletic-shoes", name: "Athletic/Tennis Shoes", description: "Ponza hike, Gozo dive dock" },
+        { id: "r-golf-shoes", name: "Golf Shoes", description: "Dedicated" },
+        { id: "r-loafers", name: "Loafers or Dress Shoe", description: "Michelin dinner nights" }
+      ]},
+      { name: "Swim", icon: "\ud83e\ude73", pieces: [
+        { id: "r-swim-trunks", name: "Swim Trunks", description: "Hammam, yacht pool, dive" },
+        { id: "r-swim-trunks-2", name: "Swim Trunks (backup)", description: "Sea day rotation" }
+      ]},
+      { name: "Golf", icon: "\u26f3", pieces: [
+        { id: "r-polo-2-golf", name: "Polo (doubles as golf shirt)", description: "European club \u2014 collared required" }
+      ]},
+      { name: "Accessories", icon: "\u231a", pieces: [
+        { id: "r-patek", name: "Patek Watch", description: "Everyday \u2014 the only statement piece" },
+        { id: "r-wedding-band", name: "Wedding Band", description: "Always" },
+        { id: "r-sunglasses", name: "Sunglasses", description: "Essential every outdoor day" },
+        { id: "r-belt", name: "Leather Belt", description: "One belt for chinos, jeans, golf" },
+        { id: "r-compression-socks", name: "Compression Socks", description: "Long-haul flights" }
+      ]}
+    ]},
+    dailyOutfits: [
+      { date: "2026-03-17", label: "Travel Day", location: "Sacramento \u2192 Amsterdam", weatherAlerts: [], occasions: [
+        { timeOfDay: "all-day", activity: "26+ hours of travel including overnight flight", description: "Good jeans + quality tee + sweater + warm coat. Compression socks for overnight flight.", weatherNote: "Sacramento 67\u00b0F \u2192 Amsterdam 50\u00b0F" }
+      ]},
+      { date: "2026-03-18", label: "Amsterdam", location: "Amsterdam", weatherAlerts: ["Damp wind makes 50\u00b0F feel like 40\u00b0F"], occasions: [
+        { timeOfDay: "daytime", activity: "Rijksmuseum Tour (1:00 PM)", description: "Good jeans + sweater + warm coat. Mostly indoors but damp walk.", weatherNote: "50\u00b0F, damp and breezy" },
+        { timeOfDay: "evening", activity: "De Silveren Spiegel \u2014 7-Course Tasting (6:30 PM)", description: "Button-down (dark) + dark chinos + blazer + loafers. Warm coat for the walk. Patek is the right touch.", weatherNote: "39\u00b0F by dinner" }
+      ]},
+      { date: "2026-03-19", label: "Amsterdam \u2192 M\u00e1laga", location: "Amsterdam \u2192 M\u00e1laga", weatherAlerts: [], occasions: [
+        { timeOfDay: "all-day", activity: "Vueling flight 11:40 AM + El Pimpi dinner", description: "Light chinos + quality tee + sweater (for AMS). Strip layers on arrival. Tee + chinos for El Pimpi.", weatherNote: "50\u00b0F \u2192 66\u00b0F" }
+      ]},
+      { date: "2026-03-20", label: "M\u00e1laga (Embarkation)", location: "M\u00e1laga", weatherAlerts: [], occasions: [
+        { timeOfDay: "morning", activity: "Hammam Al \u00c1ndalus (10:00 AM)", description: "Swim trunks + easy casual clothes. Hammam provides robes.", weatherNote: "66\u00b0F, warmest day" },
+        { timeOfDay: "afternoon", activity: "Cambara Lunch + Boarding by 4 PM", description: "Polo (accent) + light chinos. Casual port-to-boarding.", weatherNote: "66\u00b0F, pleasant" },
+        { timeOfDay: "evening", activity: "First dinner onboard", description: "Settling in. No need to dress up.", weatherNote: "On the yacht" }
+      ]},
+      { date: "2026-03-21", label: "At Sea", location: "At Sea", weatherAlerts: [], occasions: [
+        { timeOfDay: "daytime", activity: "Spa (Ignae\u2019s Azorean Rebirth 75 min) + deck", description: "Swim trunks for spa/pool. Quality tee for deck.", weatherNote: "63\u00b0F, moderate wind" },
+        { timeOfDay: "evening", activity: "Terrasse (6:30 PM, alfresco)", description: "Quality tee + light chinos + sweater for evening breeze.", weatherNote: "Low 50s by evening" }
+      ]},
+      { date: "2026-03-22", label: "Menorca", location: "Menorca", weatherAlerts: ["The Windy Island \u2014 wind chill feels like low 50s"], occasions: [
+        { timeOfDay: "all-day", activity: "Subaida Farm (11:30 AM) + Exploring", description: "Polo + light chinos + lightweight jacket (wind barrier). Grip shoes for tender transfer.", weatherNote: "59\u00b0F, wind 12-18 mph" }
+      ]},
+      { date: "2026-03-23", label: "Marseille", location: "Marseille", weatherAlerts: ["Mistral risk \u2014 gusts 30-60 mph possible"], occasions: [
+        { timeOfDay: "daytime", activity: "MuCEM + Bouillant Lunch + Le Panier", description: "Polo + dark chinos + lightweight jacket. Add sweater under jacket if Mistral active.", weatherNote: "59\u00b0F, Mistral could drop to 45\u00b0F feel" },
+        { timeOfDay: "evening", activity: "Casual dinner onboard", description: "Change to fresh tee onboard. Relaxed evening.", weatherNote: "On the yacht" }
+      ]},
+      { date: "2026-03-24", label: "Nice", location: "Nice", weatherAlerts: [], specialDay: "anniversary", occasions: [
+        { timeOfDay: "morning", activity: "Golf d\u2019Opio Valbonne (9:30 AM Blacklane)", description: "Polo doubles as golf shirt + golf pants + golf shoes. Blacklane transfer.", weatherNote: "59\u00b0F, calm" },
+        { timeOfDay: "evening", activity: "Flaveur, 2 Michelin Stars (7:30 PM) \u2014 ANNIVERSARY", description: "THE dinner. Button-down (light) + dark chinos + blazer + loafers. Patek is the statement piece.", weatherNote: "46\u00b0F by evening" }
+      ]},
+      { date: "2026-03-25", label: "At Sea", location: "At Sea", weatherAlerts: [], occasions: [
+        { timeOfDay: "all-day", activity: "Recovery day \u2014 pool, deck, relax", description: "No reservations. Casual mix. Laundry opportunity.", weatherNote: "61\u00b0F, mild" }
+      ]},
+      { date: "2026-03-26", label: "Ponza", location: "Ponza", weatherAlerts: [], occasions: [
+        { timeOfDay: "daytime", activity: "Guided Hike & Aperitivos (Four Seasons)", description: "Quality tee + jeans + lightweight jacket for boat transfers. Athletic shoes for island terrain.", weatherNote: "61\u00b0F, moderate breezes" },
+        { timeOfDay: "evening", activity: "Dinner onboard", description: "Change to fresh polo onboard. Casual evening.", weatherNote: "On the yacht" }
+      ]},
+      { date: "2026-03-27", label: "Trapani, Sicily", location: "Trapani", weatherAlerts: ["Erice cable car may close in high wind"], specialDay: "anniversary", occasions: [
+        { timeOfDay: "morning", activity: "Ancient Ruins & Flavours (8:45 AM\u20132:30 PM)", description: "Polo + light chinos + lightweight jacket. Inland is sheltered. Same outfit for Erice.", weatherNote: "62\u00b0F, windy up to 21 mph" },
+        { timeOfDay: "evening", activity: "22nd Anniversary Dinner Onboard", description: "Button-down (dark) + dark chinos + blazer + loafers. Patek is the look.", weatherNote: "On the yacht" }
+      ]},
+      { date: "2026-03-28", label: "Gozo + Valletta", location: "Gozo / Valletta", weatherAlerts: [], specialDay: "anniversary", occasions: [
+        { timeOfDay: "morning", activity: "Guided Dive in Gozo (9:30 AM\u20131:00 PM)", description: "Swim trunks + casual tee + athletic shoes. Full gear provided. Water 61\u00b0F.", weatherNote: "60\u00b0F, breezy" },
+        { timeOfDay: "afternoon", activity: "Valletta exploring", description: "Change on yacht: jeans + polo + lightweight jacket. Upper Barrakka \u2192 Trabuxu.", weatherNote: "60\u00b0F, moderate wind" },
+        { timeOfDay: "evening", activity: "Under Grain, 1 Michelin Star (7:00 PM)", description: "Button-down (light) + dark chinos + blazer + loafers.", weatherNote: "54\u00b0F" }
+      ]},
+      { date: "2026-03-29", label: "Valletta (Disembark)", location: "Valletta", weatherAlerts: ["DST begins \u2014 clocks spring forward. Tomorrow 6 AM departure."], occasions: [
+        { timeOfDay: "all-day", activity: "Phoenicia Malta + Valletta + optional Mdina", description: "Polo + light chinos + lightweight jacket. Grand hotel \u2014 polished casual. Pack tonight.", weatherNote: "60\u00b0F, pleasant" }
+      ]},
+      { date: "2026-03-30", label: "Return Flights", location: "Valletta \u2192 Sacramento", weatherAlerts: ["DST in effect \u2014 lost an hour. Multiple alarms for 4 AM."], occasions: [
+        { timeOfDay: "all-day", activity: "26 hours of travel. 4 AM departure. 3 flights.", description: "Mirror of Day 1 travel outfit (laundered). Warm coat for pre-dawn Malta + Paris. Compression socks.", weatherNote: "Malta pre-dawn \u2192 Paris 55\u00b0F \u2192 LA 72\u00b0F" }
+      ]}
+    ]
+  }
+};
+
 /* ════════════════════
    UTILITY FUNCTIONS
    ════════════════════ */
@@ -2355,6 +2700,131 @@ function toggleFaq(btn) {
   }
 }
 
+/* ═══════════════════════
+   RENDER: WARDROBE
+   ═══════════════════════ */
+function getWeatherIcon(icon) {
+  return { sun: '\u2600\ufe0f', 'cloud-sun': '\u26c5', 'cloud-rain': '\ud83c\udf27', wind: '\ud83d\udca8', cloud: '\u2601\ufe0f', ship: '\u26f5' }[icon] || '\ud83c\udf24';
+}
+function getWardrobePerson() { try { return localStorage.getItem('cruise-wardrobe-person') || 'raelan'; } catch { return 'raelan'; } }
+function setWardrobePerson(p) { try { localStorage.setItem('cruise-wardrobe-person', p); } catch {} }
+
+function renderWardrobe() {
+  const el = document.getElementById('tab-wardrobe');
+  const person = getWardrobePerson();
+  const data = WARDROBE[person];
+  const weather = WARDROBE.weather;
+  let html = '<div class="wardrobe-container">';
+
+  // Person toggle
+  html += '<div class="wardrobe-toggle">';
+  html += `<button class="wardrobe-toggle-btn${person === 'raelan' ? ' active' : ''}" onclick="switchWardrobePerson('raelan')">Raelan</button>`;
+  html += `<button class="wardrobe-toggle-btn${person === 'robert' ? ' active' : ''}" onclick="switchWardrobePerson('robert')">Robert</button>`;
+  html += '</div>';
+
+  // Weather strip
+  html += '<div class="weather-strip">';
+  weather.forEach((w, i) => {
+    const d = new Date(w.date + 'T12:00:00');
+    const dayAbbr = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()];
+    const monthDay = `${d.getMonth()+1}/${d.getDate()}`;
+    html += `<div class="weather-pill" onclick="scrollToOutfit(${i})" data-weather-idx="${i}">`;
+    html += `<span class="weather-pill-date">${dayAbbr} ${monthDay}</span>`;
+    html += `<span class="weather-pill-icon">${getWeatherIcon(w.icon)}</span>`;
+    html += `<span class="weather-pill-temp">${w.highF}\u00b0</span>`;
+    html += '</div>';
+  });
+  html += '</div>';
+
+  // Capsule accordion
+  html += '<div class="capsule-header" onclick="toggleCapsule()">';
+  html += `<h3>${person === 'raelan' ? 'Your' : "Robert's"} Capsule</h3>`;
+  html += `<span class="capsule-count">${data.capsule.totalPieces} pieces \u00b7 ${data.capsule.shoeCount} shoes <span id="capsule-arrow">\u25bc</span></span>`;
+  html += '</div>';
+  html += '<div class="capsule-body" id="capsule-body">';
+  data.capsule.categories.forEach(cat => {
+    html += '<div class="capsule-category">';
+    html += `<div class="capsule-cat-title">${cat.icon} ${esc(cat.name)}</div>`;
+    cat.pieces.forEach(p => {
+      html += '<div class="capsule-piece">';
+      html += `<div><div class="capsule-piece-name">${esc(p.name)}</div>`;
+      html += `<div class="capsule-piece-desc">${esc(p.description)}</div></div>`;
+      html += '</div>';
+    });
+    html += '</div>';
+  });
+  html += '</div>';
+
+  // Day-by-day outfit cards
+  data.dailyOutfits.forEach((day, idx) => {
+    const w = weather.find(wx => wx.date === day.date) || {};
+    const dayObj = D.days.find(d => d.date === day.date);
+    const badge = dayObj ? getDayBadge(dayObj) : day.label;
+    const isSeaDay = day.location === 'At Sea';
+    const isAnniversary = day.specialDay === 'anniversary';
+    let cardClass = 'outfit-card';
+    if (isSeaDay) cardClass += ' sea-day';
+    if (isAnniversary) cardClass += ' anniversary';
+
+    html += `<div class="${cardClass}" id="outfit-day-${idx}">`;
+    html += '<div class="outfit-card-header"><div class="outfit-card-left">';
+    html += `<div class="outfit-card-badge">${esc(badge)}</div>`;
+    html += `<div class="outfit-card-location">${esc(day.location)}</div>`;
+    if (dayObj) html += `<div class="outfit-card-date">${esc(dayObj.dateFormatted)}</div>`;
+    html += '</div><div class="outfit-card-weather">';
+    html += `<div class="outfit-card-weather-icon">${getWeatherIcon(w.icon)}</div>`;
+    html += `<div class="outfit-card-weather-temp">${w.highF || ''}\u00b0 / ${w.lowF || ''}\u00b0</div>`;
+    html += `<div class="outfit-card-weather-feels">${esc(w.feelsLike || '')}</div>`;
+    html += '</div></div>';
+
+    if (day.weatherAlerts && day.weatherAlerts.length > 0) {
+      day.weatherAlerts.forEach(a => {
+        html += `<div class="outfit-weather-alert">\u26a0\ufe0f ${esc(a)}</div>`;
+      });
+    }
+
+    day.occasions.forEach(occ => {
+      const tl = { 'all-day': 'ALL DAY', morning: 'MORNING', daytime: 'DAYTIME', afternoon: 'AFTERNOON', evening: 'EVENING' };
+      html += '<div class="outfit-occasion">';
+      html += `<div class="outfit-occasion-time">${tl[occ.timeOfDay] || occ.timeOfDay.toUpperCase()}</div>`;
+      html += `<div class="outfit-occasion-activity">${esc(occ.activity)}</div>`;
+      html += `<div class="outfit-occasion-desc">${esc(occ.description)}</div>`;
+      if (occ.weatherNote) html += `<div class="outfit-occasion-weather">${esc(occ.weatherNote)}</div>`;
+      if (occ.jewelry) html += `<div class="outfit-occasion-jewelry">${esc(occ.jewelry)}</div>`;
+      html += '</div>';
+    });
+    html += '</div>';
+  });
+
+  // Jewelry rotation (Raelan only)
+  if (person === 'raelan') {
+    html += '<div class="jewelry-summary"><h3>\ud83d\udc8e Jewelry Rotation</h3>';
+    html += '<div class="jewelry-item"><span class="jewelry-piece">Vhernier Black & Gold</span><span class="jewelry-occasion">Flaveur, Nice (Mar 24)</span></div>';
+    html += '<div class="jewelry-item"><span class="jewelry-piece">Diamond Necklace</span><span class="jewelry-occasion">Anniversary Onboard (Mar 27)</span></div>';
+    html += '<div class="jewelry-item"><span class="jewelry-piece">Diamond Earrings</span><span class="jewelry-occasion">Everyday default</span></div>';
+    html += '</div>';
+  }
+
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+function switchWardrobePerson(p) { setWardrobePerson(p); renderWardrobe(); }
+function toggleCapsule() {
+  const body = document.getElementById('capsule-body');
+  const arrow = document.getElementById('capsule-arrow');
+  if (body) { body.classList.toggle('open'); if (arrow) arrow.textContent = body.classList.contains('open') ? '\u25b2' : '\u25bc'; }
+}
+function scrollToOutfit(idx) {
+  const card = document.getElementById('outfit-day-' + idx);
+  if (card) {
+    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.querySelectorAll('.weather-pill').forEach(p => p.classList.remove('active'));
+    const pill = document.querySelector(`[data-weather-idx="${idx}"]`);
+    if (pill) pill.classList.add('active');
+  }
+}
+
 /* ═══════════════════
    TAB SWITCHING
    ═══════════════════ */
@@ -2518,6 +2988,7 @@ function init() {
   renderPack();
   renderInfo();
   renderActionItems();
+  renderWardrobe();
   initMap();
 }
 
